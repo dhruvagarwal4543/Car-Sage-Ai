@@ -1,0 +1,54 @@
+# --- secrets ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+
+# --- frontend / Chrome extension ---
+node_modules/
+dist/
+build/
+*.log
+npm-debug.log*
+*.crx
+*.zip
+
+# --- database / local files ---
+*.sqlite3
+*.db
+*.dump
+pgdata/
+
+# --- trained model artifacts (regenerate with the training script) ---
+models/*.joblib
+*.pkl
+
+# --- editor / OS ---
+.DS_Store
+.idea/
+.vscode/
+
+# --- dataset (licence NOT verified: do not publish until confirmed; see README "Data and licensing") ---
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+# row-level prediction dumps derived from the dataset (regenerate with src/experiment.py)
+reports/experiment/predictions_*.csv

@@ -1,0 +1,49 @@
+band,n,mae,split,config,model
+<10 lakh,450,464016.2589581009,cv_pooled,A_no_variant,dummy
+10-30 lakh,285,590578.6383697024,cv_pooled,A_no_variant,dummy
+30 lakh-1 crore,143,4449306.539773022,cv_pooled,A_no_variant,dummy
+>=1 crore,98,30426604.975925066,cv_pooled,A_no_variant,dummy
+<10 lakh,450,85251.23559762296,cv_pooled,A_no_variant,hgb
+10-30 lakh,285,499144.99488535523,cv_pooled,A_no_variant,hgb
+30 lakh-1 crore,143,1554437.747740949,cv_pooled,A_no_variant,hgb
+>=1 crore,98,12060165.537315542,cv_pooled,A_no_variant,hgb
+<10 lakh,450,101201.60933099124,cv_pooled,A_no_variant,ridge
+10-30 lakh,285,347717.2994720962,cv_pooled,A_no_variant,ridge
+30 lakh-1 crore,143,1628624.3429591022,cv_pooled,A_no_variant,ridge
+>=1 crore,98,11406459.232529866,cv_pooled,A_no_variant,ridge
+<10 lakh,450,464016.2589581009,cv_pooled,B_with_variant,dummy
+10-30 lakh,285,590578.6383697024,cv_pooled,B_with_variant,dummy
+30 lakh-1 crore,143,4449306.539773022,cv_pooled,B_with_variant,dummy
+>=1 crore,98,30426604.975925066,cv_pooled,B_with_variant,dummy
+<10 lakh,450,85760.45429275959,cv_pooled,B_with_variant,hgb
+10-30 lakh,285,450420.21312223497,cv_pooled,B_with_variant,hgb
+30 lakh-1 crore,143,1446429.1156491842,cv_pooled,B_with_variant,hgb
+>=1 crore,98,11867098.039731493,cv_pooled,B_with_variant,hgb
+<10 lakh,450,102684.21571281746,cv_pooled,B_with_variant,ridge
+10-30 lakh,285,336462.05684748583,cv_pooled,B_with_variant,ridge
+30 lakh-1 crore,143,1721165.3133596329,cv_pooled,B_with_variant,ridge
+>=1 crore,98,11385197.918060115,cv_pooled,B_with_variant,ridge
+<10 lakh,159,352909.6308516564,test,A_no_variant,dummy
+10-30 lakh,58,230395.35987620326,test,A_no_variant,dummy
+30 lakh-1 crore,43,4962966.915879365,test,A_no_variant,dummy
+>=1 crore,31,22005787.63755979,test,A_no_variant,dummy
+<10 lakh,159,98285.772579621,test,A_no_variant,hgb
+10-30 lakh,58,252221.4693895846,test,A_no_variant,hgb
+30 lakh-1 crore,43,1934395.8847209315,test,A_no_variant,hgb
+>=1 crore,31,8711376.739241522,test,A_no_variant,hgb
+<10 lakh,159,99345.4708506608,test,A_no_variant,ridge
+10-30 lakh,58,277612.7416927142,test,A_no_variant,ridge
+30 lakh-1 crore,43,1812586.6754532796,test,A_no_variant,ridge
+>=1 crore,31,8660043.342589812,test,A_no_variant,ridge
+<10 lakh,159,352909.6308516564,test,B_with_variant,dummy
+10-30 lakh,58,230395.35987620326,test,B_with_variant,dummy
+30 lakh-1 crore,43,4962966.915879365,test,B_with_variant,dummy
+>=1 crore,31,22005787.63755979,test,B_with_variant,dummy
+<10 lakh,159,85840.99528974971,test,B_with_variant,hgb
+10-30 lakh,58,314688.522937378,test,B_with_variant,hgb
+30 lakh-1 crore,43,1962891.4359050158,test,B_with_variant,hgb
+>=1 crore,31,9264233.923916426,test,B_with_variant,hgb
+<10 lakh,159,98295.95009885287,test,B_with_variant,ridge
+10-30 lakh,58,273750.8804160451,test,B_with_variant,ridge
+30 lakh-1 crore,43,1809982.128285621,test,B_with_variant,ridge
+>=1 crore,31,8655968.727453718,test,B_with_variant,ridge

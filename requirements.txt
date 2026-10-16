@@ -1,0 +1,3 @@
+# Everything. Install parts separately if you only need one side.
+-r requirements-data.txt
+-r requirements-app.txt

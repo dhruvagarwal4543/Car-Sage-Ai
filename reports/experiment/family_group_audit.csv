@@ -1,0 +1,222 @@
+family_group,rows,models,pmin,pmax,n_models,price_ratio
+Aston Martin|db,1,Db 11,40456503.0,40456503.0,1,1.0
+Aston Martin|rapide,1,Rapide,38845823.0,38845823.0,1,1.0
+Aston Martin|vantage,1,Vantage,29500000.0,29500000.0,1,1.0
+Audi|a3,5,A3; A3 Cabriolet,2920750.0,5038000.0,2,1.7
+Audi|a4,2,A4,4149000.0,4507000.0,1,1.1
+Audi|a5,2,A5; A5 Cabriolet,6061200.0,6948200.0,2,1.1
+Audi|a6,2,A6,5442200.0,5942200.0,1,1.1
+Audi|a8,1,A8 L,15600000.0,15600000.0,1,1.0
+Audi|q3,4,Q3,3496750.0,4361000.0,1,1.2
+Audi|q5,4,Q5,5021200.0,5621200.0,1,1.1
+Audi|q7,6,Q7,6921500.0,8111500.0,1,1.2
+Audi|q8,1,Q8,13359500.0,13359500.0,1,1.0
+Audi|r8,1,R8,27245000.0,27245000.0,1,1.0
+Audi|rs5,1,Rs5,11141200.0,11141200.0,1,1.0
+Audi|rs7,1,Rs7,17072000.0,17072000.0,1,1.0
+Audi|s5,1,S5,7243000.0,7243000.0,1,1.0
+Bajaj|qute,2,Qute (Re60),263000.0,283000.0,1,1.1
+Bentley|bentayga,2,Bentayga,37542069.0,45941557.0,1,1.2
+Bentley|continental,1,Continental Gt,33791059.0,33791059.0,1,1.0
+Bentley|flying,2,Flying Spur,34167064.0,39382083.0,1,1.2
+Bentley|mulsanne,1,Mulsanne,52571294.0,52571294.0,1,1.0
+Bmw|3-series,3,3-Series,4140000.0,4790000.0,1,1.2
+Bmw|5-series,3,5-Series,5930000.0,6680000.0,1,1.1
+Bmw|6-series,4,6-Series,6440000.0,7450000.0,1,1.2
+Bmw|7-series,6,7-Series,12290000.0,24250000.0,1,2.0
+Bmw|m2,1,M2 Competition,8180000.0,8180000.0,1,1.0
+Bmw|m4,1,M4,13590000.0,13590000.0,1,1.0
+Bmw|m5,1,M5,15490000.0,15490000.0,1,1.0
+Bmw|x1,5,X1,3520000.0,4570000.0,1,1.3
+Bmw|x3,3,X3,5600000.0,5930000.0,1,1.1
+Bmw|x4,3,X4,6060000.0,6590000.0,1,1.1
+Bmw|x5,3,X5,7330000.0,8290000.0,1,1.1
+Bmw|x7,2,X7,10250000.0,10490000.0,1,1.0
+Bmw|z4,2,Z4 Roadster,6490000.0,7890000.0,1,1.2
+Bugatti|chiron,2,Chiron,192142937.0,212155397.0,1,1.1
+Datsun|go,9,Go,374990.0,618015.0,1,1.6
+Datsun|go+,9,Go+,412292.0,680153.0,1,1.6
+Datsun|redi-go,6,Redi-Go,279650.0,437065.0,1,1.6
+Dc|avanti,1,Avanti,3407407.0,3407407.0,1,1.0
+Ferrari|458,2,458 Speciale; 458 Spider,42531500.0,43367500.0,2,1.0
+Ferrari|488,2,488 Gtb,36761413.0,39319552.0,1,1.1
+Ferrari|812,1,812 Superfast,52000000.0,52000000.0,1,1.0
+Ferrari|gtc4,2,Gtc4 Lusso,42000000.0,52000000.0,1,1.2
+Ferrari|portofino,1,Portofino,35000000.0,35000000.0,1,1.0
+Fiat|abarth,2,Abarth Avventura; Abarth Punto,980970.0,989219.0,2,1.0
+Fiat|avventura,3,Avventura,711801.0,876341.0,1,1.2
+Fiat|linea,8,Linea; Linea Classic,646336.0,997763.0,2,1.5
+Fiat|punto,6,Punto Evo; Punto Evo Pure,482330.0,747774.0,2,1.6
+Fiat|urban,4,Urban Cross,677618.0,977516.0,1,1.4
+Force|gurkha,6,Gurkha,975000.0,1330000.0,1,1.4
+Ford|aspire,13,Aspire,598500.0,862400.0,1,1.4
+Ford|ecosport,12,Ecosport,791000.0,1145000.0,1,1.4
+Ford|endeavour,3,Endeavour,2920000.0,3470000.0,1,1.2
+Ford|figo,6,Figo,523000.0,764900.0,1,1.5
+Ford|freestyle,8,Freestyle,591400.0,836400.0,1,1.4
+Ford|mustang,1,Mustang,7462000.0,7462000.0,1,1.0
+Honda|accord,1,Accord Hybrid,4321237.0,4321237.0,1,1.0
+Honda|amaze,20,Amaze,593000.0,979300.0,1,1.7
+Honda|brv,8,Brv,952900.0,1382900.0,1,1.5
+Honda|city,10,City,991000.0,1431000.0,1,1.4
+Honda|civic,5,Civic,1793900.0,2234900.0,1,1.2
+Honda|cr-v,3,Cr-V,2827001.0,3277001.0,1,1.2
+Honda|jazz,8,Jazz,745000.0,940500.0,1,1.3
+Honda|wr-v,9,Wr-V,808050.0,1048050.0,1,1.3
+Hyundai|aura,12,Aura,579900.0,922700.0,1,1.6
+Hyundai|creta,18,Creta,999990.0,1572064.0,1,1.6
+Hyundai|elantra,4,Elantra,1589000.0,2039000.0,1,1.3
+Hyundai|elite,12,Elite I20,559693.0,934003.0,1,1.7
+Hyundai|grand,22,Grand I10; Grand I10 Nios; Grand I10 Prime,460369.0,804450.0,3,1.7
+Hyundai|i20,4,I20 Active,774035.0,993393.0,1,1.3
+Hyundai|kona,1,Kona Electric,2371858.0,2371858.0,1,1.0
+Hyundai|santro,8,Santro,429990.0,578990.0,1,1.3
+Hyundai|tucson,8,Tucson,1876656.0,2697417.0,1,1.4
+Hyundai|venue,13,Venue,655000.0,1115500.0,1,1.7
+Hyundai|verna,13,Verna,817867.0,1407871.0,1,1.7
+Hyundai|xcent,15,Xcent; Xcent Prime,536859.0,875358.0,2,1.6
+Icml|extreme,11,Extreme,552890.0,2650777.0,1,4.8
+Isuzu|dmax,3,Dmax V-Cross,1654783.0,1999000.0,1,1.2
+Isuzu|mu-x,2,Mu-X,2734834.0,2931534.0,1,1.1
+Jaguar|f-pace,2,F-Pace,6422809.0,6463780.0,1,1.0
+Jaguar|f-type,8,F-Type,9092578.0,28004965.0,1,3.1
+Jaguar|xe,4,Xe,4498000.0,4633000.0,1,1.0
+Jaguar|xf,5,Xf,4977080.0,6138811.0,1,1.2
+Jaguar|xj,3,Xj,9738609.0,11129599.0,1,1.1
+Jeep|compass,23,Compass; Compass Trailhawk,1560000.0,2760000.0,2,1.8
+Jeep|grand,4,Grand Cherokee,7515000.0,11400000.0,1,1.5
+Jeep|wrangler,1,Wrangler,6394000.0,6394000.0,1,1.0
+Kia|carnival,5,Carnival,2495000.0,3395000.0,1,1.4
+Kia|seltos,16,Seltos,989000.0,1634000.0,1,1.7
+Lamborghini|aventador,3,Aventador,47467700.0,53210327.0,1,1.1
+Lamborghini|huracan,9,Huracan,32200000.0,41000000.0,1,1.3
+Lamborghini|urus,1,Urus,30000000.0,30000000.0,1,1.0
+Land Rover|discovery,10,Discovery; Discovery Sport,5706000.0,10861088.0,2,1.9
+Land Rover|range,27,Range Rover; Range Rover Evoque; Range Rover Evoque Convertible; Range Rover Sport; Range Rover Velar,5494000.0,40499548.0,5,7.4
+Lexus|es,1,Es,5695000.0,5695000.0,1,1.0
+Lexus|lc,1,Lc 500H,19600000.0,19600000.0,1,1.0
+Lexus|ls,3,Ls 500H,18221000.0,19371000.0,1,1.1
+Lexus|lx,2,Lx 450D; Lx 570,23290000.0,23290000.0,2,1.0
+Lexus|nx,2,Nx 300H,5990000.0,6060000.0,1,1.0
+Lexus|rx,1,Rx 450H,9900000.0,9900000.0,1,1.0
+Mahindra|alturas,2,Alturas G4,2770150.0,3070150.0,1,1.1
+Mahindra|bolero,11,Bolero; Bolero Power Plus,749192.0,942263.0,2,1.3
+Mahindra|e,3,E Verito,1267208.0,1303241.0,1,1.0
+Mahindra|e2o,2,E2O Plus,881425.0,957177.0,1,1.1
+Mahindra|kuv100,22,Kuv100 Nxt,488194.0,794800.0,1,1.6
+Mahindra|marazzo,8,Marazzo,999900.0,1476538.0,1,1.5
+Mahindra|nuvosport,6,Nuvosport,797802.0,1048603.0,1,1.3
+Mahindra|scorpio,9,Scorpio,999994.0,1663054.0,1,1.7
+Mahindra|thar,3,Thar,959860.0,999148.0,1,1.0
+Mahindra|tuv300,10,Tuv300; Tuv300 Plus,854328.0,1142157.0,2,1.3
+Mahindra|verito,6,Verito; Verito Vibe,657628.0,845154.0,2,1.3
+Mahindra|xuv300,11,Xuv300,830127.0,1269131.0,1,1.5
+Mahindra|xuv500,21,Xuv500,1230924.0,1973664.0,1,1.6
+Mahindra|xylo,5,Xylo,963037.0,1228335.0,1,1.3
+Maruti Suzuki|alto,16,Alto; Alto 800 Tour; Alto K10,294800.0,439777.0,3,1.5
+Maruti Suzuki|baleno,14,Baleno; Baleno Rs,558602.0,890212.0,2,1.6
+Maruti Suzuki|celerio,21,Celerio; Celerio Tour; Celerio X,422444.0,552350.0,3,1.3
+Maruti Suzuki|ciaz,14,Ciaz,819689.0,1138189.0,1,1.4
+Maruti Suzuki|dzire,17,Dzire; Dzire Tour,553423.0,952622.0,2,1.7
+Maruti Suzuki|eeco,5,Eeco,352136.0,466057.0,1,1.3
+Maruti Suzuki|ertiga,10,Ertiga,759000.0,1120689.0,1,1.5
+Maruti Suzuki|gypsy,2,Gypsy,622730.0,637343.0,1,1.0
+Maruti Suzuki|ignis,7,Ignis,483320.0,713898.0,1,1.5
+Maruti Suzuki|omni,2,Omni,282778.0,284485.0,1,1.0
+Maruti Suzuki|s-cross,4,S-Cross,880689.0,1143689.0,1,1.3
+Maruti Suzuki|s-presso,10,S-Presso,370500.0,499000.0,1,1.3
+Maruti Suzuki|swift,14,Swift,519000.0,884000.0,1,1.7
+Maruti Suzuki|vitara,9,Vitara Brezza,762742.0,1059742.0,1,1.4
+Maruti Suzuki|wagon,14,Wagon R,434000.0,594800.0,1,1.4
+Maruti Suzuki|xl6,4,Xl6,984689.0,1151189.0,1,1.2
+Maserati|ghibli,3,Ghibli,13387856.0,14247814.0,1,1.1
+Maserati|grancabrio,1,Grancabrio,19865675.0,19865675.0,1,1.0
+Maserati|granturismo,1,Granturismo,17229579.0,17229579.0,1,1.0
+Maserati|levante,3,Levante,14512054.0,15383399.0,1,1.1
+Maserati|quattroporte,1,Quattroporte,17900000.0,17900000.0,1,1.0
+Mercedes-Benz|a-class,2,Mercedes-Benz A-Class,2785288.0,2886871.0,1,1.0
+Mercedes-Benz|amg,1,Mercedes-Benz Amg Gt 4-Door Coupe,24200000.0,24200000.0,1,1.0
+Mercedes-Benz|amg-gt,3,Mercedes-Benz Amg-Gt,21583466.0,23264134.0,1,1.1
+Mercedes-Benz|b-class,4,Mercedes-Benz B-Class,2988311.0,3303282.0,1,1.1
+Mercedes-Benz|c-class,7,Mercedes-Benz C-Class; Mercedes-Benz C-Class Cabriolet,4020000.0,7500000.0,2,1.9
+Mercedes-Benz|cla-class,3,Mercedes-Benz Cla-Class,3172000.0,3699000.0,1,1.2
+Mercedes-Benz|cls,1,Mercedes-Benz Cls,8470000.0,8470000.0,1,1.0
+Mercedes-Benz|e-class,10,Mercedes-Benz E-Class; Mercedes-Benz E-Class All Terrain; Mercedes-Benz E-Class Cabriolet,5750000.0,15000000.0,3,2.6
+Mercedes-Benz|g-class,2,Mercedes-Benz G-Class,15000000.0,21875136.0,1,1.5
+Mercedes-Benz|gla-class,6,Mercedes-Benz Gla-Class,3233000.0,8067000.0,1,2.5
+Mercedes-Benz|glc,2,Mercedes-Benz Glc,5275000.0,5775000.0,1,1.1
+Mercedes-Benz|gle,2,Mercedes-Benz Gle,7370000.0,12500000.0,1,1.7
+Mercedes-Benz|gls,5,Mercedes-Benz Gls,8690000.0,19199181.0,1,2.2
+Mercedes-Benz|maybach,2,Mercedes-Benz Maybach,19890000.0,27308312.0,1,1.4
+Mercedes-Benz|s-class,4,Mercedes-Benz S-Class; Mercedes-Benz S-Class Cabriolet,13558438.0,25500000.0,2,1.9
+Mercedes-Benz|v-class,3,Mercedes-Benz V-Class,6840000.0,11000000.0,1,1.6
+Mg|hector,11,Hector,1248000.0,1728000.0,1,1.4
+Mg|zs,2,Zs Ev,2088000.0,2358000.0,1,1.1
+Mini|clubman,1,Clubman,4120000.0,4120000.0,1,1.0
+Mini|convertible,1,Convertible,3830000.0,3830000.0,1,1.0
+Mini|cooper,3,Cooper 3 Door; Cooper 5 Door,2990000.0,3600000.0,2,1.2
+Mini|countryman,4,Countryman,3490000.0,4240000.0,1,1.2
+Mini|john,1,John Cooper Works,4350000.0,4350000.0,1,1.0
+Mitsubishi|montero,1,Montero,6862560.0,6862560.0,1,1.0
+Mitsubishi|outlander,1,Outlander,2693000.0,2693000.0,1,1.0
+Mitsubishi|pajero,5,Pajero Sport,2835500.0,2992800.0,1,1.1
+Nissan|gtr,1,Gtr,21240272.0,21240272.0,1,1.0
+Nissan|kicks,8,Kicks,955000.0,1465000.0,1,1.5
+Nissan|micra,7,Micra; Micra Active,525021.0,812964.0,2,1.5
+Nissan|sunny,7,Sunny,707025.0,993997.0,1,1.4
+Nissan|terrano,6,Terrano,999900.0,1464900.0,1,1.5
+Porsche|718,2,718,8595000.0,8995000.0,1,1.0
+Porsche|911,2,911,17420000.0,18844000.0,1,1.1
+Porsche|cayenne,5,Cayenne; Cayenne Coupe,11936000.0,19763000.0,2,1.7
+Porsche|macan,2,Macan,6998000.0,8503000.0,1,1.2
+Porsche|panamera,3,Panamera,21263000.0,22613000.0,1,1.1
+Premier|rio,6,Rio,506000.0,739000.0,1,1.5
+Renault|captur,4,Captur,949999.0,1299999.0,1,1.4
+Renault|duster,9,Duster,799990.0,1249990.0,1,1.6
+Renault|kwid,12,Kwid,283290.0,492190.0,1,1.7
+Renault|lodgy,7,Lodgy,863299.0,1211599.0,1,1.4
+Renault|triber,4,Triber,495000.0,663000.0,1,1.3
+Rolls-Royce|cullinan,1,Rolls-Royce Cullinan,69500000.0,69500000.0,1,1.0
+Rolls-Royce|dawn,1,Rolls-Royce Dawn,59216193.0,59216193.0,1,1.0
+Rolls-Royce|drophead,1,Rolls-Royce Drophead Coupe,83755383.0,83755383.0,1,1.0
+Rolls-Royce|ghost,2,Rolls-Royce Ghost Series Ii,46709733.0,53247201.0,1,1.1
+Rolls-Royce|phantom,3,Rolls-Royce Phantom; Rolls-Royce Phantom Coupe,75400000.0,95000000.0,2,1.3
+Rolls-Royce|wraith,1,Rolls-Royce Wraith,50025840.0,50025840.0,1,1.0
+Skoda|kodiaq,4,Kodiaq; Kodiaq Scout,3299599.0,3678599.0,2,1.1
+Skoda|monte,4,Monte Carlo,1139599.0,1425599.0,1,1.3
+Skoda|octavia,12,Octavia,1549000.0,2359599.0,1,1.5
+Skoda|rapid,14,Rapid,881916.0,1399599.0,1,1.6
+Skoda|superb,9,Superb; Superb Sportline,2599599.0,3349599.0,2,1.3
+Tata|altroz,10,Altroz,529000.0,929000.0,1,1.8
+Tata|bolt,8,Bolt,529035.0,787980.0,1,1.5
+Tata|harrier,6,Harrier,1345363.0,1732231.0,1,1.3
+Tata|hexa,7,Hexa,1371864.0,1929417.0,1,1.4
+Tata|nano,6,Nano Genx,236447.0,334768.0,1,1.4
+Tata|nexon,27,Nexon; Nexon Ev,695000.0,1599000.0,2,2.3
+Tata|safari,4,Safari Storme,1109005.0,1643829.0,1,1.5
+Tata|tiago,11,Tiago; Tiago Nrg,460000.0,689993.0,2,1.5
+Tata|tigor,9,Tigor; Tigor Ev,575000.0,975868.0,2,1.7
+Tata|winger,1,Winger,1205000.0,1205000.0,1,1.0
+Tata|zest,11,Zest,582287.0,989000.0,1,1.7
+Toyota|camry,1,Camry,3788000.0,3788000.0,1,1.0
+Toyota|corolla,6,Corolla Altis,1645000.0,2019000.0,1,1.2
+Toyota|etios,20,Etios Cross; Etios Liva,520300.0,816000.0,2,1.6
+Toyota|fortuner,7,Fortuner,2818000.0,3420000.0,1,1.2
+Toyota|glanza,5,Glanza,697900.0,890200.0,1,1.3
+Toyota|innova,16,Innova Crysta,1493000.0,2171000.0,1,1.5
+Toyota|land,2,Land Cruiser; Land Cruiser Prado,9630000.0,14699000.0,2,1.5
+Toyota|platinum,10,Platinum Etios,627100.0,913400.0,1,1.5
+Toyota|prius,1,Prius,4509000.0,4509000.0,1,1.0
+Toyota|yaris,14,Yaris,876000.0,1418000.0,1,1.6
+Volkswagen|ameo,8,Ameo,594000.0,999900.0,1,1.7
+Volkswagen|passat,4,Passat,2599000.0,3321500.0,1,1.3
+Volkswagen|polo,8,Polo,582000.0,988500.0,1,1.7
+Volkswagen|tiguan,2,Tiguan,2814500.0,3153500.0,1,1.1
+Volkswagen|vento,12,Vento,876500.0,1449500.0,1,1.7
+Volvo|s60,3,S60; S60 Cross Country,3850500.0,5602000.0,2,1.5
+Volvo|s90,1,S90,5890000.0,5890000.0,1,1.0
+Volvo|v40,4,V40; V40 Cross Country,2769000.0,3283000.0,2,1.2
+Volvo|v90,1,V90 Cross Country,6531000.0,6531000.0,1,1.0
+Volvo|xc40,3,Xc40,3990000.0,4390000.0,1,1.1
+Volvo|xc60,1,Xc60,5990000.0,5990000.0,1,1.0
+Volvo|xc90,5,Xc90,8090000.0,13124000.0,1,1.6

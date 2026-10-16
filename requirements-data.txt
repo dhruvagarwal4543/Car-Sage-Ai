@@ -1,0 +1,12 @@
+# Data / ML: EDA notebook, src/preprocess.py, src/experiment.py, tests/
+# Lower bounds = versions the current results were produced with.
+pandas>=2.3
+numpy
+matplotlib
+seaborn
+scikit-learn>=1.6
+openpyxl          # only if a dataset arrives as .xlsx
+jupyter
+nbconvert
+ipykernel
+pytest

@@ -1,0 +1,97 @@
+config,model,split,fold,best_params,held_out_make
+A_no_variant,dummy,cv,0,{},
+A_no_variant,ridge,cv,0,"{""regressor__model__alpha"": 100}",
+A_no_variant,hgb,cv,0,"{""regressor__model__learning_rate"": 0.1, ""regressor__model__max_depth"": 3}",
+B_with_variant,dummy,cv,0,{},
+B_with_variant,ridge,cv,0,"{""regressor__model__alpha"": 100}",
+B_with_variant,hgb,cv,0,"{""regressor__model__learning_rate"": 0.1, ""regressor__model__max_depth"": 3}",
+A_no_variant,dummy,cv,1,{},
+A_no_variant,ridge,cv,1,"{""regressor__model__alpha"": 100}",
+A_no_variant,hgb,cv,1,"{""regressor__model__learning_rate"": 0.05, ""regressor__model__max_depth"": 3}",
+B_with_variant,dummy,cv,1,{},
+B_with_variant,ridge,cv,1,"{""regressor__model__alpha"": 10}",
+B_with_variant,hgb,cv,1,"{""regressor__model__learning_rate"": 0.05, ""regressor__model__max_depth"": 3}",
+A_no_variant,dummy,cv,2,{},
+A_no_variant,ridge,cv,2,"{""regressor__model__alpha"": 10}",
+A_no_variant,hgb,cv,2,"{""regressor__model__learning_rate"": 0.05, ""regressor__model__max_depth"": 3}",
+B_with_variant,dummy,cv,2,{},
+B_with_variant,ridge,cv,2,"{""regressor__model__alpha"": 10}",
+B_with_variant,hgb,cv,2,"{""regressor__model__learning_rate"": 0.05, ""regressor__model__max_depth"": 6}",
+A_no_variant,dummy,cv,3,{},
+A_no_variant,ridge,cv,3,"{""regressor__model__alpha"": 100}",
+A_no_variant,hgb,cv,3,"{""regressor__model__learning_rate"": 0.05, ""regressor__model__max_depth"": 3}",
+B_with_variant,dummy,cv,3,{},
+B_with_variant,ridge,cv,3,"{""regressor__model__alpha"": 10}",
+B_with_variant,hgb,cv,3,"{""regressor__model__learning_rate"": 0.1, ""regressor__model__max_depth"": 3}",
+A_no_variant,dummy,cv,4,{},
+A_no_variant,ridge,cv,4,"{""regressor__model__alpha"": 100}",
+A_no_variant,hgb,cv,4,"{""regressor__model__learning_rate"": 0.05, ""regressor__model__max_depth"": 3}",
+B_with_variant,dummy,cv,4,{},
+B_with_variant,ridge,cv,4,"{""regressor__model__alpha"": 100}",
+B_with_variant,hgb,cv,4,"{""regressor__model__learning_rate"": 0.05, ""regressor__model__max_depth"": 3}",
+A_no_variant,dummy,test,-1,{},
+A_no_variant,ridge,test,-1,"{""regressor__model__alpha"": 100}",
+A_no_variant,hgb,test,-1,"{""regressor__model__learning_rate"": 0.1, ""regressor__model__max_depth"": 3}",
+B_with_variant,dummy,test,-1,{},
+B_with_variant,ridge,test,-1,"{""regressor__model__alpha"": 100}",
+B_with_variant,hgb,test,-1,"{""regressor__model__learning_rate"": 0.05, ""regressor__model__max_depth"": 6}",
+A_no_variant,dummy,lomo,-1,{},Maruti Suzuki
+A_no_variant,ridge,lomo,-1,"{""regressor__model__alpha"": 100}",Maruti Suzuki
+A_no_variant,hgb,lomo,-1,"{""regressor__model__learning_rate"": 0.05, ""regressor__model__max_depth"": 3}",Maruti Suzuki
+B_with_variant,dummy,lomo,-1,{},Maruti Suzuki
+B_with_variant,ridge,lomo,-1,"{""regressor__model__alpha"": 100}",Maruti Suzuki
+B_with_variant,hgb,lomo,-1,"{""regressor__model__learning_rate"": 0.05, ""regressor__model__max_depth"": 3}",Maruti Suzuki
+A_no_variant,dummy,lomo,-1,{},Hyundai
+A_no_variant,ridge,lomo,-1,"{""regressor__model__alpha"": 100}",Hyundai
+A_no_variant,hgb,lomo,-1,"{""regressor__model__learning_rate"": 0.05, ""regressor__model__max_depth"": 3}",Hyundai
+B_with_variant,dummy,lomo,-1,{},Hyundai
+B_with_variant,ridge,lomo,-1,"{""regressor__model__alpha"": 100}",Hyundai
+B_with_variant,hgb,lomo,-1,"{""regressor__model__learning_rate"": 0.05, ""regressor__model__max_depth"": 3}",Hyundai
+A_no_variant,dummy,lomo,-1,{},Mahindra
+A_no_variant,ridge,lomo,-1,"{""regressor__model__alpha"": 100}",Mahindra
+A_no_variant,hgb,lomo,-1,"{""regressor__model__learning_rate"": 0.1, ""regressor__model__max_depth"": 3}",Mahindra
+B_with_variant,dummy,lomo,-1,{},Mahindra
+B_with_variant,ridge,lomo,-1,"{""regressor__model__alpha"": 100}",Mahindra
+B_with_variant,hgb,lomo,-1,"{""regressor__model__learning_rate"": 0.1, ""regressor__model__max_depth"": 3}",Mahindra
+A_no_variant,dummy,lomo,-1,{},Honda
+A_no_variant,ridge,lomo,-1,"{""regressor__model__alpha"": 100}",Honda
+A_no_variant,hgb,lomo,-1,"{""regressor__model__learning_rate"": 0.1, ""regressor__model__max_depth"": 3}",Honda
+B_with_variant,dummy,lomo,-1,{},Honda
+B_with_variant,ridge,lomo,-1,"{""regressor__model__alpha"": 100}",Honda
+B_with_variant,hgb,lomo,-1,"{""regressor__model__learning_rate"": 0.1, ""regressor__model__max_depth"": 3}",Honda
+A_no_variant,dummy,lomo,-1,{},Toyota
+A_no_variant,ridge,lomo,-1,"{""regressor__model__alpha"": 100}",Toyota
+A_no_variant,hgb,lomo,-1,"{""regressor__model__learning_rate"": 0.1, ""regressor__model__max_depth"": 3}",Toyota
+B_with_variant,dummy,lomo,-1,{},Toyota
+B_with_variant,ridge,lomo,-1,"{""regressor__model__alpha"": 100}",Toyota
+B_with_variant,hgb,lomo,-1,"{""regressor__model__learning_rate"": 0.1, ""regressor__model__max_depth"": 3}",Toyota
+A_no_variant,dummy,lomo,-1,{},Tata
+A_no_variant,ridge,lomo,-1,"{""regressor__model__alpha"": 100}",Tata
+A_no_variant,hgb,lomo,-1,"{""regressor__model__learning_rate"": 0.1, ""regressor__model__max_depth"": 3}",Tata
+B_with_variant,dummy,lomo,-1,{},Tata
+B_with_variant,ridge,lomo,-1,"{""regressor__model__alpha"": 100}",Tata
+B_with_variant,hgb,lomo,-1,"{""regressor__model__learning_rate"": 0.05, ""regressor__model__max_depth"": 3}",Tata
+A_no_variant,dummy,lomo,-1,{},Skoda
+A_no_variant,ridge,lomo,-1,"{""regressor__model__alpha"": 10}",Skoda
+A_no_variant,hgb,lomo,-1,"{""regressor__model__learning_rate"": 0.05, ""regressor__model__max_depth"": 6}",Skoda
+B_with_variant,dummy,lomo,-1,{},Skoda
+B_with_variant,ridge,lomo,-1,"{""regressor__model__alpha"": 10}",Skoda
+B_with_variant,hgb,lomo,-1,"{""regressor__model__learning_rate"": 0.1, ""regressor__model__max_depth"": 6}",Skoda
+A_no_variant,dummy,lomo,-1,{},Ford
+A_no_variant,ridge,lomo,-1,"{""regressor__model__alpha"": 100}",Ford
+A_no_variant,hgb,lomo,-1,"{""regressor__model__learning_rate"": 0.1, ""regressor__model__max_depth"": 3}",Ford
+B_with_variant,dummy,lomo,-1,{},Ford
+B_with_variant,ridge,lomo,-1,"{""regressor__model__alpha"": 100}",Ford
+B_with_variant,hgb,lomo,-1,"{""regressor__model__learning_rate"": 0.1, ""regressor__model__max_depth"": 3}",Ford
+A_no_variant,dummy,lomo,-1,{},Mercedes-Benz
+A_no_variant,ridge,lomo,-1,"{""regressor__model__alpha"": 10}",Mercedes-Benz
+A_no_variant,hgb,lomo,-1,"{""regressor__model__learning_rate"": 0.05, ""regressor__model__max_depth"": 6}",Mercedes-Benz
+B_with_variant,dummy,lomo,-1,{},Mercedes-Benz
+B_with_variant,ridge,lomo,-1,"{""regressor__model__alpha"": 10}",Mercedes-Benz
+B_with_variant,hgb,lomo,-1,"{""regressor__model__learning_rate"": 0.1, ""regressor__model__max_depth"": 6}",Mercedes-Benz
+A_no_variant,dummy,lomo,-1,{},Bmw
+A_no_variant,ridge,lomo,-1,"{""regressor__model__alpha"": 100}",Bmw
+A_no_variant,hgb,lomo,-1,"{""regressor__model__learning_rate"": 0.1, ""regressor__model__max_depth"": 3}",Bmw
+B_with_variant,dummy,lomo,-1,{},Bmw
+B_with_variant,ridge,lomo,-1,"{""regressor__model__alpha"": 100}",Bmw
+B_with_variant,hgb,lomo,-1,"{""regressor__model__learning_rate"": 0.05, ""regressor__model__max_depth"": 6}",Bmw
