@@ -1,10 +1,10 @@
 # Data / ML: EDA notebook, src/preprocess.py, src/experiment.py, tests/
 # Lower bounds = versions the current results were produced with.
-pandas>=2.3
+pandas>=2.3,<3     # pandas 3 breaks src/preprocess.py (astype(str) keeps NaN); results were produced with 2.3.3
 numpy
 matplotlib
 seaborn
-scikit-learn>=1.6
+scikit-learn>=1.6,<1.7   # results produced with 1.6.1
 openpyxl          # only if a dataset arrives as .xlsx
 jupyter
 nbconvert
