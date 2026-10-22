@@ -3,7 +3,7 @@ import {
   GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut as fbSignOut, type Auth, type User,
 } from "firebase/auth";
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { api, setTokenProvider } from "./api";
+import { api, setSessionExpiredHandler, setTokenProvider } from "./api";
 
 const cfg = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY as string | undefined,
@@ -26,7 +26,7 @@ export function authMessage(e: unknown): string {
 }
 
 interface Ctx {
-  configured: boolean; user: User | null; loading: boolean; saved: Set<number>;
+  configured: boolean; user: User | null; loading: boolean; saved: Set<number>; sessionExpired: boolean;
   signIn: (email: string, password: string) => Promise<void>; signUp: (email: string, password: string) => Promise<void>;
   signInGoogle: () => Promise<void>; signOut: () => Promise<void>; toggleSaved: (carId: number) => Promise<void>;
 }
@@ -36,11 +36,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(firebaseConfigured);
   const [saved, setSaved] = useState<Set<number>>(new Set());
+  const [sessionExpired, setSessionExpired] = useState(false);
 
   useEffect(() => {
     if (!auth) return;
-    setTokenProvider(async () => (auth.currentUser ? auth.currentUser.getIdToken() : null));
-    return onAuthStateChanged(auth, (u) => { setUser(u); setLoading(false); });
+    setTokenProvider(async (force) => (auth.currentUser ? auth.currentUser.getIdToken(force) : null));
+    setSessionExpiredHandler(() => { setSessionExpired(true); void fbSignOut(auth); });
+    return onAuthStateChanged(auth, (u) => { setUser(u); setLoading(false); if (u) setSessionExpired(false); });
   }, []);
 
   useEffect(() => {
@@ -51,7 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [user]);
 
   const value = useMemo<Ctx>(() => ({
-    configured: firebaseConfigured, user, loading, saved,
+    configured: firebaseConfigured, user, loading, saved, sessionExpired,
     signIn: async (email, password) => { await signInWithEmailAndPassword(auth!, email, password); },
     signUp: async (email, password) => { await createUserWithEmailAndPassword(auth!, email, password); },
     signInGoogle: async () => { await signInWithPopup(auth!, new GoogleAuthProvider()); },
@@ -61,7 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (saved.has(id)) { await api.unsaveCar(id); next.delete(id); } else { await api.saveCar(id); next.add(id); }
       setSaved(next);
     },
-  }), [user, loading, saved]);
+  }), [user, loading, saved, sessionExpired]);
   return <C.Provider value={value}>{children}</C.Provider>;
 }
 

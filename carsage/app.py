@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session
 from carsage import assistant as assistant_mod
 from carsage import catalogue, predict as predict_mod, recommend as recommend_mod
 from carsage.auth import current_user
+from carsage.config import validate_startup
 from carsage.db import get_engine
 from carsage.models import CatalogueCar, SavedCar
 from carsage.schemas import (AssistantIn, AssistantOut, CarDetail, CarOut, CarPage, CompareOut, FiltersOut, PriceIn, PriceOut,
@@ -25,6 +26,7 @@ SortKey = str
 
 def create_app(engine=None) -> FastAPI:
     load_dotenv()
+    validate_startup()      # logs missing setting NAMES; refuses to start in production if the configuration is unsafe
     app = FastAPI(title="CarSage AI API", version="0.1.0",
                   description="New-car catalogue, explainable recommendations, a catalogue-grounded assistant and an experimental price estimate. "
                               "Prices are ex-showroom (new cars); there is no live inventory or on-road pricing.")

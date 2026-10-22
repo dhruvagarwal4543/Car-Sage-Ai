@@ -12,7 +12,7 @@ import pandas as pd
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from carsage.db import get_engine
+from carsage.db import database_url, describe_target, get_engine, require_target_confirmation
 from carsage.models import CatalogueCar
 
 DEFAULT_CSV = Path(__file__).resolve().parents[1] / "data/processed/cars_processed.csv"
@@ -85,7 +85,11 @@ def import_catalogue(engine, csv_path=DEFAULT_CSV):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--csv", default=str(DEFAULT_CSV))
-    out = import_catalogue(get_engine(), ap.parse_args().csv)
+    args = ap.parse_args()
+    url = database_url()
+    require_target_confirmation(url, "the catalogue import")
+    print("target:", describe_target(url))
+    out = import_catalogue(get_engine(url), args.csv)
     print({k: v for k, v in out.items() if k != "rejections"})
     for r in out["rejections"][:20]:
         print("rejected:", r)

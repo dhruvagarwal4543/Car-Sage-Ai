@@ -55,6 +55,31 @@ def engine_options(url):
     return opts
 
 
+LOCAL_HOSTS = {"localhost", "127.0.0.1", "::1"}
+
+
+def target_host(url):
+    return urlparse(normalize_url(url).replace("+psycopg", "", 1)).hostname or ""
+
+
+def describe_target(url):
+    """Credential-free description (host and database name only) for logs and confirmations."""
+    u = urlparse(normalize_url(url).replace("+psycopg", "", 1))
+    return f"{u.hostname or '?'}/{(u.path or '/').lstrip('/') or '?'}"
+
+
+def require_target_confirmation(url, who="this command"):
+    """Writes (migrations, imports) to a non-local database need CARSAGE_CONFIRM_TARGET=<host>, so a wrong DATABASE_URL cannot be hit by accident."""
+    host = target_host(url)
+    if host in LOCAL_HOSTS or url.startswith("sqlite"):
+        return
+    load_dotenv()
+    same_endpoint = lambda h: h.replace("-pooler", "", 1)      # Neon's pooled and direct hosts are one compute endpoint
+    if same_endpoint(os.environ.get("CARSAGE_CONFIRM_TARGET") or "") != same_endpoint(host):
+        raise RuntimeError(f"Refusing to run {who} against remote database host '{host}'. "
+                           f"Check that it is the intended CarSage database, then set CARSAGE_CONFIRM_TARGET={host} and retry.")
+
+
 def get_engine(url=None):
     url = normalize_url(url or database_url())
     return create_engine(url, **engine_options(url))

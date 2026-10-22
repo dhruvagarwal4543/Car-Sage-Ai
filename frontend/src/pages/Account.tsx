@@ -7,7 +7,7 @@ import { Empty, ErrorBox, Loading } from "../components/States";
 import { useAsync } from "../useAsync";
 
 export function Login() {
-  const { configured, user, signIn, signUp, signInGoogle } = useAuth();
+  const { configured, user, sessionExpired, signIn, signUp, signInGoogle } = useAuth();
   const nav = useNavigate();
   const [mode, setMode] = useState<"in" | "up">("in");
   const [email, setEmail] = useState("");
@@ -29,6 +29,7 @@ export function Login() {
   return (
     <div className="auth-box">
       <h1>{mode === "in" ? "Sign in" : "Create account"}</h1>
+      {sessionExpired && <p className="notice" role="alert">Your session has expired. Please sign in again.</p>}
       <form onSubmit={submit}>
         <label className="field">Email<input type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} /></label>
         <label className="field">Password<input type="password" required minLength={6} autoComplete={mode === "in" ? "current-password" : "new-password"} value={password} onChange={(e) => setPassword(e.target.value)} /></label>

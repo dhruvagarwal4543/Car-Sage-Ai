@@ -40,9 +40,9 @@ The price model estimates **new-car ex-showroom price only**. It is not a used-c
 | Explainable recommendation engine | Done | [carsage/recommend.py](carsage/recommend.py) |
 | Catalogue-grounded assistant (rule-based, **no LLM**) | Done | [carsage/assistant.py](carsage/assistant.py) |
 | Price estimate endpoint | Done, **experimental**; needs a local model file (`python src/train_price_model.py`) | [carsage/predict.py](carsage/predict.py) |
-| Firebase token verification, saved cars (per-user) | Implemented; tested with mocked verification; **not yet tested against a real Firebase project** | [carsage/auth.py](carsage/auth.py) |
+| Firebase token verification, saved cars (per-user) | Implemented; tested through the real Admin SDK code path with locally generated keys (valid, expired, wrong-project, forged, malformed tokens); **not yet tested against a real Firebase project** | [carsage/auth.py](carsage/auth.py) |
 | Automated tests | passing (see [Tests](#tests)) | [tests/](tests/) |
-| Website (React + TypeScript + Vite): landing, explore, car details, comparison, advisor, sign-in, saved cars | Done; type-checked, 16 component/unit tests, production build, smoke-tested against the live API through the dev proxy. **Not yet exercised in a real browser session by me**; Firebase sign-in untested without credentials | [frontend/](frontend/) |
+| Website (React + TypeScript + Vite): landing, explore, car details, comparison, advisor, sign-in, saved cars | Done; type-checked, 21 component/unit tests, production build, smoke-tested against the live API through the dev proxy. **Not yet exercised in a real browser session by me**; Firebase sign-in untested without credentials | [frontend/](frontend/) |
 | LLM adapter, Chrome extension | Planned | |
 
 ## Architecture
@@ -186,7 +186,7 @@ All numbers are produced by `python src/experiment.py` and copied from [reports/
 [carsage/import_catalogue.py](carsage/import_catalogue.py) loads `data/processed/cars_processed.csv` by upserting on `source_row`: invalid rows are rejected and reported, and re-running creates no duplicates. Verified locally: the first import inserted 1,276 rows, and repeat imports left them unchanged (1,276 rows, 1,276 distinct `source_row`).
 
 ### Neon PostgreSQL
-Neon is the intended primary database. [carsage/db.py](carsage/db.py) reads `DATABASE_URL` (Neon's **pooled** connection string) for the API and importer and `DATABASE_URL_UNPOOLED` (Neon's **direct** string) for Alembic, forces SSL for `*.neon.tech` hosts, disables server-side prepared statements behind the pooler, and enables `pool_pre_ping` plus connection recycling because Neon suspends idle compute. These settings are unit-tested; **a live Neon connection has not been verified yet** (no CarSage Neon database has been configured). The same code runs against any PostgreSQL, so development can use a local server. SQLite is used only for fast unit tests, never as an application database.
+Neon is the intended primary database (see [docs/CLOUD_SETUP.md](docs/CLOUD_SETUP.md) for the setup checklist and what is still unverified). [carsage/db.py](carsage/db.py) reads `DATABASE_URL` (Neon's **pooled** connection string) for the API and importer and `DATABASE_URL_UNPOOLED` (Neon's **direct** string) for Alembic, forces SSL for `*.neon.tech` hosts, disables server-side prepared statements behind the pooler, and enables `pool_pre_ping` plus connection recycling because Neon suspends idle compute. These settings are unit-tested; **a live Neon connection has not been verified yet** (no CarSage Neon database has been configured). The same code runs against any PostgreSQL, so development can use a local server. SQLite is used only for fast unit tests, never as an application database.
 
 ## Repository structure
 
@@ -238,9 +238,11 @@ cp .env.example .env            # .env is git-ignored: put real values only ther
 | `DATABASE_URL_UNPOOLED` | optional Neon **direct** string used by Alembic (falls back to `DATABASE_URL`) |
 | `TEST_DATABASE_URL` | database for the PostgreSQL tests; its name must be exactly `carsage_test` (tests refuse anything else) |
 | `CORS_ORIGINS` | comma-separated allowed browser origins (default `http://localhost:5173`) |
-| `FIREBASE_PROJECT_ID`, `FIREBASE_CREDENTIALS_FILE` | server-side Firebase Admin settings; keep the service-account JSON **outside** the repository |
+| `FIREBASE_PROJECT_ID`, `FIREBASE_CREDENTIALS_FILE` | server-side Firebase Admin settings; both required for protected routes, and the file's `project_id` must equal `FIREBASE_PROJECT_ID`. Keep the service-account JSON **outside** the repository |
+| `CARSAGE_CONFIRM_TARGET` | safety latch: the exact host of a non-local database before `alembic upgrade` or the catalogue import will run |
 | `PRICE_MODEL_PATH` | optional path of the price model file (default `models/price_model.joblib`) |
-| `APP_ENV`, `SECRET_KEY`, `ACCESS_TOKEN_EXPIRE_MINUTES`, `LLM_PROVIDER`, `LLM_MODEL`, `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` | reserved, not read by the code today |
+| `APP_ENV` | `production` makes the API refuse to start with an unsafe configuration |
+| `SECRET_KEY`, `ACCESS_TOKEN_EXPIRE_MINUTES`, `LLM_PROVIDER`, `LLM_MODEL`, `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` | reserved, not read by the code today |
 
 ### Database
 **Neon:** create (or pick) a Neon project and database, copy its *pooled* and *direct* connection strings into `DATABASE_URL` and `DATABASE_URL_UNPOOLED` in `.env`, and use a separate Neon branch/database named `carsage_test` for `TEST_DATABASE_URL`. **Local PostgreSQL** works the same way. Example for a local server, run as a superuser with your own password (put it in `.env`):
@@ -253,7 +255,7 @@ CREATE DATABASE carsage_test OWNER carsage;
 alembic upgrade head                   # creates catalogue_cars and saved_cars
 python -m carsage.import_catalogue     # safe to re-run
 ```
-Migrations never drop data on `upgrade`; the importer upserts by `source_row`.
+Migrations never drop data on `upgrade`; the importer upserts by `source_row`. Before writing to a remote database, inspect it read-only with `python -m carsage.check_db`; `alembic upgrade` and the import refuse a non-local host until `CARSAGE_CONFIRM_TARGET` is set to that host.
 
 ### Run the API
 ```bash
@@ -282,7 +284,7 @@ python src/experiment.py                          # about 3 minutes; writes repo
 ```bash
 python -m pytest tests
 ```
-88 backend tests pass (Python 3.12, pandas 2.3.3, scikit-learn 1.6.1, FastAPI 0.159) and 16 frontend tests pass (`cd frontend && npm test`). Firebase verification is mocked in the backend tests. Tests that need the processed data or the `carsage_test` database skip themselves when those are unavailable.
+120 backend tests pass and 5 live-integration tests are skipped by default (Python 3.12, pandas 2.3.3, scikit-learn 1.6.1, FastAPI 0.159), and 21 frontend tests pass (`cd frontend && npm test`). The live tests (`RUN_LIVE_TESTS=1`, see [docs/CLOUD_SETUP.md](docs/CLOUD_SETUP.md)) need real Neon and Firebase credentials and have never been run. Tests that need the processed data or the `carsage_test` database skip themselves when those are unavailable.
 
 See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for the manual deployment steps (nothing is deployed yet).
 
@@ -290,7 +292,7 @@ See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for the manual deployment steps (no
 
 Done: catalogue, search/compare API, explainable recommendations, rule-based assistant, experimental price estimate, Firebase token verification, website. Still to do:
 
-1. Verify against a real Neon database and a real Firebase project (needs your credentials).
+1. Verify against a real Neon database and a real Firebase project (needs your credentials; steps in [docs/CLOUD_SETUP.md](docs/CLOUD_SETUP.md)).
 2. Optional LLM adapter behind the assistant interface (planned; the rule-based assistant remains the default).
 3. Chrome extension for supported listing pages (planned).
 4. User-created marketplace listings as a separate table (planned).

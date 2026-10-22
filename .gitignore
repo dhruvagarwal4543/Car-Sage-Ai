@@ -55,3 +55,13 @@ reports/experiment/predictions_*.csv
 
 # trained model artifacts: rebuild with src/train_price_model.py
 models/*.json
+
+# --- cloud credentials: never commit (service accounts, private keys) ---
+*-firebase-adminsdk-*.json
+service-account*.json
+serviceAccount*.json
+firebase-adminsdk*.json
+*.p12
+*.pfx
+google-credentials*.json
+.firebase/

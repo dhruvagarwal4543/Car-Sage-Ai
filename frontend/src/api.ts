@@ -1,8 +1,10 @@
 import type { AssistantOut, Car, CarDetail, CarPage, CompareOut, Filters, Preferences, PriceOut } from "./types";
 
 const BASE = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "";
-let tokenProvider: (() => Promise<string | null>) | null = null;
-export const setTokenProvider = (fn: (() => Promise<string | null>) | null) => { tokenProvider = fn; };
+let tokenProvider: ((forceRefresh: boolean) => Promise<string | null>) | null = null;
+let onSessionExpired: (() => void) | null = null;
+export const setTokenProvider = (fn: ((forceRefresh: boolean) => Promise<string | null>) | null) => { tokenProvider = fn; };
+export const setSessionExpiredHandler = (fn: (() => void) | null) => { onSessionExpired = fn; };
 
 export class ApiError extends Error {
   constructor(message: string, public status: number) { super(message); }
@@ -16,17 +18,26 @@ export function query(params: Record<string, string | number | null | undefined>
 }
 
 async function request<T>(path: string, init: RequestInit = {}, auth = false): Promise<T> {
-  const headers: Record<string, string> = { Accept: "application/json", ...(init.body ? { "Content-Type": "application/json" } : {}) };
-  if (auth) {
-    const token = tokenProvider ? await tokenProvider() : null;
-    if (!token) throw new ApiError("Please sign in to use this feature.", 401);
-    headers.Authorization = `Bearer ${token}`;
-  }
-  let res: Response;
-  try {
-    res = await fetch(BASE + path, { ...init, headers });
-  } catch {
-    throw new ApiError("Cannot reach the CarSage server. Please check that the API is running.", 0);
+  const send = async (forceRefresh: boolean): Promise<Response> => {
+    const headers: Record<string, string> = { Accept: "application/json", ...(init.body ? { "Content-Type": "application/json" } : {}) };
+    if (auth) {
+      const token = tokenProvider ? await tokenProvider(forceRefresh) : null;
+      if (!token) throw new ApiError("Please sign in to use this feature.", 401);
+      headers.Authorization = `Bearer ${token}`;
+    }
+    try {
+      return await fetch(BASE + path, { ...init, headers });
+    } catch {
+      throw new ApiError("Cannot reach the CarSage server. Please check that the API is running.", 0);
+    }
+  };
+  let res = await send(false);
+  if (auth && res.status === 401) {
+    res = await send(true);                       // the token may just be stale: retry ONCE with a force-refreshed one
+    if (res.status === 401) {                     // still rejected: the session is over; never loop
+      onSessionExpired?.();
+      throw new ApiError("Your session has expired. Please sign in again.", 401);
+    }
   }
   if (!res.ok) {
     let detail = `Request failed (${res.status})`;

@@ -2,6 +2,7 @@ import { fireEvent, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Route, Routes } from "react-router-dom";
 import { CarCard } from "./components/CarCard";
+import { Login } from "./pages/Account";
 import { Advisor } from "./pages/Advisor";
 import { Compare } from "./pages/Compare";
 import { Explore } from "./pages/Explore";
@@ -96,5 +97,13 @@ describe("Advisor", () => {
     renderApp(<Advisor />);
     await userEvent.click(screen.getByRole("button", { name: "Compare Nexon and Creta" }));
     expect(await screen.findByText(/could not answer that: Database unavailable/)).toBeInTheDocument();
+  });
+});
+
+describe("Sign-in page", () => {
+  it("explains that sign-in is not configured instead of showing a broken form", async () => {
+    renderApp(<Login />, "/login");
+    expect(await screen.findByText("Sign-in is not configured on this deployment.")).toBeInTheDocument();
+    expect(screen.queryByLabelText("Password")).not.toBeInTheDocument();
   });
 });
