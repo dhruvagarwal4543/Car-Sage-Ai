@@ -52,3 +52,6 @@ data/processed/*
 !data/processed/.gitkeep
 # row-level prediction dumps derived from the dataset (regenerate with src/experiment.py)
 reports/experiment/predictions_*.csv
+
+# trained model artifacts: rebuild with src/train_price_model.py
+models/*.json

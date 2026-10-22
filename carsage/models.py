@@ -5,7 +5,7 @@ no seller, location, image or used-car price columns exist here.
 """
 from datetime import datetime
 
-from sqlalchemy import BigInteger, Boolean, CheckConstraint, DateTime, Float, Integer, String, UniqueConstraint, func
+from sqlalchemy import BigInteger, Boolean, CheckConstraint, DateTime, Float, ForeignKey, Integer, String, UniqueConstraint, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -22,18 +22,18 @@ class CatalogueCar(Base):
     source_row: Mapped[int] = mapped_column(Integer, nullable=False)   # row id in the raw CSV: traceability + idempotent import key
     # identity (required)
     make: Mapped[str] = mapped_column(String(80), nullable=False, index=True)
-    model: Mapped[str] = mapped_column(String(120), nullable=False)
+    model: Mapped[str] = mapped_column(String(120), nullable=False, index=True)
     variant: Mapped[str] = mapped_column(String(160), nullable=False)
     fuel_type: Mapped[str] = mapped_column(String(40), nullable=False, index=True)
     price_inr: Mapped[int] = mapped_column(BigInteger, nullable=False, index=True)   # ex-showroom, new car
     # categorical specs (optional; NULL = not recorded in the dataset)
-    transmission: Mapped[str | None] = mapped_column(String(40))
+    transmission: Mapped[str | None] = mapped_column(String(40), index=True)
     body_type: Mapped[str | None] = mapped_column(String(40), index=True)
     drivetrain: Mapped[str | None] = mapped_column(String(20))
     cylinder_configuration: Mapped[str | None] = mapped_column(String(40))
     emission_norm: Mapped[str | None] = mapped_column(String(20))
     # integer specs
-    seating_capacity: Mapped[int | None] = mapped_column(Integer)
+    seating_capacity: Mapped[int | None] = mapped_column(Integer, index=True)
     doors: Mapped[int | None] = mapped_column(Integer)
     cylinders: Mapped[int | None] = mapped_column(Integer)
     gears: Mapped[int | None] = mapped_column(Integer)
@@ -62,3 +62,14 @@ class CatalogueCar(Base):
     source_dataset: Mapped[str] = mapped_column(String(80), nullable=False, default="cars_ds_final.csv")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+
+
+class SavedCar(Base):
+    """A catalogue car saved by an authenticated user. `firebase_uid` is the verified Firebase UID (no credentials are stored here)."""
+    __tablename__ = "saved_cars"
+    __table_args__ = (UniqueConstraint("firebase_uid", "car_id", name="uq_saved_cars_user_car"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    firebase_uid: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
+    car_id: Mapped[int] = mapped_column(Integer, ForeignKey("catalogue_cars.id", ondelete="CASCADE"), nullable=False, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)

@@ -11,7 +11,7 @@
 ![Alembic](https://img.shields.io/badge/migrations-Alembic-6BA81E)
 ![Tests](https://img.shields.io/badge/tests-pytest-0A9EDC?logo=pytest&logoColor=white)
 
-CarSage AI is a course project (Artificial Intelligence) that aims to become an AI-assisted marketplace for **new cars in India**. This repository currently contains the **data and machine-learning foundation plus a PostgreSQL car catalogue**. The website, backend API, recommendation engine, LLM assistant and Chrome extension are **planned and not built yet**.
+CarSage AI is a course project (Artificial Intelligence) that aims to become an AI-assisted marketplace for **new cars in India**. This repository contains the **data and machine-learning foundation, a PostgreSQL car catalogue, and a FastAPI backend** (search, comparison, explainable recommendations, a catalogue-grounded rule-based assistant, an experimental price estimate, and Firebase-authenticated saved cars). The website is in progress; the Chrome extension and any LLM integration are **planned, not built**.
 
 ---
 
@@ -33,19 +33,17 @@ The price model estimates **new-car ex-showroom price only**. It is not a used-c
 
 | Area | Status | Evidence |
 |---|---|---|
-| Exploratory data analysis | Done | [notebook](notebooks/01_indian_cars_eda.ipynb), [EDA summary](reports/eda_summary.md), 43 charts in [reports/figures/](reports/figures/) |
-| Data audit and modelling-readiness review | Done | [data audit](reports/data_audit.md), [readiness review](reports/modelling_readiness.md) |
-| Preprocessing pipeline with QC log | Done | [src/preprocess.py](src/preprocess.py) |
-| Leakage-safe splits | Done | [src/modeling_setup.py](src/modeling_setup.py) |
-| Price-model experiment (Dummy / Ridge / HistGradientBoosting) | Done, evaluated | [src/experiment.py](src/experiment.py), [results](reports/experiment/results.md) |
-| PostgreSQL `catalogue_cars` + Alembic migration + idempotent import | Done | [carsage/](carsage/), [alembic/](alembic/) |
-| Automated tests | 43 passing | [tests/](tests/) |
-| Saved/served price model | Not started | the experiment does not persist a model |
-| Search, constraint filtering, explainable recommendations | Planned | |
-| FastAPI backend, authentication, user listings | Planned | `fastapi` is listed in `requirements-app.txt` but no routes exist |
-| LLM assistant | Planned | no LLM SDK is installed or configured |
-| Website | Planned | |
-| Chrome extension | Planned | |
+| Exploratory data analysis, data audit, preprocessing, leakage-safe price experiment | Done | [notebook](notebooks/01_indian_cars_eda.ipynb), [reports/](reports/), [src/](src/) |
+| PostgreSQL catalogue (`catalogue_cars`) + Alembic migrations + idempotent import | Done, verified on local PostgreSQL 16 | [carsage/models.py](carsage/models.py), [alembic/](alembic/) |
+| Neon-ready connection handling (SSL, pooled URL for the app, direct URL for migrations) | Implemented and unit-tested; **not yet verified against a live Neon database** | [carsage/db.py](carsage/db.py) |
+| FastAPI: catalogue search, filters, detail, compare, health | Done | [carsage/app.py](carsage/app.py) |
+| Explainable recommendation engine | Done | [carsage/recommend.py](carsage/recommend.py) |
+| Catalogue-grounded assistant (rule-based, **no LLM**) | Done | [carsage/assistant.py](carsage/assistant.py) |
+| Price estimate endpoint | Done, **experimental**; needs a local model file (`python src/train_price_model.py`) | [carsage/predict.py](carsage/predict.py) |
+| Firebase token verification, saved cars (per-user) | Implemented; tested with mocked verification; **not yet tested against a real Firebase project** | [carsage/auth.py](carsage/auth.py) |
+| Automated tests | passing (see [Tests](#tests)) | [tests/](tests/) |
+| Website | In progress, see roadmap | |
+| LLM adapter, Chrome extension | Planned | |
 
 ## Architecture
 
@@ -53,32 +51,67 @@ Solid boxes exist today; dashed boxes are planned.
 
 ```mermaid
 flowchart LR
-    RAW[("Raw CSVs<br/>data/raw/archive/<br/>not in repo")]
-    EDA["EDA notebook<br/>01_indian_cars_eda.ipynb"]
-    PRE["src/preprocess.py<br/>unit parsing, QC log,<br/>duplicate + family flags"]
-    PROC[("data/processed/<br/>cars_processed.csv<br/>qc_log.csv")]
+    RAW[("Raw CSVs<br/>not in repo")]
+    PRE["src/preprocess.py<br/>QC log, duplicate +<br/>family flags"]
+    PROC[("data/processed/<br/>cars_processed.csv")]
     EXP["src/experiment.py<br/>group-aware CV + test"]
-    REP["reports/experiment/<br/>metrics + results.md"]
+    TRAIN["src/train_price_model.py"]
+    MODEL[("models/<br/>price_model.joblib<br/>git-ignored")]
     IMP["carsage.import_catalogue<br/>idempotent upsert"]
-    PG[("PostgreSQL<br/>catalogue_cars")]
-    RAW --> EDA
-    RAW --> PRE --> PROC
-    PROC --> EXP --> REP
-    PROC --> IMP --> PG
-
-    SEARCH["Search and<br/>recommendations"]:::planned
-    API["FastAPI backend"]:::planned
+    PG[("PostgreSQL (Neon)<br/>catalogue_cars<br/>saved_cars")]
+    API["FastAPI<br/>search, compare, filters,<br/>recommendations, assistant,<br/>price estimate"]
+    FB["Firebase Auth<br/>ID-token verification"]
     WEB["Website"]:::planned
-    LLM["LLM assistant"]:::planned
     EXT["Chrome extension"]:::planned
-    PG -.-> SEARCH -.-> API
-    EXP -.-> API
+    LLM["LLM adapter"]:::planned
+    RAW --> PRE --> PROC
+    PROC --> EXP
+    PROC --> TRAIN --> MODEL --> API
+    PROC --> IMP --> PG
+    PG <--> API
+    FB --> API
     API -.-> WEB
-    API -.-> LLM
     API -.-> EXT
+    LLM -.-> API
 
     classDef planned stroke-dasharray: 5 5,color:#666,fill:#f6f8fa
 ```
+
+## API
+
+Interactive docs: `http://127.0.0.1:8000/docs` once the server is running. Public endpoints need no login; `/api/me*` need a Firebase ID token (`Authorization: Bearer <token>`).
+
+| Method and path | Purpose |
+|---|---|
+| `GET /api/health`, `GET /api/health/ready` | liveness (no database) and readiness (database check, 503 if down) |
+| `GET /api/cars` | search (`q`, `make`, `model`, `fuel_type`, `transmission`, `body_type`, `min_price`, `max_price`, `min_seats`), `sort`, `page`, `page_size` (max 50) |
+| `GET /api/cars/{id}` | full specifications, derived tags, related cars |
+| `GET /api/cars/compare?ids=1,2,3` | 2-4 cars side by side, best value per row, missing-data markers |
+| `GET /api/filters` | available makes, fuel types, transmissions, body types, seat counts, price range |
+| `POST /api/recommendations` | preferences in, ranked cars out with reasons, trade-offs, missing data and any relaxed constraints |
+| `POST /api/assistant` | natural-language question in, grounded reply and cars out |
+| `POST /api/price-predictions` | **experimental** estimate from specifications or a `car_id` |
+| `GET /api/me`, `GET/PUT/DELETE /api/me/saved-cars[/{id}]` | authenticated user identity and saved cars (isolated per Firebase UID) |
+
+```bash
+curl "http://127.0.0.1:8000/api/cars?fuel_type=Diesel&max_price=1500000&sort=price_asc&page_size=5"
+curl -X POST http://127.0.0.1:8000/api/recommendations -H 'content-type: application/json' \
+     -d '{"max_price": 1200000, "use_case": "family", "transmissions": ["automatic"], "priorities": ["mileage"]}'
+curl -X POST http://127.0.0.1:8000/api/assistant -H 'content-type: application/json' \
+     -d '{"message": "family SUV under 15 lakh, diesel"}'
+```
+
+Prices are **ex-showroom prices of new cars**. The data has no on-road prices, live inventory or used-car listings, and the API never claims otherwise.
+
+### How recommendations and the assistant work
+1. **Constraints (hard):** budget, fuel, transmission, body type, seats, and an optional use case. If nothing satisfies them, constraints are relaxed in a fixed order (budget +15%, use case, body type, transmission, fuel) and the response says exactly what was relaxed.
+2. **Knowledge rules:** [carsage/rules.py](carsage/rules.py) derives tags such as `family_friendly` from attributes with explicit if-then rules; these are project heuristics, not dataset facts.
+3. **Heuristic score:** a weighted min-max score over the matches (price, mileage, power, boot space, airbags); at most two variants per model are returned. A missing attribute scores 0 and is reported, never guessed.
+4. **Assistant:** regular-expression and keyword extraction turns a message into preferences, then calls the same functions. Replies are assembled from database results only. It is not an LLM, has no internet access and no live prices.
+
+## Authentication (Firebase)
+
+Firebase Authentication is the only identity system: the website signs users in with the Firebase client SDK, and the API verifies the ID token with the Firebase Admin SDK ([carsage/auth.py](carsage/auth.py)). No passwords are stored in PostgreSQL. Only the verified Firebase UID is stored, in `saved_cars`. Missing or invalid tokens return 401; if the server has no Firebase credentials configured it returns 503 and says so. Configure `FIREBASE_PROJECT_ID` and `FIREBASE_CREDENTIALS_FILE` (a service-account JSON kept **outside** the repository).
 
 ## Data pipeline
 
@@ -135,22 +168,27 @@ All numbers are produced by `python src/experiment.py` and copied from [reports/
 
 [carsage/import_catalogue.py](carsage/import_catalogue.py) loads `data/processed/cars_processed.csv` by upserting on `source_row`: invalid rows are rejected and reported, and re-running creates no duplicates. Verified locally: the first import inserted 1,276 rows, and repeat imports left them unchanged (1,276 rows, 1,276 distinct `source_row`).
 
+### Neon PostgreSQL
+Neon is the intended primary database. [carsage/db.py](carsage/db.py) reads `DATABASE_URL` (Neon's **pooled** connection string) for the API and importer and `DATABASE_URL_UNPOOLED` (Neon's **direct** string) for Alembic, forces SSL for `*.neon.tech` hosts, disables server-side prepared statements behind the pooler, and enables `pool_pre_ping` plus connection recycling because Neon suspends idle compute. These settings are unit-tested; **a live Neon connection has not been verified yet** (no CarSage Neon database has been configured). The same code runs against any PostgreSQL, so development can use a local server. SQLite is used only for fast unit tests, never as an application database.
+
 ## Repository structure
 
 ```text
 .
-├── carsage/                  PostgreSQL layer: db.py, models.py, import_catalogue.py
-├── alembic/, alembic.ini     migrations (0001_create_catalogue_cars)
+├── carsage/                  backend: app.py (FastAPI), catalogue.py, recommend.py, rules.py, assistant.py,
+│                             predict.py, auth.py, db.py, models.py, schemas.py, import_catalogue.py
+├── alembic/, alembic.ini     migrations (0001 catalogue, 0002 indexes + saved_cars)
 ├── src/
 │   ├── preprocess.py         raw CSV -> data/processed/ (+ QC log)
 │   ├── modeling_setup.py     feature configs and leakage-safe splits
-│   └── experiment.py         Dummy / Ridge / HistGB experiment and reports
+│   ├── experiment.py         Dummy / Ridge / HistGB experiment and reports
+│   └── train_price_model.py  builds models/price_model.joblib (git-ignored) for the API
 ├── notebooks/01_indian_cars_eda.ipynb   EDA (outputs cleared)
 ├── reports/                  eda_summary.md, data_audit.md, modelling_readiness.md, experiment/
-├── tests/                    43 pytest tests
+├── tests/                    pytest suite (data/ML, catalogue, API, auth)
 ├── data/raw/, data/processed/            git-ignored data (placeholders only)
 ├── requirements-data.txt     data / ML dependencies
-├── requirements-app.txt      application dependencies (partly unused so far)
+├── requirements-app.txt      application dependencies
 └── .env.example              configuration placeholders
 ```
 
@@ -164,7 +202,7 @@ Python 3.12 (system Python 3.9 is end-of-life and not recommended), PostgreSQL 1
 python3.12 -m venv .venv && source .venv/bin/activate     # or: uv venv --python 3.12
 pip install -r requirements.txt
 ```
-`requirements-data.txt` is enough for the notebook, preprocessing and experiment. For only the database layer and tests you need `sqlalchemy`, `alembic`, `psycopg[binary]`, `python-dotenv`, `pandas<3`, `scikit-learn` and `pytest`. Note: pandas 3 is not supported by `src/preprocess.py`, hence the `<3` pin.
+`requirements-data.txt` covers the notebook, preprocessing and experiment; `requirements-app.txt` covers the API. The full set pulls in Jupyter and can be slow on a poor connection (set `UV_HTTP_TIMEOUT=300` with `uv pip install`). pandas 3 is not supported by `src/preprocess.py`, hence the `<3` pin.
 
 ### Data
 Place the dataset at `data/raw/archive/cars_ds_final.csv` (optionally `cars_ds_final_2021.csv` for the comparison in the notebook), then:
@@ -176,26 +214,36 @@ python src/preprocess.py        # writes data/processed/cars_processed.csv, qc_l
 ```bash
 cp .env.example .env            # .env is git-ignored: put real values only there
 ```
-| Variable | Used today | Purpose |
-|---|---|---|
-| `DATABASE_URL` | yes | SQLAlchemy URL of the `carsage` database (`postgresql+psycopg://...`) |
-| `TEST_DATABASE_URL` | yes | the `carsage_test` database for PostgreSQL tests (tests refuse any other database name) |
-| `APP_ENV`, `SECRET_KEY`, `ACCESS_TOKEN_EXPIRE_MINUTES`, `CORS_ORIGINS` | not yet | reserved for the future backend |
-| `LLM_PROVIDER`, `LLM_MODEL`, `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` | not yet | reserved for the future assistant (provider not chosen) |
+| Variable | Purpose |
+|---|---|
+| `DATABASE_URL` | PostgreSQL URL for the API and importer. For Neon use the **pooled** string. `postgresql://` is accepted and converted to the psycopg 3 driver |
+| `DATABASE_URL_UNPOOLED` | optional Neon **direct** string used by Alembic (falls back to `DATABASE_URL`) |
+| `TEST_DATABASE_URL` | database for the PostgreSQL tests; its name must be exactly `carsage_test` (tests refuse anything else) |
+| `CORS_ORIGINS` | comma-separated allowed browser origins (default `http://localhost:5173`) |
+| `FIREBASE_PROJECT_ID`, `FIREBASE_CREDENTIALS_FILE` | server-side Firebase Admin settings; keep the service-account JSON **outside** the repository |
+| `PRICE_MODEL_PATH` | optional path of the price model file (default `models/price_model.joblib`) |
+| `APP_ENV`, `SECRET_KEY`, `ACCESS_TOKEN_EXPIRE_MINUTES`, `LLM_PROVIDER`, `LLM_MODEL`, `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` | reserved, not read by the code today |
 
 ### Database
-Run as a PostgreSQL superuser, choosing your own password (put it in `.env`):
+**Neon:** create (or pick) a Neon project and database, copy its *pooled* and *direct* connection strings into `DATABASE_URL` and `DATABASE_URL_UNPOOLED` in `.env`, and use a separate Neon branch/database named `carsage_test` for `TEST_DATABASE_URL`. **Local PostgreSQL** works the same way. Example for a local server, run as a superuser with your own password (put it in `.env`):
 ```sql
 CREATE ROLE carsage LOGIN PASSWORD '<your password>';
 CREATE DATABASE carsage OWNER carsage;
 CREATE DATABASE carsage_test OWNER carsage;
 ```
 ```bash
-alembic upgrade head                   # creates catalogue_cars
+alembic upgrade head                   # creates catalogue_cars and saved_cars
 python -m carsage.import_catalogue     # safe to re-run
 ```
+Migrations never drop data on `upgrade`; the importer upserts by `source_row`.
 
-### Run the components
+### Run the API
+```bash
+python src/train_price_model.py               # optional: builds models/price_model.joblib (about a minute); without it the price endpoint answers 503
+uvicorn carsage.app:app --reload              # http://127.0.0.1:8000/docs
+```
+
+### Run the other components
 ```bash
 jupyter lab notebooks/01_indian_cars_eda.ipynb   # EDA; do not commit executed outputs (they contain dataset rows)
 python src/experiment.py                          # about 3 minutes; writes reports/experiment/
@@ -205,19 +253,18 @@ python src/experiment.py                          # about 3 minutes; writes repo
 ```bash
 python -m pytest tests
 ```
-43 tests pass in the verified environment (Python 3.12, pandas 2.3.3, scikit-learn 1.6.1). Tests that need the processed data or the `carsage_test` database skip themselves when those are unavailable.
+88 tests pass in the verified environment (Python 3.12, pandas 2.3.3, scikit-learn 1.6.1, FastAPI 0.159). Firebase verification is mocked in the tests. Tests that need the processed data or the `carsage_test` database skip themselves when those are unavailable.
 
 ## Roadmap
 
-All planned; none of it exists yet.
+Done: catalogue, search/compare API, explainable recommendations, rule-based assistant, experimental price estimate, Firebase token verification. Still to do:
 
-1. Save and load one evaluated price model with a model card and a prediction function.
-2. Requirements-based search: hard constraint filtering plus heuristic ranking, with relaxation when nothing matches.
-3. Knowledge-based rules that produce explainable recommendations.
-4. FastAPI backend with basic authentication and a separate table for user-created listings.
-5. LLM assistant that calls tools over the real catalogue and cannot name cars the tools did not return.
-6. Website, then a Chrome extension for supported listing pages.
-7. Responsible-AI notes: scope disclaimers (new-car estimates only), data limitations, and privacy.
+1. Website (explore, car details, comparison, advisor, sign-in, saved cars) on top of the API. *(in progress)*
+2. Verify against a real Neon database and a real Firebase project (needs your credentials).
+3. Optional LLM adapter behind the assistant interface (planned; the rule-based assistant remains the default).
+4. Chrome extension for supported listing pages (planned).
+5. User-created marketplace listings as a separate table (planned).
+6. Better price model: the evaluation shows large errors above ₹1 crore, so the estimate stays labelled experimental.
 
 ## Contributing
 

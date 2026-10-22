@@ -156,3 +156,32 @@ def test_postgres_migration_matches_models_and_import_is_idempotent(tmp_path):
                            "values (1,'a','b','c','p',1,false,'x')"))
     finally:
         command.downgrade(cfg, "base")   # leave the test database empty
+
+
+# ---- connection settings (Neon readiness): pure functions, no network
+def test_url_normalisation_and_neon_options():
+    from carsage import db
+    assert db.normalize_url("postgresql://u:p@h/d?sslmode=require").startswith("postgresql+psycopg://u:p@h/d")
+    assert db.normalize_url("postgres://u:p@h/d").startswith("postgresql+psycopg://")
+    assert db.normalize_url("sqlite:///x.db") == "sqlite:///x.db"
+    pooled = db.engine_options("postgresql+psycopg://u:p@ep-cool-123-pooler.us-east-2.aws.neon.tech/neondb")
+    assert pooled["connect_args"] == {"sslmode": "require", "prepare_threshold": None} and pooled["pool_pre_ping"] is True
+    direct = db.engine_options("postgresql+psycopg://u:p@ep-cool-123.us-east-2.aws.neon.tech/neondb")
+    assert direct["connect_args"] == {"sslmode": "require"}                      # SSL forced for Neon, prepared statements left on
+    explicit = db.engine_options("postgresql+psycopg://u:p@x.neon.tech/d?sslmode=verify-full")
+    assert "connect_args" not in explicit                                        # an explicit sslmode is respected
+    assert "connect_args" not in db.engine_options("postgresql+psycopg://u:p@localhost/d")   # local Postgres untouched
+    assert db.engine_options("sqlite:///x.db") == {}
+
+
+def test_migration_url_prefers_unpooled(monkeypatch):
+    from carsage import db
+    monkeypatch.setattr(db, "load_dotenv", lambda: None)
+    monkeypatch.setenv("DATABASE_URL", "postgresql://pooled")
+    monkeypatch.setenv("DATABASE_URL_UNPOOLED", "postgresql://direct")
+    assert db.migration_url() == "postgresql://direct"
+    monkeypatch.delenv("DATABASE_URL_UNPOOLED")
+    assert db.migration_url() == "postgresql://pooled"
+    monkeypatch.delenv("DATABASE_URL")
+    with pytest.raises(RuntimeError, match="DATABASE_URL is not set"):
+        db.migration_url()

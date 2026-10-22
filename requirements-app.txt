@@ -1,13 +1,10 @@
-# Application (NOT implemented yet; declared for Phase 2+). Nothing here is needed by the data/ML code.
+# Application dependencies (backend API, database, authentication)
 fastapi>=0.115
 uvicorn[standard]
 sqlalchemy>=2.0
 psycopg[binary]>=3.1
 alembic
-pydantic>=2.0
-pydantic-settings
 python-dotenv
-pyjwt
-bcrypt
-httpx
-# LLM SDK: add exactly one once the provider is chosen (anthropic or openai)
+httpx                 # FastAPI TestClient
+firebase-admin>=6     # verifies Firebase ID tokens server-side
+# An LLM SDK is intentionally not required: the assistant is rule-based. Add one only if you implement an LLM adapter.
