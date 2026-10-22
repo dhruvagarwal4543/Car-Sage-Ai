@@ -11,7 +11,7 @@
 ![Alembic](https://img.shields.io/badge/migrations-Alembic-6BA81E)
 ![Tests](https://img.shields.io/badge/tests-pytest-0A9EDC?logo=pytest&logoColor=white)
 
-CarSage AI is a course project (Artificial Intelligence) that aims to become an AI-assisted marketplace for **new cars in India**. This repository contains the **data and machine-learning foundation, a PostgreSQL car catalogue, and a FastAPI backend** (search, comparison, explainable recommendations, a catalogue-grounded rule-based assistant, an experimental price estimate, and Firebase-authenticated saved cars). The website is in progress; the Chrome extension and any LLM integration are **planned, not built**.
+CarSage AI is a course project (Artificial Intelligence) that aims to become an AI-assisted marketplace for **new cars in India**. This repository contains the **data and machine-learning foundation, a PostgreSQL car catalogue, and a FastAPI backend** (search, comparison, explainable recommendations, a catalogue-grounded rule-based assistant, an experimental price estimate, and Firebase-authenticated saved cars). A React + TypeScript website (explore, details, comparison, AI advisor, Firebase sign-in, saved cars) sits on top of the API. The Chrome extension and any LLM integration are **planned, not built**.
 
 ---
 
@@ -42,7 +42,7 @@ The price model estimates **new-car ex-showroom price only**. It is not a used-c
 | Price estimate endpoint | Done, **experimental**; needs a local model file (`python src/train_price_model.py`) | [carsage/predict.py](carsage/predict.py) |
 | Firebase token verification, saved cars (per-user) | Implemented; tested with mocked verification; **not yet tested against a real Firebase project** | [carsage/auth.py](carsage/auth.py) |
 | Automated tests | passing (see [Tests](#tests)) | [tests/](tests/) |
-| Website | In progress, see roadmap | |
+| Website (React + TypeScript + Vite): landing, explore, car details, comparison, advisor, sign-in, saved cars | Done; type-checked, 16 component/unit tests, production build, smoke-tested against the live API through the dev proxy. **Not yet exercised in a real browser session by me**; Firebase sign-in untested without credentials | [frontend/](frontend/) |
 | LLM adapter, Chrome extension | Planned | |
 
 ## Architecture
@@ -61,7 +61,7 @@ flowchart LR
     PG[("PostgreSQL (Neon)<br/>catalogue_cars<br/>saved_cars")]
     API["FastAPI<br/>search, compare, filters,<br/>recommendations, assistant,<br/>price estimate"]
     FB["Firebase Auth<br/>ID-token verification"]
-    WEB["Website"]:::planned
+    WEB["React website<br/>frontend/"]
     EXT["Chrome extension"]:::planned
     LLM["LLM adapter"]:::planned
     RAW --> PRE --> PROC
@@ -70,7 +70,8 @@ flowchart LR
     PROC --> IMP --> PG
     PG <--> API
     FB --> API
-    API -.-> WEB
+    API <--> WEB
+    FB -.-> WEB
     API -.-> EXT
     LLM -.-> API
 
@@ -183,6 +184,7 @@ Neon is the intended primary database. [carsage/db.py](carsage/db.py) reads `DAT
 │   ├── modeling_setup.py     feature configs and leakage-safe splits
 │   ├── experiment.py         Dummy / Ridge / HistGB experiment and reports
 │   └── train_price_model.py  builds models/price_model.joblib (git-ignored) for the API
+├── frontend/                 React + TypeScript + Vite website (src/pages, src/components, tests)
 ├── notebooks/01_indian_cars_eda.ipynb   EDA (outputs cleared)
 ├── reports/                  eda_summary.md, data_audit.md, modelling_readiness.md, experiment/
 ├── tests/                    pytest suite (data/ML, catalogue, API, auth)
@@ -243,6 +245,17 @@ python src/train_price_model.py               # optional: builds models/price_mo
 uvicorn carsage.app:app --reload              # http://127.0.0.1:8000/docs
 ```
 
+### Run the website
+```bash
+cd frontend
+npm install
+cp .env.example .env.local        # optional: add your Firebase WEB config to enable sign-in (browsing works without it)
+npm run dev                       # http://localhost:5173 (proxies /api to the API on :8000)
+npm test                          # Vitest component and unit tests
+npm run build                     # type-check + production bundle in frontend/dist
+```
+Start the API first (previous section). Without Firebase variables the Sign-in page explains that sign-in is not configured; everything else works. In production, set `VITE_API_BASE_URL` to the API origin and add the website origin to the API's `CORS_ORIGINS`.
+
 ### Run the other components
 ```bash
 jupyter lab notebooks/01_indian_cars_eda.ipynb   # EDA; do not commit executed outputs (they contain dataset rows)
@@ -253,18 +266,17 @@ python src/experiment.py                          # about 3 minutes; writes repo
 ```bash
 python -m pytest tests
 ```
-88 tests pass in the verified environment (Python 3.12, pandas 2.3.3, scikit-learn 1.6.1, FastAPI 0.159). Firebase verification is mocked in the tests. Tests that need the processed data or the `carsage_test` database skip themselves when those are unavailable.
+88 backend tests pass (Python 3.12, pandas 2.3.3, scikit-learn 1.6.1, FastAPI 0.159) and 16 frontend tests pass (`cd frontend && npm test`). Firebase verification is mocked in the backend tests. Tests that need the processed data or the `carsage_test` database skip themselves when those are unavailable.
 
 ## Roadmap
 
-Done: catalogue, search/compare API, explainable recommendations, rule-based assistant, experimental price estimate, Firebase token verification. Still to do:
+Done: catalogue, search/compare API, explainable recommendations, rule-based assistant, experimental price estimate, Firebase token verification, website. Still to do:
 
-1. Website (explore, car details, comparison, advisor, sign-in, saved cars) on top of the API. *(in progress)*
-2. Verify against a real Neon database and a real Firebase project (needs your credentials).
-3. Optional LLM adapter behind the assistant interface (planned; the rule-based assistant remains the default).
-4. Chrome extension for supported listing pages (planned).
-5. User-created marketplace listings as a separate table (planned).
-6. Better price model: the evaluation shows large errors above ₹1 crore, so the estimate stays labelled experimental.
+1. Verify against a real Neon database and a real Firebase project (needs your credentials).
+2. Optional LLM adapter behind the assistant interface (planned; the rule-based assistant remains the default).
+3. Chrome extension for supported listing pages (planned).
+4. User-created marketplace listings as a separate table (planned).
+5. Better price model: the evaluation shows large errors above ₹1 crore, so the estimate stays labelled experimental.
 
 ## Contributing
 
