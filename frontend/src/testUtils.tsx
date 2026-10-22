@@ -6,7 +6,7 @@ import { CompareProvider } from "./compare";
 import type { Car } from "./types";
 
 export function renderApp(ui: ReactElement, route = "/") {
-  return render(<MemoryRouter initialEntries={[route]} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}><AuthProvider><CompareProvider>{ui}</CompareProvider></AuthProvider></MemoryRouter>);
+  return render(<MemoryRouter initialEntries={[route]}><AuthProvider><CompareProvider>{ui}</CompareProvider></AuthProvider></MemoryRouter>);
 }
 
 export function car(over: Partial<Car> = {}): Car {

@@ -114,6 +114,22 @@ Prices are **ex-showroom prices of new cars**. The data has no on-road prices, l
 
 Firebase Authentication is the only identity system: the website signs users in with the Firebase client SDK, and the API verifies the ID token with the Firebase Admin SDK ([carsage/auth.py](carsage/auth.py)). No passwords are stored in PostgreSQL. Only the verified Firebase UID is stored, in `saved_cars`. Missing or invalid tokens return 401; if the server has no Firebase credentials configured it returns 503 and says so. Configure `FIREBASE_PROJECT_ID` and `FIREBASE_CREDENTIALS_FILE` (a service-account JSON kept **outside** the repository).
 
+## Security and responsible AI
+
+**What is in place**
+- Secrets only in environment variables or untracked files (`.env`, a service-account file outside the repo); `.env.example` has placeholders only.
+- All database access goes through SQLAlchemy with bound parameters; search text is escaped for `LIKE`. Query parameters and bodies are validated and bounded (page size at most 50, text lengths capped, 2-4 cars per comparison).
+- CORS allows only the origins in `CORS_ORIGINS`. Protected routes verify a Firebase ID token on the server (401 invalid/missing, 403 no identity, 503 auth not configured); saved cars are always filtered by the verified UID, so users cannot read or change each other's records. Error bodies contain no internals, and request logs hold method, path and status only (no query strings, tokens or bodies).
+- No natural-language-to-SQL feature exists, so there is no model-generated SQL to sandbox. The assistant only calls fixed, parameterised catalogue functions.
+- Transparency: prices are labelled ex-showroom; missing data is shown as "Not recorded" and never filled in; recommendations list reasons, trade-offs and relaxed constraints; the price estimate is labelled experimental with its measured error and out-of-range warnings; the assistant states it is rule-based and offline.
+
+**Known limitations**
+- No rate limiting, no on-road prices, no live inventory, no images (a neutral placeholder is shown), no used-car or listing data, so fake-listing detection is out of scope.
+- The score and the `family_friendly`/`city_friendly` rules are heuristics, not ground truth, and do not capture taste, brand reliability or after-sales service.
+- The price model has large errors for expensive cars and is no substitute for a dealer quote.
+- `npm audit` reports 4 advisories under Firebase's optional Firestore/gRPC packages. The website imports only `firebase/app` and `firebase/auth`, and the built bundle contains no Firestore or gRPC code, so they are not reachable in the shipped app. `pip-audit` reports none.
+- The dataset's licence is unverified (see below).
+
 ## Data pipeline
 
 **Dataset.** Two files, `cars_ds_final.csv` (1,276 rows) and `cars_ds_final_2021.csv` (1,267 rows), 141 columns each, one row per new-car *variant*. Comparison on the data showed the newer file is an updated, more complete version (17 more distinct variants, identical prices on shared variants), so it is the one analysed. The files are **not included** in this repository (see [Data and licensing](#data-and-licensing)).
@@ -267,6 +283,8 @@ python src/experiment.py                          # about 3 minutes; writes repo
 python -m pytest tests
 ```
 88 backend tests pass (Python 3.12, pandas 2.3.3, scikit-learn 1.6.1, FastAPI 0.159) and 16 frontend tests pass (`cd frontend && npm test`). Firebase verification is mocked in the backend tests. Tests that need the processed data or the `carsage_test` database skip themselves when those are unavailable.
+
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for the manual deployment steps (nothing is deployed yet).
 
 ## Roadmap
 
