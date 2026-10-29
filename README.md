@@ -16,7 +16,7 @@ CarSage AI is a course project (Artificial Intelligence) that aims to become an 
 ---
 
 ## Contents
-[Overview](#overview) · [Status](#project-status) · [Architecture](#architecture) · [Data pipeline](#data-pipeline) · [Machine learning](#machine-learning-approach) · [Results](#evaluation-results) · [Database](#postgresql-catalogue) · [Structure](#repository-structure) · [Getting started](#getting-started) · [Roadmap](#roadmap) · [License](#license)
+[Overview](#overview) · [Status](#project-status) · [Architecture](#architecture) · [API](#api) · [Authentication](#authentication-firebase) · [Data pipeline](#data-pipeline) · [Machine learning](#machine-learning-approach) · [Results](#evaluation-results) · [Database](#postgresql-catalogue) · [Structure](#repository-structure) · [Getting started](#getting-started) · [Tests](#tests) · [Roadmap](#roadmap) · [License](#license)
 
 ## Overview
 
@@ -210,6 +210,18 @@ Neon is the intended primary database (see [docs/CLOUD_SETUP.md](docs/CLOUD_SETU
 └── .env.example              configuration placeholders
 ```
 
+## Local development at a glance
+
+The app runs as two processes: FastAPI on port **8000** and Vite on port **5173**. The website proxies `/api` requests to the backend during development.
+
+1. Install the Python dependencies and prepare the dataset using [Getting started](#getting-started). The raw dataset is not included in this repository.
+2. Copy `.env.example` to `.env`, configure PostgreSQL, then run `alembic upgrade head` and `python -m carsage.import_catalogue`.
+3. In an activated Python environment, run `uvicorn carsage.app:app --reload`.
+4. In a second terminal, run `cd frontend`, `npm ci`, then `npm run dev`.
+5. Open [the website](http://localhost:5173) or [the interactive API docs](http://127.0.0.1:8000/docs).
+
+Browsing, comparison and the rule-based advisor work without Firebase. Signing in and saving cars require both the server and website Firebase configuration. Training the price model is optional; without its model file, only the price-prediction endpoint returns `503`.
+
 ## Getting started
 
 ### Prerequisites
@@ -266,7 +278,7 @@ uvicorn carsage.app:app --reload              # http://127.0.0.1:8000/docs
 ### Run the website
 ```bash
 cd frontend
-npm install
+npm ci
 cp .env.example .env.local        # optional: add your Firebase WEB config to enable sign-in (browsing works without it)
 npm run dev                       # http://localhost:5173 (proxies /api to the API on :8000)
 npm test                          # Vitest component and unit tests
