@@ -286,6 +286,15 @@ npm run build                     # type-check + production bundle in frontend/d
 ```
 Start the API first (previous section). Without Firebase variables the Sign-in page explains that sign-in is not configured; everything else works. In production, set `VITE_API_BASE_URL` to the API origin and add the website origin to the API's `CORS_ORIGINS`.
 
+### Local troubleshooting
+
+| Symptom | What to check |
+|---|---|
+| Website loads but catalogue requests fail | Start the API on port 8000 and open `http://127.0.0.1:8000/api/health/ready`. A `503` readiness response means the database check failed; verify `DATABASE_URL` and that PostgreSQL is running. |
+| Catalogue is empty | After preprocessing the dataset, run `alembic upgrade head` and `python -m carsage.import_catalogue` against the configured database. |
+| Sign-in or saving cars is unavailable | Configure the website's `VITE_FIREBASE_*` values and the server's Firebase project and credentials. Restart the relevant development server after changing its environment. |
+| Price prediction returns `503` | Run `python src/train_price_model.py`. Keep the generated `.joblib` and its companion `.json` together; restart the API after replacing a loaded model. |
+
 ### Run the other components
 ```bash
 jupyter lab notebooks/01_indian_cars_eda.ipynb   # EDA; do not commit executed outputs (they contain dataset rows)
