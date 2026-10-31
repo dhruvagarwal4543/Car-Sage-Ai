@@ -4,6 +4,7 @@ import { api } from "../api";
 import { CarCard } from "../components/CarCard";
 import type { Car, Preferences } from "../types";
 import { Icon } from "../components/Icon";
+import { Emblem } from "../components/Emblem";
 
 interface Msg { role: "user" | "assistant"; text: string; cars?: Car[]; compare?: boolean }
 const SUGGESTIONS = ["Family SUV under 15 lakh, diesel", "Automatic petrol hatchback under 8 lakh", "Fuel efficient city car under 10 lakh", "Compare Nexon and Creta", "7 seater under 20 lakh"];
@@ -43,7 +44,7 @@ export function Advisor() {
   const submit = (e: FormEvent) => { e.preventDefault(); void send(input); };
   return (
     <>
-      <div className="advisor-heading"><div><p className="eyebrow"><Icon name="spark" size={16} /> YOUR PERSONAL SHORTLIST STARTS HERE</p><h1>AI Car Advisor</h1><p>A little guidance for a big decision.</p></div><button className="btn" disabled={busy} onClick={() => { ctx.current = null; started.current = ""; setMsgs([{ role: "assistant", text: GREETING }]); setInput(""); setParams({}, { replace: true }); }}>New conversation</button></div>
+      <div className="advisor-heading"><div className="advisor-intro"><div className="emblem-mark" aria-hidden="true"><Emblem /></div><div><p className="eyebrow"><Icon name="spark" size={16} /> YOUR PERSONAL SHORTLIST STARTS HERE</p><h1>AI Car Advisor</h1><p>A little guidance for a big decision.</p></div></div><button className="btn" disabled={busy} onClick={() => { ctx.current = null; started.current = ""; setMsgs([{ role: "assistant", text: GREETING }]); setInput(""); setParams({}, { replace: true }); }}>New conversation</button></div>
       <p className="advisor-disclosure"><span className="status-dot" /> Grounded in the catalogue · Rule-based, not a language model · No live prices</p>
       <div className="chat" role="log" aria-live="polite" aria-label="Conversation">
         {msgs.map((m, i) => (

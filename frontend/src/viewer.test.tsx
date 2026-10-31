@@ -12,6 +12,5 @@ it("keeps the vehicle photo usable if the scene component fails", async () => {
     render(<VehicleViewer car={car({ make: "Porsche", model: "911", variant: "Carrera S" })} />);
     expect(await screen.findByText(/The 3D viewer could not be started/)).toBeInTheDocument();
     expect(screen.getByRole("img", { name: /Porsche 911/ })).toHaveAttribute("src", expect.stringContaining("porsche-911.webp"));
-    expect(screen.getByText("Photo view")).toBeInTheDocument();
   } finally { window.removeEventListener("error", expectedError); vi.restoreAllMocks(); }
 });

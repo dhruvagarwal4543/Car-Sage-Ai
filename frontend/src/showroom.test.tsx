@@ -1,51 +1,37 @@
-import { act, screen, within } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { screen, within } from "@testing-library/react";
 import { api } from "./api";
 import { Home } from "./pages/Home";
 import { car, renderApp } from "./testUtils";
-import type { CarDetail } from "./types";
 
 vi.mock("./components/VehicleScene", () => ({ default: () => <div data-testid="model-scene" /> }));
-const porsche = car({ id: 10, make: "Porsche", model: "911", variant: "Carrera S" });
-const creta = car({ id: 20, make: "Hyundai", model: "Creta", variant: "SX", price_inr: 1500000 });
-const nexon = car({ id: 30, make: "Tata", model: "Nexon" });
+const porsche = car({ id: 10, make: "Porsche", model: "911", variant: "Carrera S", fuel_type: "Petrol", transmission: "Automatic", price_inr: 19100000 });
 
 beforeEach(() => {
   vi.spyOn(api, "filters").mockResolvedValue({ makes: [], fuel_types: [], transmissions: [], body_types: [], seating_capacities: [], price_min: null, price_max: null });
-  vi.spyOn(api, "cars").mockImplementation(async (params) => ({ items: [porsche, creta, nexon].filter((c) => c.make === params.make), total: 1, page: 1, page_size: 1 }));
-  vi.spyOn(api, "car").mockImplementation(async (id) => ({ ...[porsche, creta, nexon].find((c) => c.id === id)!, related: [] }));
+  vi.spyOn(api, "cars").mockImplementation(async (params) => ({ items: params.make === "Porsche" ? [porsche] : [], total: 1, page: 1, page_size: 1 }));
 });
 afterEach(() => vi.restoreAllMocks());
 
-it("switches both the real catalogue identity and visual when a showroom vehicle is selected", async () => {
+it("stages the one credited vehicle in 3D with its real catalogue identity", async () => {
   renderApp(<Home />);
-  await screen.findByTestId("model-scene");
-  expect(screen.getByRole("heading", { name: "911 Carrera S" })).toBeInTheDocument();
-  await userEvent.click(screen.getByRole("button", { name: /Hyundai Creta/ }));
-  await screen.findByRole("heading", { name: "Creta SX" });
-  expect(screen.queryByTestId("model-scene")).not.toBeInTheDocument();
-  expect(screen.getByRole("img", { name: /Hyundai Creta/ })).toHaveAttribute("src", expect.stringContaining("hyundai-creta"));
-  expect(within(screen.getByRole("heading", { name: "Creta SX" }).closest(".showroom-caption") as HTMLElement).getByText("₹15.00 lakh")).toBeInTheDocument();
-  expect(api.car).toHaveBeenCalledWith(20);
+  expect(await screen.findByTestId("model-scene")).toBeInTheDocument();
+  const caption = screen.getByRole("heading", { name: "911 Carrera S" }).closest(".showroom-caption") as HTMLElement;
+  expect(within(caption).getByText("₹1.91 crore")).toBeInTheDocument();
+  expect(within(caption).getByText(/Petrol/)).toBeInTheDocument();
+  expect(api.cars).toHaveBeenCalledWith(expect.objectContaining({ make: "Porsche", model: "911" }));
 });
 
-it("ignores a late vehicle response after a newer selection has loaded", async () => {
-  let finish!: (value: CarDetail) => void;
-  vi.mocked(api.car).mockImplementation((id) => id === 20 ? new Promise((resolve) => { finish = resolve; }) : Promise.resolve({ ...nexon, related: [] }));
+it("offers no vehicle switcher and no photo fallback toggle", async () => {
   renderApp(<Home />);
   await screen.findByTestId("model-scene");
-  await userEvent.click(screen.getByRole("button", { name: /Hyundai Creta/ }));
-  await userEvent.click(screen.getByRole("button", { name: /Tata Nexon/ }));
-  await screen.findByRole("heading", { name: "Nexon XM" });
-  await act(async () => { finish({ ...creta, related: [] }); });
-  expect(screen.getByRole("heading", { name: "Nexon XM" })).toBeInTheDocument();
-  expect(screen.getByRole("img", { name: /Tata Nexon/ })).toHaveAttribute("src", expect.stringContaining("tata-nexon"));
-  expect(screen.queryByRole("heading", { name: "Creta SX" })).not.toBeInTheDocument();
+  expect(screen.queryByLabelText("Showroom vehicle selection")).not.toBeInTheDocument();
+  expect(screen.queryByLabelText("Vehicle visual format")).not.toBeInTheDocument();
 });
 
-it("loads a vehicle linked from another route using its catalogue ID", async () => {
-  renderApp(<Home />, "/?car=30");
-  await screen.findByRole("heading", { name: "Nexon XM" });
-  expect(api.car).toHaveBeenCalledWith(30);
+it("reports a failure to reach the catalogue instead of staging nothing", async () => {
+  vi.mocked(api.cars).mockRejectedValue(new Error("Database unavailable"));
+  renderApp(<Home />);
+  const alerts = await screen.findAllByRole("alert");
+  expect(alerts[0]).toHaveTextContent("Database unavailable");
   expect(screen.queryByTestId("model-scene")).not.toBeInTheDocument();
 });

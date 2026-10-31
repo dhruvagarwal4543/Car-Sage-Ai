@@ -45,19 +45,12 @@ export function CarCard({ car, compact = false, modelView = false }: { car: Car;
           <p className="muted small">{car.make}</p>
           <h3>{car.model} <span className="variant">{car.variant}</span></h3>
           <p className="price">{modelView && <span className="from-price">From </span>}{inr(car.price_inr)} <span className="muted small">ex-showroom</span></p>
-          <ul className="chips" aria-label="Key specifications">
-            <li>{car.fuel_type}</li>
-            {car.transmission && <li>{car.transmission}</li>}
-            {car.body_type && <li>{car.body_type}</li>}
-            {car.seating_capacity != null && <li>{car.seating_capacity} seats</li>}
-            {car.mileage_kmpl != null && <li>{num(car.mileage_kmpl, "km/l")}</li>}
-          </ul>
+          <p className="spec-line">{[car.fuel_type, car.transmission, car.body_type, car.seating_capacity != null ? `${car.seating_capacity} seats` : null, car.mileage_kmpl != null ? num(car.mileage_kmpl, "km/l") : null].filter(Boolean).join(" · ")}</p>
         </div>
       </Link>
       <div className="card-actions">
         {modelView && <Link className="variants-link" to={`/cars?${variants}`}>View variants <Icon name="arrow" size={14} /></Link>}
         <button className={`btn small ${inCompare ? "active" : ""}`} aria-pressed={inCompare} onClick={toggleCompare}><Icon name={inCompare ? "check" : "compare"} size={15} />{inCompare ? "In comparison" : "Compare"}<span className="sr-only"> {car.make} {car.model} {car.variant}</span></button>
-        <Link className="showroom-link" to={`/?car=${car.id}#showroom`} aria-label={`View ${car.make} ${car.model} in showroom`} title="View in showroom"><Icon name="cube" size={18} /></Link>
         <SaveButton car={car} />
       </div>
       {notice && <p className="notice" role="alert">{notice}</p>}

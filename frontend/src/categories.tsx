@@ -12,7 +12,7 @@ const silhouettes: Record<string, string> = {
 };
 
 export function CategoryIcon({ category }: { category: string }) {
-  return <svg viewBox="0 0 24 21" fill="none" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" aria-hidden="true"><path d={silhouettes[category] ?? silhouettes.SUV} /><circle cx="6" cy="15" r="2" fill="var(--surface)" /><circle cx="18" cy="15" r="2" fill="var(--surface)" /></svg>;
+  return <svg viewBox="0 0 24 21" fill="none" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" aria-hidden="true"><path d={silhouettes[category] ?? silhouettes.SUV} /><circle cx="6" cy="15" r="2" fill="none" /><circle cx="18" cy="15" r="2" fill="none" /></svg>;
 }
 
 export function makeLabel(make: string) {

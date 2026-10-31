@@ -5,10 +5,10 @@ import { authMessage, useAuth } from "../auth";
 import { CarCard } from "../components/CarCard";
 import { Empty, ErrorBox, Loading } from "../components/States";
 import { useAsync } from "../useAsync";
-import { Icon } from "../components/Icon";
+import { Emblem } from "../components/Emblem";
 
 function AccountShell({ children }: { children: ReactNode }) {
-  return <div className="account-layout"><section className="account-story"><p className="eyebrow">YOUR NEXT CHAPTER</p><h2>Good choices.<br />Great journeys.</h2><p>Keep your favourites in one place. Come back when you’re ready for the next step.</p><div className="account-emblem"><Icon name="bookmark" size={70} /></div><p className="small">Your shortlist is personal. Your saved cars belong to you.</p></section><div className="auth-box">{children}</div></div>;
+  return <div className="account-layout"><section className="account-story"><p className="eyebrow">YOUR NEXT CHAPTER</p><h2>Good choices.<br />Great journeys.</h2><p>Keep your favourites in one place. Come back when you’re ready for the next step.</p><div className="account-emblem"><Emblem /></div><p className="small">Your shortlist is personal. Your saved cars belong to you.</p></section><div className="auth-box">{children}</div></div>;
 }
 
 export function Login() {
