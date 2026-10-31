@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CarSage AI</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <strong>CarSage <span class="ai">AI</span></strong>
+    <span id="conn" class="pill" role="status">Connecting…</span>
+    <button id="theme" class="icon" type="button" aria-label="Toggle light or dark theme">◐</button>
+  </header>
+  <main>
+    <section id="vehicle" aria-live="polite"></section>
+    <section id="panel" aria-live="polite"></section>
+    <section>
+      <h2>Search the catalogue</h2>
+      <label class="sr" for="q">Search by make, model or variant</label>
+      <input id="q" type="search" placeholder="e.g. Creta, Nexon diesel" autocomplete="off">
+      <div id="results" aria-live="polite"></div>
+    </section>
+    <section id="compare"></section>
+    <section id="saved"></section>
+    <details>
+      <summary>Settings</summary>
+      <label>API address <input id="apiBase" type="url"></label>
+      <label>Website address <input id="siteBase" type="url"></label>
+      <button id="saveCfg" type="button">Save settings</button>
+      <p class="muted">Saved cars and the comparison list live on this device only. The API must allow this extension's origin (<code id="origin"></code>) in CORS_ORIGINS.</p>
+    </details>
+  </main>
+  <script type="module" src="src/popup.js"></script>
+</body>
+</html>

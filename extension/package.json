@@ -1,0 +1,7 @@
+{
+  "name": "carsage-extension",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": { "test": "vitest run" },
+  "devDependencies": { "jsdom": "^27.0.0", "vitest": "^4.1.0" }
+}

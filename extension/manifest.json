@@ -1,0 +1,9 @@
+{
+  "manifest_version": 3,
+  "name": "CarSage AI",
+  "version": "0.1.0",
+  "description": "Research cars on CarDekho, CarWale and other sites: match to the CarSage catalogue, compare, see price history and find alternatives.",
+  "action": { "default_popup": "popup.html", "default_title": "CarSage AI" },
+  "permissions": ["activeTab", "scripting", "storage"],
+  "content_security_policy": { "extension_pages": "script-src 'self'; object-src 'self'" }
+}
