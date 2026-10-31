@@ -36,10 +36,16 @@ Health checks: liveness `GET /api/health`, readiness `GET /api/health/ready` (ch
 *Price model:* `models/price_model.joblib` is built from the processed dataset by `python src/train_price_model.py` and is **not** in the repository. Either upload the file to the host and set `PRICE_MODEL_PATH`, or leave it out: `/api/price-predictions` then answers `503` and the rest of the site works.
 
 ## 4. Website
+
+Use Node 22.12+ for the patched Vite/Vitest tooling. React remains on 18.
 ```bash
 cd frontend && npm ci && npm run build      # output: frontend/dist
 ```
-Set `VITE_API_BASE_URL` to the API's public origin and the `VITE_FIREBASE_*` values at build time. Configure the host to rewrite unknown paths to `/index.html` (client-side routing).
+Set `VITE_API_BASE_URL` to the API's public origin and the `VITE_FIREBASE_*` values at build time. Configure the host to rewrite unknown application paths to `/index.html` (client-side routing). Serve actual files under `/assets/` before the SPA fallback, including the GLB, WebP photos, font and Draco WASM/JS files. Preserve their licence files and `/credits`. See [VEHICLE_ASSETS.md](VEHICLE_ASSETS.md) for exact model coverage and compatibility. The browser requires a WebGL-capable device for 3D; photo fallbacks remain usable.
+
+For a local production-build check, run `npm run preview -- --host 127.0.0.1` with the API on port 8000. Vite preview proxies `/api`, like the dev server. A deployed static host needs the production API origin in `VITE_API_BASE_URL`; the local proxy is not a production backend.
+
+For caching, hashed JavaScript/CSS can use immutable cache headers. The manually named vehicle assets should use validators or versioned names on replacement. Do not apply immutable caching to changing `index.html`. Verify the hosting CSP permits local workers (`worker-src blob:`) and WebAssembly decoding when Draco is enabled; keep any change scoped to the viewer.
 
 ## Known limitations of free hosting
 - Free API instances sleep when idle, so the first request can take many seconds; Neon also suspends idle compute (the engine pre-pings connections to recover).

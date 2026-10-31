@@ -11,7 +11,7 @@
 ![Alembic](https://img.shields.io/badge/migrations-Alembic-6BA81E)
 ![Tests](https://img.shields.io/badge/tests-pytest-0A9EDC?logo=pytest&logoColor=white)
 
-CarSage AI is a course project (Artificial Intelligence) that aims to become an AI-assisted marketplace for **new cars in India**. This repository contains the **data and machine-learning foundation, a PostgreSQL car catalogue, and a FastAPI backend** (search, comparison, explainable recommendations, a catalogue-grounded rule-based assistant, an experimental price estimate, and Firebase-authenticated saved cars). A React + TypeScript website (explore, details, comparison, AI advisor, Firebase sign-in, saved cars) sits on top of the API. The Chrome extension and any LLM integration are **planned, not built**.
+CarSage AI is a course project (Artificial Intelligence) that aims to become an AI-assisted marketplace for **new cars in India**. This repository contains the **data and machine-learning foundation, a PostgreSQL car catalogue, and a FastAPI backend** (search, comparison, explainable recommendations, a catalogue-grounded rule-based assistant, an experimental price estimate, and Firebase-authenticated saved cars). A React 18 + TypeScript website with a premium light UI, a real Three.js showroom, verified model-family photography, exploration, details, comparison, an advisor, Firebase sign-in and saved cars sits on top of the API. The Chrome extension and any LLM integration are **planned, not built**.
 
 ---
 
@@ -42,7 +42,7 @@ The price model estimates **new-car ex-showroom price only**. It is not a used-c
 | Price estimate endpoint | Done, **experimental**; needs a local model file (`python src/train_price_model.py`) | [carsage/predict.py](carsage/predict.py) |
 | Firebase token verification, saved cars (per-user) | Implemented; tested through the real Admin SDK code path with locally generated keys (valid, expired, wrong-project, forged, malformed tokens); **not yet tested against a real Firebase project** | [carsage/auth.py](carsage/auth.py) |
 | Automated tests | passing (see [Tests](#tests)) | [tests/](tests/) |
-| Website (React + TypeScript + Vite): landing, explore, car details, comparison, advisor, sign-in, saved cars | Done; type-checked, 21 component/unit tests, production build, smoke-tested against the live API through the dev proxy. **Not yet exercised in a real browser session by me**; Firebase sign-in untested without credentials | [frontend/](frontend/) |
+| Website (React + TypeScript + Vite): landing, explore, car details, comparison, advisor, sign-in, saved cars | Cinematic light/dark UI, scroll motion and corrected model/category filters; 41 frontend tests, type checking and production build pass. Verified in Chrome at desktop/mobile sizes, including genuine WebGL rotation, photo/3D switching, fallback paths and catalogue workflows. Real Firebase sign-in remains unverified without credentials | [frontend/](frontend/) |
 | LLM adapter, Chrome extension | Planned | |
 
 ## Architecture
@@ -85,10 +85,10 @@ Interactive docs: `http://127.0.0.1:8000/docs` once the server is running. Publi
 | Method and path | Purpose |
 |---|---|
 | `GET /api/health`, `GET /api/health/ready` | liveness (no database) and readiness (database check, 503 if down) |
-| `GET /api/cars` | search (`q`, `make`, `model`, `fuel_type`, `transmission`, `body_type`, `min_price`, `max_price`, `min_seats`), `sort`, `page`, `page_size` (max 50) |
+| `GET /api/cars` | search (`q`, `make`, `model`, `fuel_type`, `transmission`, `body_type`, `min_price`, `max_price`, `min_seats`), `view=models\|variants`, `sort`, `page`, `page_size` (max 50) |
 | `GET /api/cars/{id}` | full specifications, derived tags, related cars |
 | `GET /api/cars/compare?ids=1,2,3` | 2-4 cars side by side, best value per row, missing-data markers |
-| `GET /api/filters` | available makes, fuel types, transmissions, body types, seat counts, price range |
+| `GET /api/filters` | facets using the same search filters: makes, make-dependent models, fuel/body memberships, transmission groups, seats, price range |
 | `POST /api/recommendations` | preferences in, ranked cars out with reasons, trade-offs, missing data and any relaxed constraints |
 | `POST /api/assistant` | natural-language question in, grounded reply and cars out |
 | `POST /api/price-predictions` | **experimental** estimate from specifications or a `car_id` |
@@ -110,6 +110,20 @@ Prices are **ex-showroom prices of new cars**. The data has no on-road prices, l
 3. **Heuristic score:** a weighted min-max score over the matches (price, mileage, power, boot space, airbags); at most two variants per model are returned. A missing attribute scores 0 and is reported, never guessed.
 4. **Assistant:** regular-expression and keyword extraction turns a message into preferences, then calls the same functions. Replies are assembled from database results only. It is not an LLM, has no internet access and no live prices.
 
+## Interactive showroom and visual assets
+
+The light and dark interfaces are shared across the homepage, catalogue, details, comparison, advisor, accounts and saved cars. Appearance defaults to the system setting and persists explicit choices; a small script applies it before styles render. The homepage retrieves each selected vehicle from the API; `/?car=<catalogue id>` opens that exact record. Car cards and advisor results can send a vehicle directly into the showroom.
+
+GSAP coordinates the hero introduction, vehicle entrances and section/card reveals. A lazy ScrollTrigger scrub animates one CSS-sticky desktop hero scene; mobile, short viewports and reduced motion use ordinary document flow. Route changes remove animation contexts and observers. Three.js lighting follows the theme without reloading the model.
+
+The catalogue defaults to **Models** (263 models in the current local data), with **All variants** (1,267 records) available separately. A model card is the cheapest variant matching the active filters; its **View variants** link preserves those filters. Compound body/fuel types belong to each applicable category, and Automatic includes AMT/CVT/DCT. Facet counts follow the other active filters; changing make clears the dependent model. These are read-only queries: original specifications and database rows are preserved.
+
+The lazy-loaded Three.js viewer supports real pointer/touch rotation, bounded camera movement, keyboard controls, zoom/reset, photo switching, studio lighting and shadows. It renders on demand and releases GPU resources when switched or unmounted. Model, WebGL and module failures retain a usable photo fallback.
+
+**Asset coverage is deliberately limited:** one licensed Porsche 911 Carrera 4S GLB is used as an explicitly labelled reference for the closed-roof Carrera S catalogue record. It is never assigned to the Cabriolet. Seventeen model-family photo mappings use sixteen verified, credited WebP photographs. Other vehicles show an honest unavailable-photo state. Photos may differ from the catalogue in colour, generation and trim. No generated or generic car visual is presented as an authentic vehicle photo.
+
+See [the vehicle asset guide](docs/VEHICLE_ASSETS.md) for compatibility, sources, licences, performance, lifecycle and adding models. `/credits` lists the original photo/model attributions. No database migration, cloud resource, paid API, LLM or extension was introduced for this redesign.
+
 ## Authentication (Firebase)
 
 Firebase Authentication is the only identity system: the website signs users in with the Firebase client SDK, and the API verifies the ID token with the Firebase Admin SDK ([carsage/auth.py](carsage/auth.py)). No passwords are stored in PostgreSQL. Only the verified Firebase UID is stored, in `saved_cars`. Missing or invalid tokens return 401; if the server has no Firebase credentials configured it returns 503 and says so. Configure `FIREBASE_PROJECT_ID` and `FIREBASE_CREDENTIALS_FILE` (a service-account JSON kept **outside** the repository).
@@ -124,10 +138,10 @@ Firebase Authentication is the only identity system: the website signs users in 
 - Transparency: prices are labelled ex-showroom; missing data is shown as "Not recorded" and never filled in; recommendations list reasons, trade-offs and relaxed constraints; the price estimate is labelled experimental with its measured error and out-of-range warnings; the assistant states it is rule-based and offline.
 
 **Known limitations**
-- No rate limiting, no on-road prices, no live inventory, no images (a neutral placeholder is shown), no used-car or listing data, so fake-listing detection is out of scope.
+- No rate limiting, no on-road prices, no live inventory, photo coverage is limited to the reviewed asset manifest, no used-car or listing data, so fake-listing detection is out of scope.
 - The score and the `family_friendly`/`city_friendly` rules are heuristics, not ground truth, and do not capture taste, brand reliability or after-sales service.
 - The price model has large errors for expensive cars and is no substitute for a dealer quote.
-- `npm audit` reports 4 advisories under Firebase's optional Firestore/gRPC packages. The website imports only `firebase/app` and `firebase/auth`, and the built bundle contains no Firestore or gRPC code, so they are not reachable in the shipped app. `pip-audit` reports none.
+- `npm audit` reports zero vulnerabilities at the redesign verification. Vite and Vitest were updated to patched compatible releases; React remains on 18. Firebase remains on 11, with its optional gRPC dependency overridden within major version 1 to a patched release. The application still imports only `firebase/app` and `firebase/auth`. Backend dependency auditing was not repeated for this visual-only change.
 - The dataset's licence is unverified (see below).
 
 ## Data pipeline
@@ -225,7 +239,7 @@ Browsing, comparison and the rule-based advisor work without Firebase. Signing i
 ## Getting started
 
 ### Prerequisites
-Python 3.12 (system Python 3.9 is end-of-life and not recommended), PostgreSQL 16, and the dataset files (not included).
+Python 3.12, Node 22.12+ with npm, PostgreSQL 16, and the dataset files (not included).
 
 ### Install
 ```bash
@@ -284,7 +298,7 @@ npm run dev                       # http://localhost:5173 (proxies /api to the A
 npm test                          # Vitest component and unit tests
 npm run build                     # type-check + production bundle in frontend/dist
 ```
-Start the API first (previous section). Without Firebase variables the Sign-in page explains that sign-in is not configured; everything else works. In production, set `VITE_API_BASE_URL` to the API origin and add the website origin to the API's `CORS_ORIGINS`.
+Start the API first (previous section). Without Firebase variables browsing, comparison and the advisor work; signing in and saving cars require Firebase setup. In production, set `VITE_API_BASE_URL` to the API origin and add the website origin to the API's `CORS_ORIGINS`.
 
 ### Local troubleshooting
 
@@ -305,7 +319,7 @@ python src/experiment.py                          # about 3 minutes; writes repo
 ```bash
 python -m pytest tests
 ```
-120 backend tests pass and 5 live-integration tests are skipped by default (Python 3.12, pandas 2.3.3, scikit-learn 1.6.1, FastAPI 0.159), and 21 frontend tests pass (`cd frontend && npm test`). The live tests (`RUN_LIVE_TESTS=1`, see [docs/CLOUD_SETUP.md](docs/CLOUD_SETUP.md)) need real Neon and Firebase credentials and have never been run. Tests that need the processed data or the `carsage_test` database skip themselves when those are unavailable.
+132 backend tests pass and 5 live-integration tests are skipped by default, and 41 frontend tests pass (`cd frontend && npm test`). The live tests (`RUN_LIVE_TESTS=1`, see [docs/CLOUD_SETUP.md](docs/CLOUD_SETUP.md)) need real Neon and Firebase credentials and have never been run. Tests that need the processed data or the `carsage_test` database skip themselves when those are unavailable.
 
 See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for the manual deployment steps (nothing is deployed yet).
 
