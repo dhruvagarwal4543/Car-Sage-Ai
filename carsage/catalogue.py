@@ -1,5 +1,7 @@
 """Read-only catalogue queries. Every query is parameterised by SQLAlchemy and hides rows flagged as exact duplicates."""
-from sqlalchemy import func, select
+from collections import Counter
+
+from sqlalchemy import func, literal, or_, select
 from sqlalchemy.orm import Session
 
 from carsage.models import CatalogueCar as C
@@ -24,6 +26,20 @@ COMPARE_FIELDS = [
     ("kerb_weight_kg", "Kerb weight", "kg", None), ("emission_norm", "Emission norm", None, None), ("drivetrain", "Drivetrain", None, None),
 ]
 VISIBLE = C.is_exact_duplicate.is_(False)
+AUTOMATIC = ["automatic", "amt", "dct", "cvt"]
+
+
+def category_condition(field, value):
+    """Match category membership without rewriting source specifications."""
+    col = getattr(C, field)
+    if field == "transmission":
+        return func.lower(func.trim(col)).in_(AUTOMATIC) if value.lower() == "automatic" else func.lower(func.trim(col)) == value.lower().strip()
+    separator = "," if field == "body_type" else "+"
+    compact = func.replace(func.lower(col), " ", "")
+    value = value.lower().replace(" ", "")
+    if separator in value:
+        return compact == value                      # old compound-category links remain valid
+    return (literal(separator) + compact + literal(separator)).like(f"%{separator}{_like_escape(value)}{separator}%", escape="\\")
 
 
 def to_out(car):
@@ -42,9 +58,12 @@ def apply_filters(stmt, *, q=None, make=None, model=None, fuel_type=None, transm
     for tok in (q or "").lower().split():
         pat = f"%{_like_escape(tok)}%"
         stmt = stmt.where(func.lower(C.make).like(pat, escape="\\") | func.lower(C.model).like(pat, escape="\\") | func.lower(C.variant).like(pat, escape="\\"))
-    for col, val in ((C.make, make), (C.model, model), (C.fuel_type, fuel_type), (C.transmission, transmission), (C.body_type, body_type)):
+    for col, val in ((C.make, make), (C.model, model)):
         if val:
             stmt = stmt.where(func.lower(col) == val.lower())
+    for field, value in (("fuel_type", fuel_type), ("transmission", transmission), ("body_type", body_type)):
+        if value:
+            stmt = stmt.where(category_condition(field, value))
     if min_price is not None:
         stmt = stmt.where(C.price_inr >= min_price)
     if max_price is not None:
@@ -54,8 +73,11 @@ def apply_filters(stmt, *, q=None, make=None, model=None, fuel_type=None, transm
     return stmt
 
 
-def list_cars(s: Session, *, sort="price_asc", page=1, page_size=20, **filters):
+def list_cars(s: Session, *, sort="price_asc", page=1, page_size=20, view="variants", **filters):
     base = apply_filters(select(C), **filters)
+    if view == "models":
+        ranked = base.with_only_columns(C.id, func.row_number().over(partition_by=(C.make, C.model), order_by=(C.price_inr, C.id)).label("rank")).subquery()
+        base = select(C).join(ranked, ranked.c.id == C.id).where(ranked.c.rank == 1)
     total = s.scalar(select(func.count()).select_from(base.subquery()))
     rows = s.scalars(base.order_by(*SORTS[sort], C.id).limit(page_size).offset((page - 1) * page_size)).all()
     return [to_out(r) for r in rows], total
@@ -66,10 +88,10 @@ def get_car(s: Session, car_id: int):
 
 
 def related_cars(s: Session, car, n=4):
-    """Other models in the same body type, nearest in price (within +/-25%)."""
+    """Other models sharing a body category, nearest in price (within +/-25%)."""
     stmt = select(C).where(VISIBLE, C.model != car.model, C.price_inr.between(car.price_inr * 0.75, car.price_inr * 1.25))
     if car.body_type:
-        stmt = stmt.where(C.body_type == car.body_type)
+        stmt = stmt.where(or_(*(category_condition("body_type", body.strip()) for body in car.body_type.split(",") if body.strip())))
     rows = s.scalars(stmt.order_by(func.abs(C.price_inr - car.price_inr), C.id).limit(n * 4)).all()
     seen, out = set(), []
     for r in rows:                                   # one variant per model
@@ -97,11 +119,27 @@ def compare(s: Session, ids):
     return CompareOut(cars=[to_out(c) for c in cars], fields=fields)
 
 
-def filter_options(s: Session):
-    def counts(col):
-        rows = s.execute(select(col, func.count()).where(VISIBLE, col.is_not(None)).group_by(col).order_by(col)).all()
+def filter_options(s: Session, **filters):
+    def facet_base(stmt, key):
+        omit = {key, "model"} if key == "make" else {key}
+        return apply_filters(stmt, **{k: v for k, v in filters.items() if k not in omit})
+
+    def counts(col, key):
+        rows = s.execute(facet_base(select(col, func.count()), key).where(col.is_not(None)).group_by(col).order_by(col)).all()
         return [{"value": v, "count": n} for v, n in rows]
-    lo, hi = s.execute(select(func.min(C.price_inr), func.max(C.price_inr)).where(VISIBLE)).one()
-    seats = s.scalars(select(C.seating_capacity).where(VISIBLE, C.seating_capacity.is_not(None)).distinct().order_by(C.seating_capacity)).all()
-    return {"makes": counts(C.make), "fuel_types": counts(C.fuel_type), "transmissions": counts(C.transmission),
-            "body_types": counts(C.body_type), "seating_capacities": list(seats), "price_min": lo, "price_max": hi}
+
+    def memberships(rows, separator):
+        grouped = Counter()
+        for row in rows:
+            for value in {v.strip() for v in row["value"].split(separator) if v.strip()}:
+                grouped[value] += row["count"]
+        return [{"value": value, "count": count} for value, count in sorted(grouped.items())]
+
+    lo, hi = s.execute(apply_filters(select(func.min(C.price_inr), func.max(C.price_inr)), **{k: v for k, v in filters.items() if k not in {"min_price", "max_price"}})).one()
+    seats = s.scalars(facet_base(select(C.seating_capacity), "min_seats").where(C.seating_capacity.is_not(None)).distinct().order_by(C.seating_capacity)).all()
+    transmissions = counts(C.transmission, "transmission")
+    automatic_count = sum(r["count"] for r in transmissions if r["value"].lower() in AUTOMATIC)
+    groups = ([{"value": "Automatic", "count": automatic_count}] if automatic_count else []) + [r for r in transmissions if r["value"].lower() not in AUTOMATIC]
+    return {"makes": counts(C.make, "make"), "models": counts(C.model, "model") if filters.get("make") else [],
+            "fuel_types": memberships(counts(C.fuel_type, "fuel_type"), "+"), "transmissions": transmissions, "transmission_groups": groups,
+            "body_types": memberships(counts(C.body_type, "body_type"), ","), "seating_capacities": list(seats), "price_min": lo, "price_max": hi}

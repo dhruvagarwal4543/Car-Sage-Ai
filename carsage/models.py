@@ -5,7 +5,7 @@ no seller, location, image or used-car price columns exist here.
 """
 from datetime import datetime
 
-from sqlalchemy import BigInteger, Boolean, CheckConstraint, DateTime, Float, ForeignKey, Integer, String, UniqueConstraint, func
+from sqlalchemy import BigInteger, Boolean, CheckConstraint, DateTime, Float, ForeignKey, Index, Integer, String, UniqueConstraint, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -72,4 +72,40 @@ class SavedCar(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     firebase_uid: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
     car_id: Mapped[int] = mapped_column(Integer, ForeignKey("catalogue_cars.id", ondelete="CASCADE"), nullable=False, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+
+class PriceObservation(Base):
+    """Private page observations or reviewed public imports, separate from catalogue prices."""
+    __tablename__ = "price_observations"
+    __table_args__ = (
+        UniqueConstraint("dedup_key", name="uq_price_observations_dedup"),
+        CheckConstraint("price_inr > 0 AND price_inr <= 10000000000", name="ck_price_observations_price"),
+        CheckConstraint("currency = 'INR'", name="ck_price_observations_currency"),
+        CheckConstraint("price_type IN ('ex_showroom','on_road','used_asking','advertised')", name="ck_price_observations_type"),
+        CheckConstraint("vehicle_status IN ('new','used')", name="ck_price_observations_status"),
+        CheckConstraint("source_kind IN ('user_observation','manufacturer','authorized_dataset')", name="ck_price_observations_kind"),
+        CheckConstraint("firebase_uid IS NOT NULL OR source_kind <> 'user_observation'", name="ck_price_observations_owner"),
+        Index("ix_price_observations_owner_series_date", "firebase_uid", "series_key", "observed_at"),
+        Index("ix_price_observations_car_date", "car_id", "observed_at"),
+    )
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    firebase_uid: Mapped[str | None] = mapped_column(String(128))
+    car_id: Mapped[int] = mapped_column(Integer, ForeignKey("catalogue_cars.id", ondelete="RESTRICT"), nullable=False)
+    source_website: Mapped[str] = mapped_column(String(255), nullable=False)
+    source_url: Mapped[str] = mapped_column(String(2048), nullable=False)
+    source_data_id: Mapped[str | None] = mapped_column(String(200))
+    price_inr: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    currency: Mapped[str] = mapped_column(String(3), nullable=False)
+    price_type: Mapped[str] = mapped_column(String(20), nullable=False)
+    vehicle_status: Mapped[str] = mapped_column(String(4), nullable=False)
+    model_year: Mapped[int] = mapped_column(Integer, nullable=False)
+    market: Mapped[str] = mapped_column(String(100), nullable=False)
+    observed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    source_kind: Mapped[str] = mapped_column(String(24), nullable=False)
+    provenance: Mapped[str] = mapped_column(String(2000), nullable=False)
+    rights: Mapped[str] = mapped_column(String(2000), nullable=False)
+    confidence: Mapped[str] = mapped_column(String(24), nullable=False)
+    series_key: Mapped[str] = mapped_column(String(64), nullable=False)
+    dedup_key: Mapped[str] = mapped_column(String(64), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)

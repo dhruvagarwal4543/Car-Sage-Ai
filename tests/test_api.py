@@ -146,6 +146,49 @@ def test_filters_endpoint(client):
     assert 7 in f["seating_capacities"] and "Electric" in [x["value"] for x in f["fuel_types"]]
 
 
+def test_model_grouping_is_paginated_and_picks_a_matching_variant(client):
+    all_variants = client.get("/api/cars?page_size=50").json()
+    grouped = client.get("/api/cars?view=models&page_size=3").json()
+    identities = {(c["make"], c["model"]) for c in all_variants["items"]}
+    assert grouped["total"] == len(identities) == 8
+    seen = [c for page in (1, 2, 3) for c in client.get(f"/api/cars?view=models&page_size=3&page={page}").json()["items"]]
+    assert len({(c["make"], c["model"]) for c in seen}) == len(seen) == 8
+    nexon = client.get("/api/cars?view=models&make=Tata&model=Nexon&transmission=automatic").json()
+    assert nexon["total"] == 1 and nexon["items"][0]["variant"] == "XZ+"
+    assert nexon["items"][0]["price_inr"] == 1200000
+    assert client.get("/api/cars?view=unknown").status_code == 422
+
+
+def test_category_membership_includes_compound_types_and_automatic_families(client, engine):
+    from sqlalchemy.orm import Session
+    from carsage.models import CatalogueCar
+    with Session(engine) as session:
+        session.add(CatalogueCar(source_row=100, make="Tata", model="Category test", variant="Dual fuel", fuel_type="CNG + Petrol",
+                                 body_type="SUV, Crossover", transmission="AMT", price_inr=800000, seating_capacity=5, is_exact_duplicate=False))
+        session.commit()
+    for query in ("body_type=SUV", "body_type=Crossover", "fuel_type=CNG", "fuel_type=Petrol", "transmission=automatic", "transmission=AMT"):
+        cars = client.get("/api/cars?" + query).json()["items"]
+        assert any(c["model"] == "Category test" for c in cars), query
+    exact = client.get("/api/cars", params={"body_type": "SUV, Crossover", "fuel_type": "CNG + Petrol"}).json()
+    assert exact["total"] == 1
+    related = client.get(f"/api/cars/{exact['items'][0]['id']}").json()["related"]
+    assert any(car["model"] == "Nexon" for car in related)
+    facets = client.get("/api/filters").json()
+    assert not any("," in f["value"] for f in facets["body_types"])
+    assert {f["value"]: f["count"] for f in facets["body_types"]}["Crossover"] == 1
+    assert {f["value"]: f["count"] for f in facets["transmission_groups"]}["Automatic"] == 5
+    recommended = rec(client, fuel_types=["CNG"], body_types=["Crossover"], transmissions=["automatic"])
+    assert recommended["recommendations"][0]["car"]["model"] == "Category test"
+
+
+def test_facets_follow_filters_and_models_follow_make(client):
+    facets = client.get("/api/filters?make=Tata&fuel_type=Diesel").json()
+    assert {v["value"] for v in facets["models"]} == {"Nexon"}
+    assert {v["value"]: v["count"] for v in facets["body_types"]} == {"SUV": 2}
+    assert {v["value"] for v in facets["makes"]} == {"Tata", "Hyundai", "Toyota", "BMW"}
+    assert client.get("/api/filters?min_price=100&max_price=1").status_code == 422
+
+
 # ---------------- recommendations
 def rec(client, **prefs):
     r = client.post("/api/recommendations", json=prefs)
@@ -242,6 +285,34 @@ def test_assistant_refines_previous_preferences(client):
     first = ask(client, "suv under 20 lakh")
     second = ask(client, "make it diesel", first["preferences"])
     assert second["preferences"]["max_price"] == 2000000 and second["preferences"]["fuel_types"] == ["Diesel"]
+
+
+def test_assistant_replaces_choices_and_can_return_to_model_lookup(client):
+    first = ask(client, "automatic diesel SUV under 20 lakh")
+    second = ask(client, "actually petrol only, manual hatchback", first["preferences"])
+    prefs = second["preferences"]
+    assert prefs["fuel_types"] == ["Petrol"] and prefs["transmissions"] == ["manual"]
+    assert prefs["body_types"] == ["Hatchback"] and prefs["max_price"] == 2000000
+    assert all(c["fuel_type"] == "Petrol" and c["transmission"] == "Manual" for c in second["cars"])
+    lookup = ask(client, "tell me about the Hyundai Creta", prefs)
+    assert lookup["intent"] == "lookup" and {c["model"] for c in lookup["cars"]} == {"Creta"}
+    assert lookup["preferences"] == prefs
+
+
+@pytest.mark.parametrize("message,lo,hi", [
+    ("under 12,00,000", None, 1200000), ("under ₹1,200,000", None, 1200000),
+    ("₹12,00,000", None, 1200000), ("under 12.5 lakh", None, 1250000),
+    ("between 8,00,000 and 12,00,000", 800000, 1200000),
+])
+def test_assistant_parses_formatted_budgets(client, message, lo, hi):
+    prefs = ask(client, message)["preferences"]
+    assert (prefs["min_price"], prefs["max_price"]) == (lo, hi)
+
+
+@pytest.mark.parametrize("message", ["under 0 lakh", "under " + "9" * 300 + " crore", "0 seater"])
+def test_assistant_rejects_invalid_extracted_preferences_without_crashing(client, message):
+    reply = ask(client, message)
+    assert reply["intent"] == "help" and reply["cars"] == []
 
 
 def test_assistant_input_limits(client):

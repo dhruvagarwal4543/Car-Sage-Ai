@@ -3,15 +3,14 @@
 Concepts used: constraint satisfaction (hard filters, ordered relaxation when nothing satisfies them),
 heuristic ranking (weighted min-max score), knowledge rules (carsage.rules tags) and explanations.
 """
-from sqlalchemy import func, select
+from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
 
-from carsage.catalogue import apply_filters, to_out
+from carsage.catalogue import apply_filters, category_condition, to_out
 from carsage.models import CatalogueCar as C
 from carsage.rules import RULES, derive_tags
 from carsage.schemas import Preferences, Recommendation, RecommendationOut
 
-AUTOMATIC = ["automatic", "amt", "dct", "cvt"]
 USE_CASE_TAG = {"family": "family_friendly", "city": "city_friendly"}
 BALANCED = ["price", "mileage", "power", "safety"]
 # criterion -> (label, attribute, higher_is_better, unit)
@@ -28,12 +27,11 @@ def inr(v):
 def _candidates(s: Session, p: Preferences):
     stmt = apply_filters(select(C), min_price=p.min_price, max_price=p.max_price, min_seats=p.min_seats)
     if p.fuel_types:
-        stmt = stmt.where(func.lower(C.fuel_type).in_([f.lower() for f in p.fuel_types]))
+        stmt = stmt.where(or_(*(category_condition("fuel_type", f) for f in p.fuel_types)))
     if p.transmissions:
-        wanted = [t for tr in p.transmissions for t in (["manual"] if tr == "manual" else AUTOMATIC)]
-        stmt = stmt.where(func.lower(C.transmission).in_(wanted))
+        stmt = stmt.where(or_(*(category_condition("transmission", tr) for tr in p.transmissions)))
     if p.body_types:
-        stmt = stmt.where(func.lower(C.body_type).in_([b.lower() for b in p.body_types]))
+        stmt = stmt.where(or_(*(category_condition("body_type", b) for b in p.body_types)))
     rows = s.scalars(stmt).all()
     if p.use_case:
         rows = [r for r in rows if USE_CASE_TAG[p.use_case] in derive_tags(r)]

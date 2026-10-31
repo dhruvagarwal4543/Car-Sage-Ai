@@ -69,8 +69,10 @@ class CompareOut(BaseModel):
 
 class FiltersOut(BaseModel):
     makes: list[dict]
+    models: list[dict] = []
     fuel_types: list[dict]
     transmissions: list[dict]
+    transmission_groups: list[dict] = []
     body_types: list[dict]
     seating_capacities: list[int]
     price_min: int | None

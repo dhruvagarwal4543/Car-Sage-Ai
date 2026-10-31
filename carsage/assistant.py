@@ -5,6 +5,7 @@ Pipeline: message -> intent + preference extraction (regex / keyword rules) -> c
 comes from the database. An LLM adapter could replace `parse` and `_reply_*` later without touching the tools.
 """
 import re
+from decimal import Decimal
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -20,15 +21,16 @@ PRIORITY_WORDS = {"mileage": r"mileage|efficien|economical|economy|fuel.saving",
                   "safety": r"\bsafe|safety|airbag", "space": r"spacious|space|boot|luggage|legroom", "price": r"cheap|affordable|value|budget.friendly|low.cost"}
 AMBIGUOUS_MODELS = {"city", "sport", "classic", "active", "cross", "plus", "power", "one", "go"}   # common words: need the make before them
 UNIT = r"(lakhs?|lacs?|lk|l|crores?|cr)"
-NUM = r"(\d+(?:[.,]\d+)?)"
+NUM = r"(\d[\d,]*(?:\.\d+)?)"
 MONEY = rf"(?:rs\.?|inr|₹)?\s*{NUM}\s*(?:{UNIT}\b)?"
 
 
 def _amount(num, unit):
-    n = float(num.replace(",", ""))
-    if unit:
-        return int(n * (1e7 if unit.lower().startswith("c") else 1e5))
-    return int(n) if n >= 10000 else None      # a bare small number is ambiguous: ignored
+    n = Decimal(num.replace(",", ""))
+    amount = n * (10**7 if unit and unit.lower().startswith("c") else 10**5 if unit else 1)
+    if not 1 <= amount <= 10**10:
+        raise ValueError("budget outside supported range")
+    return int(amount) if unit or n >= 10000 else None      # a bare small number is ambiguous: ignored
 
 
 def _budget(text):
@@ -41,6 +43,8 @@ def _budget(text):
     m = re.search(rf"(?:under|below|within|upto|up to|less than|max(?:imum)?|budget(?: of)?|around|about)\s*{MONEY}", text)
     if not m:
         m = re.search(rf"(?:rs\.?|inr|₹)?\s*{NUM}\s*{UNIT}\b", text)      # "12 lakh" on its own: treated as a ceiling
+    if not m:
+        m = re.search(rf"(?:rs\.?|inr|₹)\s*{NUM}\s*(?:{UNIT}\b)?", text)
     if m:
         v = _amount(m.group(1), m.group(2))
         if v:
@@ -54,16 +58,19 @@ def parse(text: str, context: Preferences | None = None) -> Preferences:
     lo, hi = _budget(t)
     if hi:
         p.max_price, p.min_price = hi, lo
-    for w, v in FUELS.items():
-        if re.search(rf"\b{w}\b", t) and v not in p.fuel_types:
-            p.fuel_types.append(v)
-    for w, v in BODIES.items():
-        if re.search(rf"\b{w}s?\b", t) and v not in p.body_types:
-            p.body_types.append(v)
-    if re.search(r"\b(automatic|auto|amt|cvt|dct)\b", t) and "automatic" not in p.transmissions:
-        p.transmissions.append("automatic")
-    if re.search(r"\bmanual\b", t) and "manual" not in p.transmissions:
-        p.transmissions.append("manual")
+    fuels = list(dict.fromkeys(v for w, v in FUELS.items() if re.search(rf"\b{w}\b", t)))
+    bodies = list(dict.fromkeys(v for w, v in BODIES.items() if re.search(rf"\b{w}s?\b", t)))
+    transmissions = []
+    if re.search(r"\b(automatic|auto|amt|cvt|dct)\b", t):
+        transmissions.append("automatic")
+    if re.search(r"\bmanual\b", t):
+        transmissions.append("manual")
+    if fuels:
+        p.fuel_types = fuels
+    if bodies:
+        p.body_types = bodies
+    if transmissions:
+        p.transmissions = transmissions
     m = re.search(r"(\d{1,2})\s*[- ]?\s*(?:seater|seats|seat|people|persons)", t)
     if m:
         p.min_seats = min(int(m.group(1)), 20)
@@ -74,7 +81,7 @@ def parse(text: str, context: Preferences | None = None) -> Preferences:
     for k, rx in PRIORITY_WORDS.items():
         if re.search(rx, t) and k not in p.priorities:
             p.priorities.append(k)
-    return p
+    return Preferences.model_validate(p.model_dump())
 
 
 def _has_prefs(p: Preferences):
@@ -173,8 +180,12 @@ def respond(s: Session, message: str, context: Preferences | None = None) -> Ass
     if len(models) >= 2 and re.search(r"compar|\bvs\b|versus|difference|\bor\b|better", t):
         reply, cars = _reply_compare(s, models)
         return AssistantOut(reply=reply, intent="compare", preferences=context, cars=cars)
-    prefs = parse(message, context)
-    if _has_prefs(prefs) and not (context is None and models and not _has_prefs(parse(message))):
+    try:
+        current, prefs = parse(message), parse(message, context)
+    except ValueError:
+        return AssistantOut(reply="Please use a budget from ₹1 to ₹1,000 crore and a seat count from 1 to 20.", intent="help", preferences=context, cars=[])
+    lookup = models and (not _has_prefs(current) or re.search(r"tell me about|summari[sz]e|details (?:of|about)", t))
+    if _has_prefs(prefs) and not lookup:
         reply, cars = _reply_recommend(s, prefs)
         return AssistantOut(reply=reply, intent="recommend", preferences=prefs, cars=cars)
     if models:

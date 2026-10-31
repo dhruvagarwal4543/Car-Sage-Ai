@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 
 from carsage import assistant as assistant_mod
 from carsage import catalogue, predict as predict_mod, recommend as recommend_mod
+from carsage import history as history_mod
 from carsage.auth import current_user
 from carsage.config import validate_startup
 from carsage.db import get_engine
@@ -78,10 +79,11 @@ def create_app(engine=None) -> FastAPI:
              body_type: str | None = Query(None, max_length=40), min_price: int | None = Query(None, ge=0, le=10**10),
              max_price: int | None = Query(None, ge=0, le=10**10), min_seats: int | None = Query(None, ge=1, le=20),
              sort: str = Query("price_asc", pattern="^(price_asc|price_desc|power_desc|mileage_desc|name)$"),
-             page: int = Query(1, ge=1, le=10000), page_size: int = Query(20, ge=1, le=50), s: Session = Depends(get_db)):
+             page: int = Query(1, ge=1, le=10000), page_size: int = Query(20, ge=1, le=50),
+             view: str = Query("variants", pattern="^(variants|models)$"), s: Session = Depends(get_db)):
         if min_price is not None and max_price is not None and min_price > max_price:
             raise HTTPException(422, "min_price must not exceed max_price")
-        items, total = catalogue.list_cars(s, sort=sort, page=page, page_size=page_size, q=q, make=make, model=model, fuel_type=fuel_type,
+        items, total = catalogue.list_cars(s, sort=sort, page=page, page_size=page_size, view=view, q=q, make=make, model=model, fuel_type=fuel_type,
                                            transmission=transmission, body_type=body_type, min_price=min_price, max_price=max_price, min_seats=min_seats)
         return CarPage(items=items, total=total, page=page, page_size=page_size)
 
@@ -108,10 +110,48 @@ def create_app(engine=None) -> FastAPI:
         return d
 
     @app.get("/api/filters", response_model=FiltersOut, tags=["catalogue"])
-    def filters(s: Session = Depends(get_db)):
-        return catalogue.filter_options(s)
+    def filters(q: str | None = Query(None, max_length=100), make: str | None = Query(None, max_length=80), model: str | None = Query(None, max_length=120),
+                fuel_type: str | None = Query(None, max_length=40), transmission: str | None = Query(None, max_length=40), body_type: str | None = Query(None, max_length=40),
+                min_price: int | None = Query(None, ge=0, le=10**10), max_price: int | None = Query(None, ge=0, le=10**10),
+                min_seats: int | None = Query(None, ge=1, le=20), s: Session = Depends(get_db)):
+        if min_price is not None and max_price is not None and min_price > max_price:
+            raise HTTPException(422, "min_price must not exceed max_price")
+        return catalogue.filter_options(s, q=q, make=make, model=model, fuel_type=fuel_type, transmission=transmission, body_type=body_type,
+                                        min_price=min_price, max_price=max_price, min_seats=min_seats)
 
     # ---- intelligence
+    @app.post("/api/catalogue/match", tags=["extension"])
+    def match_vehicle(body: history_mod.MatchIn, s: Session = Depends(get_db)):
+        return history_mod.match(s, body)
+
+    @app.post("/api/price-history/query", tags=["price history"])
+    def public_history(body: history_mod.HistoryQuery, s: Session = Depends(get_db)):
+        try:
+            return history_mod.history(s, body)
+        except LookupError as exc:
+            raise HTTPException(404, str(exc))
+        except ValueError as exc:
+            raise HTTPException(422, str(exc))
+
+    @app.post("/api/me/price-history/query", tags=["price history"])
+    def private_history(body: history_mod.HistoryQuery, user: UserOut = Depends(current_user), s: Session = Depends(get_db)):
+        try:
+            return history_mod.history(s, body, user.uid)
+        except LookupError as exc:
+            raise HTTPException(404, str(exc))
+        except ValueError as exc:
+            raise HTTPException(422, str(exc))
+
+    @app.post("/api/me/price-observations", tags=["price history"])
+    def record_price(body: history_mod.ObservationIn, user: UserOut = Depends(current_user), s: Session = Depends(get_db)):
+        try:
+            row, created = history_mod.ingest(s, body, user.uid)
+            return {"created": created, "observation": history_mod.point(row)}
+        except LookupError as exc:
+            raise HTTPException(404, str(exc))
+        except ValueError as exc:
+            raise HTTPException(422, str(exc))
+
     @app.post("/api/recommendations", response_model=RecommendationOut, tags=["recommendations"])
     def recommendations(prefs: Preferences, s: Session = Depends(get_db)):
         return recommend_mod.recommend(s, prefs)
