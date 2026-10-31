@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import {
   GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut as fbSignOut, type Auth, type User,
 } from "firebase/auth";
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { api, setSessionExpiredHandler, setTokenProvider } from "./api";
 
 const cfg = {
@@ -37,33 +37,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(firebaseConfigured);
   const [saved, setSaved] = useState<Set<number>>(new Set());
   const [sessionExpired, setSessionExpired] = useState(false);
+  const [savedLoading, setSavedLoading] = useState(false);
+  const pending = useRef(new Set<number>());
 
   useEffect(() => {
     if (!auth) return;
     setTokenProvider(async (force) => (auth.currentUser ? auth.currentUser.getIdToken(force) : null));
     setSessionExpiredHandler(() => { setSessionExpired(true); void fbSignOut(auth); });
-    return onAuthStateChanged(auth, (u) => { setUser(u); setLoading(false); if (u) setSessionExpired(false); });
+    const unsubscribe = onAuthStateChanged(auth, (u) => { setUser(u); setLoading(false); setSavedLoading(Boolean(u)); if (u) setSessionExpired(false); });
+    return () => { unsubscribe(); setTokenProvider(null); setSessionExpiredHandler(null); };
   }, []);
 
   useEffect(() => {
-    if (!user) { setSaved(new Set()); return; }
+    setSaved(new Set());
+    if (!user) { setSavedLoading(false); return; }
     let alive = true;
-    api.savedCars().then((cars) => alive && setSaved(new Set(cars.map((c) => c.id)))).catch(() => alive && setSaved(new Set()));
+    api.savedCars().then((cars) => alive && setSaved(new Set(cars.map((c) => c.id)))).catch(() => alive && setSaved(new Set())).finally(() => { if (alive) setSavedLoading(false); });
     return () => { alive = false; };
   }, [user]);
 
   const value = useMemo<Ctx>(() => ({
-    configured: firebaseConfigured, user, loading, saved, sessionExpired,
+    configured: firebaseConfigured, user, loading: loading || savedLoading, saved, sessionExpired,
     signIn: async (email, password) => { await signInWithEmailAndPassword(auth!, email, password); },
     signUp: async (email, password) => { await createUserWithEmailAndPassword(auth!, email, password); },
     signInGoogle: async () => { await signInWithPopup(auth!, new GoogleAuthProvider()); },
     signOut: async () => { await fbSignOut(auth!); },
     toggleSaved: async (id) => {
-      const next = new Set(saved);
-      if (saved.has(id)) { await api.unsaveCar(id); next.delete(id); } else { await api.saveCar(id); next.add(id); }
-      setSaved(next);
+      if (!user) throw new Error("Please sign in to save cars.");
+      if (savedLoading) throw new Error("Your saved cars are still loading. Please try again.");
+      if (pending.current.has(id)) return;
+      const wasSaved = saved.has(id);
+      pending.current.add(id);
+      try {
+        if (wasSaved) await api.unsaveCar(id); else await api.saveCar(id);
+        if (auth?.currentUser?.uid === user.uid) setSaved((current) => {
+          const next = new Set(current);
+          if (wasSaved) next.delete(id); else next.add(id);
+          return next;
+        });
+      } finally { pending.current.delete(id); }
     },
-  }), [user, loading, saved, sessionExpired]);
+  }), [user, loading, savedLoading, saved, sessionExpired]);
   return <C.Provider value={value}>{children}</C.Provider>;
 }
 

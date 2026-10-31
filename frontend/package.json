@@ -12,9 +12,11 @@
   },
   "dependencies": {
     "firebase": "^11.0.0",
+    "gsap": "^3.15.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^7.18.4"
+    "react-router-dom": "^7.18.4",
+    "three": "^0.180.0"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.2",
@@ -23,10 +25,17 @@
     "@testing-library/user-event": "^14.6.8",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "@types/three": "^0.180.0",
     "@vitejs/plugin-react": "^4.3.4",
     "jsdom": "^25.0.1",
     "typescript": "^5.6.3",
-    "vite": "^5.4.11",
-    "vitest": "^2.1.8"
+    "vite": "^6.4.5",
+    "vitest": "^4.1.11"
+  },
+  "overrides": {
+    "@grpc/grpc-js": "^1.13.6"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   }
 }

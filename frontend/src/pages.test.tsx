@@ -50,13 +50,12 @@ describe("Explore price inputs", () => {
 
 describe("CarCard comparison selection", () => {
   it("toggles and enforces the 4-car limit", async () => {
-    const notices: string[] = [];
-    renderApp(<>{[1, 2, 3, 4, 5].map((i) => <CarCard key={i} car={car({ id: i, variant: `V${i}` })} onNotice={(m) => notices.push(m)} />)}</>);
+    renderApp(<>{[1, 2, 3, 4, 5].map((i) => <CarCard key={i} car={car({ id: i, variant: `V${i}` })} />)}</>);
     const buttons = screen.getAllByRole("button", { name: /Compare/ });
     for (const b of buttons.slice(0, 4)) await userEvent.click(b);
     expect(screen.getAllByRole("button", { name: /^In comparison/ })).toHaveLength(4);
     await userEvent.click(buttons[4]);
-    expect(notices).toEqual(["You can compare up to 4 cars. Remove one first."]);
+    expect(screen.getByRole("alert")).toHaveTextContent("You can compare up to 4 cars. Remove one first.");
     expect(JSON.parse(localStorage.getItem("carsage.compare")!)).toEqual([1, 2, 3, 4]);
   });
 });
@@ -73,6 +72,7 @@ describe("Compare", () => {
     expect(screen.getByText("Not recorded")).toHaveClass("missing");
   });
   it("asks for more cars when fewer than two are selected", async () => {
+    stubFetch(() => ({ ...car(), related: [] }));
     renderApp(<Compare />, "/compare?ids=1");
     expect(await screen.findByText("Add one more car to compare.")).toBeInTheDocument();
   });

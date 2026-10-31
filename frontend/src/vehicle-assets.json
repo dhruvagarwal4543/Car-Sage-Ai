@@ -1,0 +1,197 @@
+[
+  {
+    "make": "Hyundai",
+    "model": "Creta",
+    "image": "/assets/vehicles/hyundai-creta.webp",
+    "imageLabel": "2021 Hyundai Creta SX(O) CRDi (India) front view.jpg",
+    "author": "Dairokkan9",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:2021_Hyundai_Creta_SX(O)_CRDi_(India)_front_view.jpg",
+    "note": "Model reference photo; colour, generation and equipment may differ from the selected catalogue variant."
+  },
+  {
+    "make": "Maruti Suzuki",
+    "model": "Swift",
+    "image": "/assets/vehicles/maruti-suzuki-swift.webp",
+    "imageLabel": "2018 Suzuki Swift SZ5 Boosterjet SHVS 1.0 Front.jpg",
+    "author": "Vauxford",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:2018_Suzuki_Swift_SZ5_Boosterjet_SHVS_1.0_Front.jpg",
+    "note": "Model reference photo; colour, generation and equipment may differ from the selected catalogue variant."
+  },
+  {
+    "make": "Maruti Suzuki",
+    "model": "Alto",
+    "image": "/assets/vehicles/maruti-suzuki-alto.webp",
+    "imageLabel": "Maruti Suzuki - Alto 800 LXi.JPG",
+    "author": "Biswarup Ganguly",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Maruti_Suzuki_-_Alto_800_LXi.JPG",
+    "note": "Model reference photo; colour, generation and equipment may differ from the selected catalogue variant."
+  },
+  {
+    "make": "Datsun",
+    "model": "Redi-Go",
+    "image": "/assets/vehicles/datsun-redi-go.webp",
+    "imageLabel": "Datsun redi-Go (front).png",
+    "author": "Agratsa",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Datsun_redi-Go_(front).png",
+    "note": "Model reference photo; colour, generation and equipment may differ from the selected catalogue variant."
+  },
+  {
+    "make": "Maruti Suzuki",
+    "model": "Omni",
+    "image": "/assets/vehicles/maruti-suzuki-omni.webp",
+    "imageLabel": "Maruti Suzuki Omni Paro Taxi Front.JPG",
+    "author": "Ominae",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Maruti_Suzuki_Omni_Paro_Taxi_Front.JPG",
+    "note": "Model reference photo; colour, generation and equipment may differ from the selected catalogue variant."
+  },
+  {
+    "make": "Bajaj",
+    "model": "Qute (Re60)",
+    "image": "/assets/vehicles/bajaj-qute-re60.webp",
+    "imageLabel": "2018 Bajaj Qute white front.jpg",
+    "author": "Южноуралец",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:2018_Bajaj_Qute_white_front.jpg",
+    "note": "Model reference photo; colour, generation and equipment may differ from the selected catalogue variant."
+  },
+  {
+    "make": "Honda",
+    "model": "City",
+    "image": "/assets/vehicles/honda-city.webp",
+    "imageLabel": "2018 Honda City Hybrid (1).jpg",
+    "author": "Bindydad123",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:2018_Honda_City_Hybrid_(1).jpg",
+    "note": "Model reference photo; colour, generation and equipment may differ from the selected catalogue variant."
+  },
+  {
+    "make": "Hyundai",
+    "model": "Venue",
+    "image": "/assets/vehicles/hyundai-venue.webp",
+    "imageLabel": "2019 Hyundai Venue front NYIAS 2019.jpg",
+    "author": "Kevauto",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:2019_Hyundai_Venue_front_NYIAS_2019.jpg",
+    "note": "Model reference photo; colour, generation and equipment may differ from the selected catalogue variant."
+  },
+  {
+    "make": "Maruti Suzuki",
+    "model": "Baleno",
+    "image": "/assets/vehicles/maruti-suzuki-baleno.webp",
+    "imageLabel": "2018 Suzuki Baleno SZ3 Dualjet - 1242cc 1.2 (90PS) Petrol - Fire Red - 02-2024, Front.jpg",
+    "author": "Harvey Bold",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:2018_Suzuki_Baleno_SZ3_Dualjet_-_1242cc_1.2_(90PS)_Petrol_-_Fire_Red_-_02-2024,_Front.jpg",
+    "note": "Model reference photo; colour, generation and equipment may differ from the selected catalogue variant."
+  },
+  {
+    "make": "Porsche",
+    "model": "911",
+    "image": "/assets/vehicles/porsche-911.webp",
+    "imageLabel": "Porsche 911 Carrera S (991) facelift front.jpg",
+    "author": "Rutger van der Maar",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Porsche_911_Carrera_S_(991)_facelift_front.jpg",
+    "note": "Model reference photo; colour, generation and equipment may differ from the selected catalogue variant.",
+    "modelUrl": "/assets/vehicles/porsche-911-carrera-4s.glb",
+    "modelAuthor": "Karol Miklas",
+    "modelSource": "https://sketchfab.com/3d-models/free-porsche-911-carrera-4s-d01b254483794de3819786d93e0e1ebf",
+    "modelLicense": "CC BY-SA 4.0",
+    "modelNote": "911 Carrera 4S reference model. The catalogue record is Carrera S; body details, colour and equipment may differ.",
+    "modelVariants": [
+      "Carrera S"
+    ]
+  },
+  {
+    "make": "Tata",
+    "model": "Nexon",
+    "image": "/assets/vehicles/tata-nexon.webp",
+    "imageLabel": "2023 Tata Nexon XZA+ front view.jpg",
+    "author": "Dairokkan9",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:2023_Tata_Nexon_XZA%2B_front_view.jpg",
+    "note": "Model reference photo; colour, generation and equipment may differ from the selected catalogue variant."
+  },
+  {
+    "make": "Tata",
+    "model": "Nano Genx",
+    "image": "/assets/vehicles/tata-nano-genx.webp",
+    "imageLabel": "Tata Nano - GenX 01.JPG",
+    "author": "Alexander Gounder",
+    "license": "CC0",
+    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "source": "https://commons.wikimedia.org/wiki/File:Tata_Nano_-_GenX_01.JPG",
+    "note": "Model reference photo; colour, generation and equipment may differ from the selected catalogue variant."
+  },
+  {
+    "make": "Renault",
+    "model": "Kwid",
+    "image": "/assets/vehicles/renault-kwid.webp",
+    "imageLabel": "Renault Kwid 2017 in Montevideo (front).jpg",
+    "author": "NaBUru38",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Renault_Kwid_2017_in_Montevideo_(front).jpg",
+    "note": "Model reference photo; colour, generation and equipment may differ from the selected catalogue variant."
+  },
+  {
+    "make": "Maruti Suzuki",
+    "model": "Dzire",
+    "image": "/assets/vehicles/maruti-suzuki-dzire.webp",
+    "imageLabel": "Maruti Suzuki Dzire VXi VVT (front).JPG",
+    "author": "Biswarup Ganguly",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Maruti_Suzuki_Dzire_VXi_VVT_(front).JPG",
+    "note": "Model reference photo; colour, generation and equipment may differ from the selected catalogue variant."
+  },
+  {
+    "make": "Maruti Suzuki",
+    "model": "Ciaz",
+    "image": "/assets/vehicles/maruti-suzuki-ciaz.webp",
+    "imageLabel": "Maruti Ciaz 2017.jpg",
+    "author": "Alishahessle",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Maruti_Ciaz_2017.jpg",
+    "note": "Model reference photo; colour, generation and equipment may differ from the selected catalogue variant."
+  },
+  {
+    "make": "Honda",
+    "model": "Amaze",
+    "image": "/assets/vehicles/honda-amaze.webp",
+    "imageLabel": "Honda Amaze 2018 (front) in Uttar Pradesh.jpg",
+    "author": "Agratsa",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Honda_Amaze_2018_(front)_in_Uttar_Pradesh.jpg",
+    "note": "Model reference photo; colour, generation and equipment may differ from the selected catalogue variant."
+  },
+  {
+    "make": "Maruti Suzuki",
+    "model": "Dzire Tour",
+    "image": "/assets/vehicles/maruti-suzuki-dzire.webp",
+    "imageLabel": "Maruti Suzuki Dzire VXi VVT (front).JPG",
+    "author": "Biswarup Ganguly",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Maruti_Suzuki_Dzire_VXi_VVT_(front).JPG",
+    "note": "Dzire model-family reference photo; Tour trim, generation and equipment may differ."
+  }
+]

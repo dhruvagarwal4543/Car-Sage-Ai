@@ -57,7 +57,7 @@ export const api = {
   cars: (p: Record<string, string | number | null | undefined>) => request<CarPage>(`/api/cars${query(p)}`),
   car: (id: number) => request<CarDetail>(`/api/cars/${id}`),
   compare: (ids: number[]) => request<CompareOut>(`/api/cars/compare?ids=${ids.join(",")}`),
-  filters: () => request<Filters>("/api/filters"),
+  filters: (params: Record<string, string | number | null | undefined> = {}) => request<Filters>(`/api/filters${query(params)}`),
   assistant: (message: string, context: Preferences | null) => request<AssistantOut>("/api/assistant", post({ message, context })),
   predict: (carId: number) => request<PriceOut>("/api/price-predictions", post({ car_id: carId })),
   savedCars: () => request<Car[]>("/api/me/saved-cars", {}, true),

@@ -12,7 +12,7 @@ export interface CarDetail extends Car { related: Car[] }
 export interface CompareField { key: string; label: string; unit: string | null; values: (string | number | null)[]; differs: boolean; best_index: number | null; missing: number[] }
 export interface CompareOut { cars: Car[]; fields: CompareField[] }
 export interface Facet { value: string; count: number }
-export interface Filters { makes: Facet[]; fuel_types: Facet[]; transmissions: Facet[]; body_types: Facet[]; seating_capacities: number[]; price_min: number | null; price_max: number | null }
+export interface Filters { makes: Facet[]; models?: Facet[]; fuel_types: Facet[]; transmissions: Facet[]; transmission_groups?: Facet[]; body_types: Facet[]; seating_capacities: number[]; price_min: number | null; price_max: number | null }
 export interface Preferences {
   max_price?: number | null; min_price?: number | null; fuel_types: string[]; transmissions: ("manual" | "automatic")[]; body_types: string[];
   min_seats?: number | null; use_case?: "family" | "city" | null; priorities: string[]; limit?: number;

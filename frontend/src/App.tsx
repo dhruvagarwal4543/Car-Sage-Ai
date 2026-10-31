@@ -7,6 +7,7 @@ import { CarDetail } from "./pages/CarDetail";
 import { Compare } from "./pages/Compare";
 import { Explore } from "./pages/Explore";
 import { Home } from "./pages/Home";
+import { Credits } from "./pages/Credits";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="advisor" element={<Advisor />} />
         <Route path="login" element={<Login />} />
         <Route path="saved" element={<Saved />} />
+        <Route path="credits" element={<Credits />} />
         <Route path="*" element={<Empty title="Page not found"><Link to="/">Back to the home page</Link></Empty>} />
       </Route>
     </Routes>
