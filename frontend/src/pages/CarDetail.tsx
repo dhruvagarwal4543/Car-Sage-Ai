@@ -45,14 +45,13 @@ function CarDetails({ id }: { id: number }) {
           <h1>{c.model} <span className="variant">{c.variant}</span></h1>
           <p className="price big">{inr(c.price_inr)} <span className="muted small">ex-showroom</span></p>
           <p className="muted small">Ex-showroom price of a new car. On-road price (registration, insurance, taxes) is not in the data.</p>
-          {c.tags.length > 0 && <ul className="chips">{c.tags.map((t) => <li key={t} className="tag" title="Derived by a simple rule from the specifications">{TAG_LABELS[t] ?? t}</li>)}</ul>}
+          {c.tags.length > 0 && <p className="spec-line" title="Derived by a simple rule from the specifications">{c.tags.map((t) => TAG_LABELS[t] ?? t).join(" · ")}</p>}
           <div className="actions">
             <button className={`btn ${compare.has(c.id) ? "active" : ""}`} aria-pressed={compare.has(c.id)} onClick={() => setNotice(compare.toggle(c.id) ? "" : "You can compare up to 4 cars.")}>{compare.has(c.id) ? "In comparison" : "Add to comparison"}</button>
             <Link className="btn" to="/compare">View comparison ({compare.ids.length})</Link>
             <SaveButton car={c} />
             <Link className="btn primary" to={`/advisor?q=${encodeURIComponent(`tell me about the ${c.make} ${c.model}`)}`}>Ask the advisor</Link>
           </div>
-          <Link className="text-link small" to={`/?car=${c.id}#showroom`}>View this car in the homepage showroom ↗</Link>
           {notice && <p className="notice" role="alert">{notice}</p>}
         </div>
       </div>
@@ -67,7 +66,7 @@ function CarDetails({ id }: { id: number }) {
       <p className="muted small">Only attributes present in the dataset are shown.</p>
 
       <section aria-labelledby="est-h" className="panel">
-        <h2 id="est-h">Price estimate <span className="tag">experimental</span></h2>
+        <h2 id="est-h">Price estimate</h2><p className="label">Experimental</p>
         <p className="muted">A statistical model estimates this car's ex-showroom price from its specifications, to show how well specs explain price. It is not a quote.</p>
         <button className="btn" onClick={estimate} disabled={pred.busy}>{pred.busy ? "Estimating…" : "Estimate from specifications"}</button>
         {pred.error && <ErrorBox message={pred.error} />}

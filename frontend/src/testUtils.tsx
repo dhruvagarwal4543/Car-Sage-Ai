@@ -3,11 +3,10 @@ import type { ReactElement } from "react";
 import { MemoryRouter } from "react-router-dom";
 import { AuthProvider } from "./auth";
 import { CompareProvider } from "./compare";
-import { ThemeProvider } from "./theme";
 import type { Car } from "./types";
 
 export function renderApp(ui: ReactElement, route = "/") {
-  return render(<MemoryRouter initialEntries={[route]}><ThemeProvider><AuthProvider><CompareProvider>{ui}</CompareProvider></AuthProvider></ThemeProvider></MemoryRouter>);
+  return render(<MemoryRouter initialEntries={[route]}><AuthProvider><CompareProvider>{ui}</CompareProvider></AuthProvider></MemoryRouter>);
 }
 
 export function car(over: Partial<Car> = {}): Car {
