@@ -29,7 +29,7 @@ body::before { content: ''; position: fixed; inset: 0; z-index: -3; pointer-even
   radial-gradient(90% 55% at 18% -8%, #16314e 0%, transparent 62%),
   radial-gradient(80% 50% at 86% 4%, #2a2250 0%, transparent 60%),
   radial-gradient(120% 80% at 50% 110%, #0a1526 0%, transparent 65%); }
-.backdrop { position: fixed; inset: 0; z-index: -2; pointer-events: none; opacity: .5; }
+.backdrop { position: fixed; inset: 0; z-index: -2; pointer-events: none; opacity: .5; overflow: hidden; }
 .backdrop canvas { display: block; width: 100%; height: 100%; }
 
 h1, h2, h3, h4 { margin: 0; font-weight: 700; line-height: 1.04; letter-spacing: -.045em; }
@@ -229,10 +229,10 @@ main.home-page { padding-bottom: 0; }
 .catalogue-note { display: flex; align-items: center; gap: 12px; margin: 22px 0 0; color: var(--muted); font-size: 12px; }
 .catalogue-note > span:last-child { padding-left: 14px; margin-left: 2px; border-left: 1px solid var(--line); }
 
-.field { display: grid; gap: 8px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
-.field > input, .field > select, .field > textarea { padding: 12px 14px; border: 1px solid var(--line-mid); border-radius: 10px; background: var(--surface); color: var(--ink); font-size: 14px; font-weight: 500; letter-spacing: 0; text-transform: none; outline: none; transition: border-color .25s; }
+.field { display: grid; grid-template-columns: minmax(0, 1fr); min-width: 0; gap: 8px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.field > input, .field > select, .field > textarea { width: 100%; min-width: 0; padding: 12px 14px; border: 1px solid var(--line-mid); border-radius: 10px; background: var(--surface); color: var(--ink); font-size: 14px; font-weight: 500; letter-spacing: 0; text-transform: none; outline: none; transition: border-color .25s; }
 .field > input:focus, .field > select:focus { border-color: var(--line-strong); }
-.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.field-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
 .field.inline { display: flex; align-items: center; gap: 12px; }
 .field.inline select { width: auto; }
 select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-position: right 16px top 52%, right 11px top 52%; background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; cursor: pointer; }
@@ -364,7 +364,7 @@ select { appearance: none; background-image: linear-gradient(45deg, transparent 
 .view-switch button[aria-pressed='true'] { background: var(--surface-2); color: var(--ink); }
 .mobile-filter-toggle { display: none; }
 .explore { display: grid; grid-template-columns: 268px minmax(0, 1fr); gap: 36px; align-items: start; }
-.filters { position: sticky; top: calc(var(--nav-h) + 24px); display: grid; gap: 18px; padding: 24px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); max-height: calc(100vh - var(--nav-h) - 48px); overflow: auto; }
+.filters { grid-template-columns: minmax(0, 1fr); position: sticky; top: calc(var(--nav-h) + 24px); display: grid; gap: 18px; padding: 24px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); max-height: calc(100vh - var(--nav-h) - 48px); overflow: auto; }
 .filter-heading { display: grid; gap: 4px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
 .filter-heading strong { font-size: 14px; letter-spacing: -.02em; }
 .results-head { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 22px; }
@@ -505,7 +505,7 @@ body:has(.compare-bar) .composer { bottom: 96px; }
   .mobile-filter-toggle { display: inline-flex; margin-right: auto; }
   .catalogue-toolbar { flex-wrap: wrap; }
   .catalogue-toolbar > .small { width: 100%; }
-  .explore { grid-template-columns: 1fr; }
+  .explore { grid-template-columns: minmax(0, 1fr); }
   .filters { position: static; display: none; max-height: none; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .filters.is-open { display: grid; }
   .filter-heading, .filters > label:first-of-type, .filters .field-row, .filters > .state, .filters > .btn { grid-column: 1 / -1; }
