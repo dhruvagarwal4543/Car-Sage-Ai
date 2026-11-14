@@ -573,3 +573,5 @@ body:has(.compare-bar) .composer { bottom: 96px; }
   .scroll-cue, .scroll-progress { display: none; }
   .cinema .viewer-controls { top: auto; right: 14px; bottom: 14px; flex-direction: row; transform: none; }
 }
+
+.trace { max-width: 70ch; font-size: 13px; color: var(--muted); } .trace summary { cursor: pointer; } .trace ul { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 4px; }

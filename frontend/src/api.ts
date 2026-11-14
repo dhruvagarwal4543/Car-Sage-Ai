@@ -1,4 +1,4 @@
-import type { AssistantOut, Car, CarDetail, CarPage, CompareOut, Filters, Preferences, PriceOut } from "./types";
+import type { AssistantOut, Car, CarDetail, CarPage, CompareOut, Filters, LiveCompare, Preferences, PriceOut } from "./types";
 
 const BASE = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "";
 let tokenProvider: ((forceRefresh: boolean) => Promise<string | null>) | null = null;
@@ -60,6 +60,9 @@ export const api = {
   filters: (params: Record<string, string | number | null | undefined> = {}) => request<Filters>(`/api/filters${query(params)}`),
   assistant: (message: string, context: Preferences | null) => request<AssistantOut>("/api/assistant", post({ message, context })),
   predict: (carId: number) => request<PriceOut>("/api/price-predictions", post({ car_id: carId })),
+  // identity comes from the catalogue entry; the displayed catalogue price has no stated city or date, so it is sent as a price of unspecified basis
+  compareLive: (car: Car, refresh = false, city = "") => request<LiveCompare>("/api/prices/compare-live", post({ vehicle: { make: car.make, model: car.model, variant: car.variant, fuel_type: car.fuel_type, transmission: car.transmission ?? undefined,
+    engine_cc: car.displacement_cc ? Math.round(car.displacement_cc) : undefined, city: city || undefined }, displayed_price_inr: car.price_inr, displayed_price_type: "ex_showroom", preferred_price_type: "ex_showroom", refresh })),
   savedCars: () => request<Car[]>("/api/me/saved-cars", {}, true),
   saveCar: (id: number) => request<void>(`/api/me/saved-cars/${id}`, { method: "PUT" }, true),
   unsaveCar: (id: number) => request<void>(`/api/me/saved-cars/${id}`, { method: "DELETE" }, true),

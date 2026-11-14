@@ -81,12 +81,15 @@ describe("Compare", () => {
 describe("Advisor", () => {
   it("sends the question, shows the grounded reply and cars, and carries preferences forward", async () => {
     const bodies: { message: string; context: unknown }[] = [];
-    stubFetch((_u, init) => { bodies.push(JSON.parse(String(init?.body))); return { reply: "Top pick: Tata Nexon XM", intent: "recommend", preferences: { fuel_types: ["Diesel"], transmissions: [], body_types: [], priorities: [], max_price: 1500000 }, cars: [car()] }; });
+    stubFetch((_u, init) => { bodies.push(JSON.parse(String(init?.body))); return { reply: "Top pick: Tata Nexon XM", intent: "recommend", preferences: { fuel_types: ["Diesel"], transmissions: [], body_types: [], priorities: [], max_price: 1500000 }, cars: [car()],
+      trace: { input: {}, constraints: [{ id: "max_price", label: "budget up to ₹15.00 lakh", relaxable: true }], initial_candidates: 10, eliminated: { max_price: 4 }, feasible: 6, relaxation: [], search: { strategy: "none", states_expanded: 1, cost: 0 }, scoring: { priorities: ["price"], method: "min-max" }, missing_attributes: {}, ranking: [{ car_id: 1, score: 90 }], latency_ms: 3 } }; });
     renderApp(<Routes><Route path="/" element={<Advisor />} /></Routes>);
     await userEvent.type(screen.getByLabelText("Your question"), "diesel suv under 15 lakh");
     fireEvent.submit(screen.getByLabelText("Your question").closest("form")!);
     expect(await screen.findByText("Top pick: Tata Nexon XM")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Tata Nexon XM, details/ })).toBeInTheDocument();
+    expect(screen.getByText(/How this was decided · 6 of 10 cars met every requirement/)).toBeInTheDocument();   // the agent's trace is shown, not hidden
+    expect(screen.getByText(/budget up to ₹15.00 lakh: rules out 4 cars/)).toBeInTheDocument();
     await userEvent.type(screen.getByLabelText("Your question"), "make it automatic{enter}");
     await waitFor(() => expect(bodies).toHaveLength(2));
     expect(bodies[0].context).toBeNull();

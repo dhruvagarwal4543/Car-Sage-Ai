@@ -107,3 +107,25 @@ it("opens the advisor comparison table and clears context for a new conversation
   await waitFor(() => expect(bodies).toHaveLength(2));
   expect(bodies[1].context).toBeNull();
 });
+
+it("shows live quotes per price basis with sources, refuses a 'cheapest' claim from one site and keeps the catalogue price separate", async () => {
+  catalogue();
+  const b = { code: "DELHI_EX_SHOWROOM", price_type: "ex_showroom", location_kind: "city" as const, location: "Delhi" };
+  const q = { provider: "CarDekho", source_url: "https://www.cardekho.com/overview/Hyundai_Creta/Hyundai_Creta_E.htm", vehicle: "E", price_inr: 1090700, price_type: "ex_showroom", price_label: "Ex-Showroom Price in New Delhi", basis: b,
+    basis_label: "ex-showroom, Delhi", freshness: "cached", match: "exact", match_evidence: "", retrieved_at: "2026-11-12T10:00:00+00:00", verified: false };
+  const spy = vi.spyOn(api, "compareLive").mockResolvedValue({ quotes: [q], comparable_groups: [{ basis: b, basis_label: "ex-showroom, Delhi", price_type: "ex_showroom", quotes: [q], lowest: q, providers: ["CarDekho"], comparable_across_providers: false, single_source: true }],
+    probable_quotes: [], model_level: [{ provider: "CarDekho", price_low: 1090700, price_high: 2045700, basis_label: "ex-showroom, Delhi", source_url: "https://www.cardekho.com/hyundai/creta", note: "model-level reference" }],
+    lowest_comparable: q, savings_inr: null, difference_from_displayed_inr: null, incompatible_bases: "Prices shown are from different location bases and cannot be directly compared.",
+    provider_failures: [{ provider: "CarWale", page: "city (Delhi)", error: "fetch budget used up", kind: "rate_limited", retry_after_s: 41.2, served: "unavailable" }], warnings: ["listed prices are what the websites display"], retrieved_at: q.retrieved_at });
+  renderApp(<Routes><Route path="cars/:id" element={<CarDetail />} /></Routes>, "/cars/1");
+  await userEvent.selectOptions(await screen.findByLabelText(/City to compare for/), "Delhi");
+  await userEvent.click(screen.getByRole("button", { name: "Check current prices" }));
+  expect(spy).toHaveBeenCalledWith(expect.objectContaining({ id: 1 }), false, "Delhi");
+  expect(await screen.findByText(/Only CarDekho returned an exact ex-showroom, Delhi quote, so no "cheapest across websites" claim is possible/)).toBeInTheDocument();
+  expect(screen.getByText(/Prices shown are from different location bases and cannot be directly compared/)).toBeInTheDocument();
+  expect(screen.getByRole("heading", { name: /ex-showroom, Delhi/ })).toBeInTheDocument();
+  expect(screen.getByText("Model-level references (not your variant)")).toBeInTheDocument();
+  expect(screen.getAllByRole("link", { name: "source" }).map((a) => a.getAttribute("href"))).toEqual([q.source_url, "https://www.cardekho.com/hyundai/creta"]);
+  expect(screen.getByText(/CarWale \(city \(Delhi\)\): fetch budget used up - retry in about 42 s/)).toBeInTheDocument();
+  expect(screen.getByText(/The catalogue price above is historical/)).toBeInTheDocument();
+});

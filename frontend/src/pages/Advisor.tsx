@@ -2,11 +2,11 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { api } from "../api";
 import { CarCard } from "../components/CarCard";
-import type { Car, Preferences } from "../types";
+import type { Car, DecisionTrace, Preferences } from "../types";
 import { Icon } from "../components/Icon";
 import { Emblem } from "../components/Emblem";
 
-interface Msg { role: "user" | "assistant"; text: string; cars?: Car[]; compare?: boolean }
+interface Msg { role: "user" | "assistant"; text: string; cars?: Car[]; compare?: boolean; trace?: DecisionTrace | null }
 const SUGGESTIONS = ["Family SUV under 15 lakh, diesel", "Automatic petrol hatchback under 8 lakh", "Fuel efficient city car under 10 lakh", "Compare Nexon and Creta", "7 seater under 20 lakh"];
 const GREETING = "Hi! Tell me your budget and needs, for example “family SUV under 15 lakh, diesel, automatic”. I can also compare models or summarise one. I use only the car catalogue: ex-showroom prices, no live inventory.";
 
@@ -28,7 +28,7 @@ export function Advisor() {
     try {
       const r = await api.assistant(t, ctx.current);
       ctx.current = r.preferences;
-      setMsgs((m) => [...m, { role: "assistant", text: r.reply, cars: r.cars, compare: r.intent === "compare" }]);
+      setMsgs((m) => [...m, { role: "assistant", text: r.reply, cars: r.cars, compare: r.intent === "compare", trace: r.trace }]);
     } catch (e) {
       setMsgs((m) => [...m, { role: "assistant", text: `Sorry, I could not answer that: ${e instanceof Error ? e.message : "unknown error"}` }]);
     } finally { sending.current = false; setBusy(false); }
@@ -50,6 +50,7 @@ export function Advisor() {
         {msgs.map((m, i) => (
           <div key={i} className={`msg ${m.role}`}>
             <div className="message-label">{m.role === "assistant" ? <><span className="advisor-avatar"><Icon name="spark" size={15} /></span> CarSage Advisor</> : "You"}</div><p className="bubble">{m.text}</p>
+            {m.trace && <Trace t={m.trace} />}
             {m.cars && m.cars.length > 0 && <>
               <div className="grid three">{m.cars.slice(0, m.compare ? 4 : 3).map((c) => <CarCard key={c.id} car={c} compact />)}</div>
               {m.compare && <Link className="btn primary" to={`/compare?ids=${m.cars.map((c) => c.id).join(",")}`}>Open comparison table</Link>}
@@ -66,5 +67,22 @@ export function Advisor() {
         <button className="btn primary" type="submit" disabled={busy || !input.trim()}>Send</button>
       </form>
     </>
+  );
+}
+
+// How the agent decided: the trace the API returns with every recommendation, shown as-is (no client-side interpretation).
+function Trace({ t }: { t: DecisionTrace }) {
+  const relaxed = t.relaxation.length > 0;
+  return (
+    <details className="trace">
+      <summary>How this was decided · {t.feasible} of {t.initial_candidates} cars met every requirement{relaxed ? ", so a requirement was relaxed" : ""} · {t.latency_ms} ms</summary>
+      <ul>
+        {t.constraints.length === 0 && <li>No hard requirements given: every catalogue car was considered.</li>}
+        {t.constraints.map((c) => <li key={c.id}>{c.label}: rules out {t.eliminated[c.id] ?? 0} cars on its own{c.relaxable ? "" : " (never relaxed)"}</li>)}
+        {relaxed && <li>Relaxed ({t.search.strategy}, cheapest first): {t.relaxation.join("; ")}</li>}
+        <li>Ranked by {t.scoring.priorities.join(", ")}: {t.scoring.method}</li>
+        {Object.entries(t.missing_attributes).map(([car, items]) => <li key={car}>{car}: {items.join("; ")}</li>)}
+      </ul>
+    </details>
   );
 }
