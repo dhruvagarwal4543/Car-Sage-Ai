@@ -193,6 +193,24 @@ All numbers are produced by `python src/experiment.py` and copied from [reports/
 - Even with `family_group`, a few under-merged model pairs remain (see [family-group audit](reports/experiment/family_group_audit.md)); scores are probably somewhat optimistic.
 - New-car ex-showroom price at an unknown date only: not used-car resale, and no dates, sellers, locations or listing identifiers exist, so **fake-listing detection is not supported by this data**.
 
+## Where each AI technique lives
+
+| Technique | Implementation | Tests / evidence |
+|---|---|---|
+| Intelligent agent (PEAS, knowledge-based, goal-directed, utility ranking) | [carsage/agent.py](carsage/agent.py) (description, `GET /api/agent`), decision procedure [carsage/recommend.py](carsage/recommend.py) | [tests/test_agent.py](tests/test_agent.py) |
+| Knowledge representation: production rules with missing-data semantics | [carsage/rules.py](carsage/rules.py) | `test_rules_*` |
+| Constraint satisfaction: variable `car`, catalogue domain, unary hard constraints, True/False/None checks | [carsage/csp.py](carsage/csp.py) | `test_constraints_*`, `test_strict_results_*` |
+| State-space search: relaxation states, actions, goal test, path cost, uniform-cost search; greedy baseline | [carsage/search.py](carsage/search.py) | `test_search_*` |
+| Heuristic (utility) ranking over the feasible set | `rank()` in [carsage/recommend.py](carsage/recommend.py) | `test_missing_attributes_*` |
+| Explainability: reasons, trade-offs, missing data, full decision trace | `DecisionTrace` in [carsage/schemas.py](carsage/schemas.py); shown on the Advisor page | `test_relaxation_is_explained_*` |
+| Rule-based natural-language understanding, unsupported requests named | [carsage/assistant.py](carsage/assistant.py) | `test_parse_realistic_queries`, `test_unsupported_*` |
+| Machine learning: experimental price estimate (Ridge) | [src/experiment.py](src/experiment.py), [carsage/predict.py](carsage/predict.py) | [reports/experiment/](reports/experiment/) |
+| Evaluation of the agent (baselines, ablations) | `python src/evaluate_recommender.py` | [reports/evaluation/recommender.md](reports/evaluation/recommender.md) |
+
+Live prices (not AI, data plumbing): [carsage/providers.py](carsage/providers.py) and [carsage/prices.py](carsage/prices.py) read CarDekho/CarWale public pages (paced by [carsage/scheduler.py](carsage/scheduler.py)), match the viewed variant strictly, and group quotes by price basis (type + city) so only like is compared with like (`POST /api/prices/compare-live`); the advisor can cite cached quotes with `live_prices: true` but they never change which cars qualify. Details and limits: [extension/README.md](extension/README.md).
+
+Not AI: catalogue search and filters (SQL), the compare table, saved cars, authentication, price-history storage. Request limits: `RATE_LIMIT_PER_MINUTE` (default 60 per client on the POST endpoints; 0 disables) and 50 price observations per user per day.
+
 ## PostgreSQL catalogue
 
 [carsage/models.py](carsage/models.py) defines `catalogue_cars` (one row per car variant; `source_row` is the unique traceability key). Optional specifications are NULLable and stay NULL when the dataset has no value. The table deliberately has **no** seller, location, image or used-car price columns; user-created marketplace listings will be a separate table in a later phase. [alembic/versions/0001_create_catalogue_cars.py](alembic/versions/0001_create_catalogue_cars.py) creates it, and a test checks the migration against the models.
@@ -329,7 +347,7 @@ Done: catalogue, search/compare API, explainable recommendations, rule-based ass
 
 1. Verify against a real Neon database and a real Firebase project (needs your credentials; steps in [docs/CLOUD_SETUP.md](docs/CLOUD_SETUP.md)).
 2. Optional LLM adapter behind the assistant interface (planned; the rule-based assistant remains the default).
-3. Chrome extension for supported listing pages (planned).
+3. Chrome extension: built for CarDekho/CarWale (see [extension/README.md](extension/README.md)); account sync inside the extension is not.
 4. User-created marketplace listings as a separate table (planned).
 5. Better price model: the evaluation shows large errors above ₹1 crore, so the estimate stays labelled experimental.
 

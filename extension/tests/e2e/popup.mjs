@@ -139,6 +139,19 @@ try {
     await ev(v, `document.querySelector('[data-act=open]').click(); true`);
     await sleep(900);
     check(`[${fixture}] Open Details opens /cars/<id>`, (await targets()).some((t) => /localhost:5173\/cars\/\d+/.test(t.url)));
+    if (fixture === 'cardekho-variant') {            // live cross-website prices: real API, real provider pages (needs network)
+      check(`[${fixture}] Compare Prices is enabled for a variant page`, await ev(v, `!document.querySelector('[data-act=live]').disabled`));
+      await ev(v, `document.querySelector('[data-act=live]').click(); true`);
+      await ev(v, `document.getElementById('liveCity').value = 'Delhi'; true`);
+      await ev(v, `document.querySelector('[data-act=runLive]').click(); true`);
+      const live = await waitFor(v, `(document.getElementById('liveOut')?.textContent || '').length > 60 && !document.getElementById('liveOut').textContent.includes('Asking the websites')`, 40000);
+      const liveText = await ev(v, `document.getElementById('liveOut').textContent`);
+      console.log('       live panel:', liveText.replace(/\s+/g, ' ').slice(0, 900));
+      check(`[${fixture}] live panel shows quotes with freshness and source links, or says plainly why not`, !!live && (/ex-showroom, Delhi/.test(liveText) || /No exact variant quote|Cannot reach|rate limit|retry in/.test(liveText)));
+      check(`[${fixture}] every source link points at a provider website`, await ev(v, `[...document.querySelectorAll('#liveOut a')].every((a) => /^https:\\/\\/www\\.(cardekho|carwale)\\.com\\//.test(a.href))`));
+      check(`[${fixture}] a lone provider never gets a 'cheapest' claim and no unlabeled mixing`, await ev(v, `!/Lowest comparable/.test(document.getElementById('liveOut').textContent) || /Comparable across CarDekho and CarWale/.test(document.getElementById('liveOut').textContent)`));
+      check(`[${fixture}] results are grouped under a price-basis heading`, await ev(v, `/^(Prices shown|No exact|Cannot|Too many)/.test(document.getElementById('liveOut').textContent.trim()) || !!document.querySelector('#liveOut h3')`));
+    }
     await ev(v, `document.querySelector('[data-act=rechoose]').click(); true`);
     check(`[${fixture}] Change variant returns to the picker and disables the actions`, await ev(v, `!!document.getElementById('cand') && document.querySelector('[data-act=addCompare]').disabled`));
     await ev(v, `(() => { const c = document.getElementById('cand'); c.value = c.options[2].value; document.querySelector('[data-act=confirm]').click(); return true; })()`);
@@ -156,6 +169,6 @@ try {
   console.log(`\n${results.length - failed}/${results.length} browser checks passed`);
   try { await send('Browser.close'); } catch { /* already closing */ }
   chrome.kill();
-  fs.rmSync(PROFILE, { recursive: true, force: true });
+  try { fs.rmSync(PROFILE, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }); } catch { /* Chrome may still hold the profile; it is a temp dir */ }
   process.exit(failed ? 1 : 0);
 }

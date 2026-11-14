@@ -115,8 +115,32 @@ describe('labelled price rules', () => {
     expect(t('Rate & Win ₹1000 Rs.10.91 Lakh*Get On-Road Price*Ex-Showroom Price in New Delhi')).toMatchObject({ inr: 1091000, type: 'ex_showroom' });
   });
   it('picks the label nearest to the price and flags glued prices as a spread', () => {
-    expect(t('Ex-Showroom PriceRs. 10.91 LakhRs. 12.61 LakhOn-Road Price, MumbaiRs. 13.08 Lakh')).toEqual({ inr: 1091000, type: 'ex_showroom', range: true });
+    expect(t('Ex-Showroom PriceRs. 10.91 LakhRs. 12.61 LakhOn-Road Price, MumbaiRs. 13.08 Lakh')).toMatchObject({ inr: 1091000, type: 'ex_showroom', range: true, city: null });   // Mumbai belongs to the on-road label
     expect(t('On-Road Price, Mumbai Rs. 13.08 Lakh')).toMatchObject({ inr: 1308000, type: 'on_road' });
   });
   it('returns nothing when no price sits next to a label', () => { expect(t('Creta E price starts at Rs. 13.08 Lakh')).toBeNull(); });
+});
+
+describe('price city, average and spec facts (listing identity for live comparison)', () => {
+  const t = (body) => labelledPrice(new DOMParser().parseFromString(`<body>${body}</body>`, 'text/html'));
+  it('reads the city that the chosen price label names, and only that label', () => {
+    expect(t('Rs. 10.91 Lakh*Get On-Road Price*Ex-Showroom Price in New DelhiGet Diwali Offers')).toMatchObject({ type: 'ex_showroom', city: 'New Delhi', average: false });
+    expect(t('On-Road Price, MumbaiRs. 13.08 Lakh')).toMatchObject({ type: 'on_road', city: 'Mumbai' });
+    expect(t('Ex-Showroom PriceRs. 10.91 LakhOn-Road Price, MumbaiRs. 13.08 Lakh').city).toBeNull();
+  });
+  it('flags a national average price', () => { expect(t('Avg. Ex-Showroom price Rs. 10.91 Lakh')).toMatchObject({ type: 'ex_showroom', average: true, city: null }); });
+  it('real pages name the city of their ex-showroom label (CarDekho: New Delhi, CarWale hero: Mumbai)', () => {
+    expect(real('cardekho-model')[0]).toMatchObject({ priceCity: 'New Delhi', priceNationalAverage: false });
+    expect(real('cardekho-variant')[0]).toMatchObject({ priceCity: 'New Delhi' });
+    expect(real('carwale-model')[0].priceCity).toBe('Mumbai');
+  });
+  it('a CarDekho variant page contributes its spec-table fuel, gearbox and displacement', () => {
+    const html = '<h1>Hyundai Creta E</h1><div>Ex-Showroom Price Rs.10,90,700</div><div>Engine Type 1.5L MPi Displacement 1497 cc Transmission Type Manual Gearbox 6-Speed Fuel Type Petrol Petrol Mileage</div>';
+    const v = detect(new DOMParser().parseFromString(`<html><body>${html}</body></html>`, 'text/html'), 'https://www.cardekho.com/overview/Hyundai_Creta/Hyundai_Creta_E.htm').vehicles[0];
+    expect(v).toMatchObject({ fuelType: 'Petrol', transmission: 'Manual', displacementCc: 1497 });
+    const model = detect(new DOMParser().parseFromString(`<html><body>${html}</body></html>`, 'text/html'), 'https://www.cardekho.com/hyundai/creta').vehicles[0];
+    expect(model.fuelType).toBeNull();                                      // spec tables are only trusted on variant pages
+    const glued = '<h1>Hyundai Creta E</h1><div>Ex-Showroom PriceRs.10,90,700</div><div>Engine TypeDisplacement1497 ccTransmission TypeManualGearbox6-SpeedFuel TypePetrolPetrol Mileage</div>';   // real textContent has no spaces between cells
+    expect(detect(new DOMParser().parseFromString(`<html><body>${glued}</body></html>`, 'text/html'), 'https://www.cardekho.com/overview/Hyundai_Creta/Hyundai_Creta_E.htm').vehicles[0]).toMatchObject({ fuelType: 'Petrol', transmission: 'Manual', displacementCc: 1497 });
+  });
 });

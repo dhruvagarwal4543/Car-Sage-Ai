@@ -92,6 +92,6 @@ try {
   console.log(`\n${results.length - failed}/${results.length} browser checks passed`);
   try { await send('Browser.close'); } catch { /* already closing */ }
   chrome.kill();
-  fs.rmSync(PROFILE, { recursive: true, force: true });
+  try { fs.rmSync(PROFILE, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 }); } catch { /* Chrome may still hold the profile; it is a temp dir */ }
   process.exit(failed ? 1 : 0);
 }

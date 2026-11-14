@@ -1,4 +1,4 @@
-import { DEFAULTS, MAX_COMPARE, altPrefs, carUrl, chartPoints, cleanEntries, compareUrl, inr, makeApi, safeUrl, splitTitle } from './core.js';
+import { DEFAULTS, LIVE_CITIES, MAX_COMPARE, altPrefs, carUrl, chartPoints, cleanEntries, compareUrl, inr, liveRequest, liveSummary, makeApi, safeUrl, splitTitle } from './core.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));   // listing text is untrusted
@@ -8,7 +8,7 @@ const store = {
 };
 const TYPES = { ex_showroom: 'Ex-showroom', on_road: 'On-road', used_asking: 'Used asking price', advertised: 'Advertised', unknown: 'Unknown price type' };
 
-const S = { cfg: DEFAULTS, api: null, scan: null, vehicle: null, match: null, car: null, makes: null, compare: [], saved: [], panel: '' };
+const S = { cfg: DEFAULTS, api: null, scan: null, vehicle: null, match: null, car: null, makes: null, compare: [], saved: [], panel: '', liveCity: '', livePriceType: '', liveFuel: null, liveGear: null };
 
 const fail = (e) => `<p class="bad" role="alert">${esc(e.message)} <button data-act="retry">Retry</button></p>`;
 const carLine = (c) => `${esc(c.make)} ${esc(c.model)} ${esc(c.variant)} · ${esc(c.fuel_type)}${c.transmission ? ' · ' + esc(c.transmission) : ''} · ${inr(c.price_inr)}`;
@@ -34,8 +34,9 @@ async function resolveMatch(v) {
     const make = sp.make || v.make;
     if (sp.make) sp = splitTitle(v.title, S.makes, (await S.api.filters(sp.make)).models.map((m) => m.value));
     const model = sp.model || v.model;
+    v.make ||= make; v.model ||= model; v.variant ||= sp.variant || null;      // the listing's own identity, used by live price comparison
     if (!make || !model) { S.match = { status: 'unresolved' }; return render(); }
-    const r = await S.api.match({ make, model, variant: sp.variant || undefined, fuel_type: v.fuelType || undefined });
+    const r = await S.api.match({ make, model, variant: sp.variant || undefined, fuel_type: v.fuelType || undefined, model_year: v.status === 'new' ? v.modelYear || undefined : undefined });
     S.match = r; if (r.status === 'exact') S.car = r.candidates[0];
   } catch (e) { S.match = { status: 'error', error: e }; }
   render();
@@ -59,17 +60,23 @@ function renderVehicle() {
   else if (m?.status === 'unresolved') matchHtml = '<p class="warn">Could not tell the make and model. Search the catalogue below.</p>';
   else if (m?.status === 'unmatched') matchHtml = '<p class="warn">This model is not in the CarSage catalogue, so it cannot be compared or priced. You can still save it on this device.</p>';
   else if (car) matchHtml = `<p class="ok">Matched: ${carLine(car)}</p>${m?.status === 'ambiguous' ? '<button data-act="rechoose">Change variant</button><p class="muted">Add this one, then change the variant and add another to compare variants of the same model.</p>' : ''}`;
-  else if (m?.status === 'ambiguous') matchHtml = `<p class="warn">${m.total_candidates} catalogue variants fit. Choose the right one:</p><label class="sr" for="cand">Catalogue variant</label><select id="cand"><option value="">Choose a variant…</option>${m.candidates.map((c) => `<option value="${c.id}">${carLine(c)}</option>`).join('')}</select><button class="primary" data-act="confirm">Confirm variant</button><p class="muted">${esc(m.note || '')}</p>`;
+  else if (m?.status === 'ambiguous') matchHtml = `<p class="warn">${m.total_candidates} catalogue variants fit (match confidence ${esc(m.confidence || 'low')}; best evidence first). Choose the right one:</p><label class="sr" for="cand">Catalogue variant</label><select id="cand"><option value="">Choose a variant…</option>${m.candidates.map((c) => `<option value="${c.id}">${carLine(c)}</option>`).join('')}</select><button class="primary" data-act="confirm">Confirm variant</button><p class="muted">${esc(m.note || '')}</p>`;
   const on = car ? '' : 'disabled title="Match the car to the catalogue first"';
   return `<div class="card">${pick}<div class="row">${img ? `<img class="thumb" src="${esc(img)}" alt="">` : ''}<div><div class="title">${esc(v.title)}</div><div class="muted">${esc(facts)}</div><div>${esc(price)}</div>
     <div class="muted">${link ? `<a href="${esc(link)}" target="_blank" rel="noopener noreferrer">${esc(v.site)}</a>` : esc(v.site)} · detected via ${v.source === 'json-ld' ? 'page metadata' : 'page text'} · confidence ${esc(v.confidence)}</div></div></div>${matchHtml}
     <div class="actions"><button class="primary" data-act="save">Save (this device)</button><button data-act="addCompare" ${on}>Add to Compare</button><button data-act="history" ${on}>Price History</button>
-    <button data-act="alts" ${on}>Find Alternatives</button><button data-act="open" ${on}>Open Details</button><button data-act="rescan">Rescan</button></div></div>`;
+    <button data-act="alts" ${on}>Find Alternatives</button><button data-act="live" ${v.variant && v.make && v.model ? '' : 'disabled title="This page shows a model, not an exact variant: open a variant page"'}>Compare Prices</button><button data-act="open" ${on}>Open Details</button><button data-act="rescan">Rescan</button></div></div>`;
 }
 
 function renderPanel() {
   if (S.panel === 'alts') return '<h2>Alternatives</h2><div class="card"><label class="inline"><input type="checkbox" id="sf" checked>same fuel</label><label class="inline"><input type="checkbox" id="sb">same body</label><label class="inline"><input type="checkbox" id="st">same transmission</label>'
     + `<label>Budget up to (₹ lakh)<input id="bud" type="number" min="1" step="0.5" value="${Math.round(((S.vehicle.priceInr || S.car.price_inr) / 1e5) * 10) / 10}"></label><button class="primary" data-act="runAlts">Find</button><div id="altOut"></div></div>`;
+  if (S.panel === 'live') return `<h2>Compare prices across websites</h2><div class="card"><p class="muted">Current listed prices on CarDekho and CarWale for this variant, grouped by what the price means (type and city). Pages are read when you ask and cached up to 6 hours.</p>
+      <label>City to compare for<select id="liveCity"><option value="">Not specified (each site's own default)</option>${LIVE_CITIES.map((c) => `<option ${c === S.liveCity ? 'selected' : ''}>${c}</option>`).join('')}</select></label>
+      <label>Fuel<select id="liveFuel">${['', 'Petrol', 'Diesel', 'CNG', 'Electric', 'Hybrid'].map((f) => `<option value="${f}" ${f === (S.liveFuel ?? S.vehicle.fuelType ?? '') ? 'selected' : ''}>${f || (S.vehicle.fuelOptions && S.vehicle.fuelOptions.length > 1 ? 'Choose: ' + S.vehicle.fuelOptions.join(' / ') : 'Not stated')}</option>`).join('')}</select></label>
+      <label>Transmission<select id="liveGear">${['', 'Manual', 'Automatic'].map((g) => `<option value="${g}" ${g === (S.liveGear ?? (S.vehicle.transmission || '')) ? 'selected' : ''}>${g || 'Not stated'}</option>`).join('')}</select></label>
+      <label>Price type<select id="livePT"><option value="" ${S.livePriceType ? '' : 'selected'}>As on this page</option><option value="ex_showroom" ${S.livePriceType === 'ex_showroom' ? 'selected' : ''}>Ex-showroom</option><option value="on_road" ${S.livePriceType === 'on_road' ? 'selected' : ''}>On-road (needs a city)</option></select></label>
+      <div class="actions"><button class="primary" data-act="runLive" id="liveGo">Compare prices</button><button data-act="runLive" data-refresh="1" id="liveRefresh">Refresh</button></div><div id="liveOut" aria-live="polite"></div></div>`;
   if (S.panel === 'history') {
     const v = S.vehicle, type = v.priceType === 'unknown' ? (v.status === 'used' ? 'used_asking' : 'ex_showroom') : v.priceType;
     return `<h2>Price history</h2><div class="card"><label>Model year<input id="hy" type="number" min="1900" max="2100" value="${v.modelYear || new Date().getFullYear()}"></label>
@@ -115,6 +122,40 @@ async function runHistory(years) {
   } catch (e) { out.innerHTML = fail(e).replace('data-act="retry"', `data-act="runHistory" data-years="${years}"`); }
 }
 
+function liveHtml(sum) {
+  const qrow = (x) => `<li><div class="title">${x.lowest ? '▼ ' : ''}${esc(x.provider)} · ${inr(x.price)}</div><div class="muted">${esc(x.vehicle)} · ${esc(x.match)} match · ${esc(x.freshness)}${x.retrieved ? ' · ' + esc(x.retrieved) + 'Z' : ''} · <a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">source</a></div></li>`;
+  return (sum.incompatible ? `<p class="warn" role="alert">${esc(sum.incompatible)}</p>` : '')
+    + (sum.groups.length ? sum.groups.map((g) => `<h3>${esc(g.label)}</h3><p class="muted">${g.multi ? 'Comparable across ' + esc(g.providers.join(' and ')) : 'One website only'}</p><ul>${g.rows.map(qrow).join('')}</ul>`).join('') : '<p class="warn">No exact variant quote found.</p>')
+    + (sum.claim ? `<p class="ok">${esc(sum.claim)}${sum.diff ? ' · ' + esc(sum.diff) : ''}${sum.savings ? ' · ' + esc(sum.savings) : ''}</p>` : '')
+    + (sum.probable.length ? `<h3>Probable matches (not in the comparison)</h3><ul>${sum.probable.map((x) => `<li><div class="title">${esc(x.provider)} · ${esc(x.vehicle)} · ${inr(x.price)}</div><div class="muted">${esc(x.label)} · ${esc(x.why)} · <a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">source</a></div></li>`).join('')}</ul>` : '')
+    + (sum.modelLevel.length ? `<h3>Model-level references (not your variant)</h3><ul>${sum.modelLevel.map((m) => `<li><div class="title">${esc(m.provider)} · ${inr(m.low)} – ${inr(m.high)}</div><div class="muted">${esc(m.label)} · ${esc(m.note)} · <a href="${esc(m.url)}" target="_blank" rel="noopener noreferrer">source</a></div></li>`).join('')}</ul>` : '')
+    + (sum.ambiguous ? `<p class="warn">${sum.ambiguous} provider variant(s) were ambiguous and left out; state the exact variant, fuel and transmission.</p>` : '')
+    + sum.failures.map((f) => `<p class="bad">${esc(f)}</p>`).join('') + `<p class="muted">${sum.warnings.map(esc).join(' ')}</p>`;
+}
+
+let liveBusy = false;
+async function runLive(refresh) {
+  if (liveBusy) return;
+  liveBusy = true;
+  S.liveCity = $('liveCity').value; S.livePriceType = $('livePT').value; S.liveFuel = $('liveFuel').value; S.liveGear = $('liveGear').value;
+  await store.set('liveCity', S.liveCity);
+  const out = $('liveOut'), buttons = ['liveGo', 'liveRefresh'].map($);
+  buttons.forEach((b) => { b.disabled = true; });
+  out.innerHTML = '<p class="muted" role="status">Asking the websites… requests are spaced out politely, so this can take several seconds.</p>';
+  let wait = 0;
+  try {
+    const sum = liveSummary(await S.api.compareLive(liveRequest(S.vehicle, S.car, { refresh, city: S.liveCity, priceType: S.livePriceType, fuel: S.liveFuel, gear: S.liveGear })));
+    out.innerHTML = liveHtml(sum);
+    wait = sum.retryAfter;
+  } catch (e) {
+    wait = e.status === 429 ? 30 : 0;
+    out.innerHTML = e.status === 429 ? '<p class="warn">Too many requests; wait a moment before trying again.</p>' : fail(e).replace('data-act="retry"', 'data-act="runLive"');
+  }
+  liveBusy = false;
+  const re = () => buttons.forEach((b) => { if (b) b.disabled = false; });
+  if (wait > 0) { out.insertAdjacentHTML('beforeend', `<p class="muted">Refresh is paused for about ${Math.ceil(Math.min(wait, 60))} s.</p>`); setTimeout(re, Math.min(wait, 60) * 1000); } else re();
+}
+
 async function runAlts() {
   const out = $('altOut'); out.innerHTML = '<p class="muted">Loading…</p>';
   try {
@@ -156,7 +197,8 @@ document.addEventListener('click', async (ev) => {
       return render();
     }
     case 'addCompare': return addCompare(fromListing());
-    case 'history': case 'alts': S.panel = S.panel === d.act ? '' : d.act; return render();
+    case 'history': case 'alts': case 'live': S.panel = S.panel === d.act ? '' : d.act; return render();
+    case 'runLive': return runLive(!!d.refresh);
     case 'runHistory': return runHistory(Number(d.years));
     case 'runAlts': return runAlts();
     case 'open': return open(carUrl(S.cfg.siteBase, S.car.id));
@@ -191,10 +233,11 @@ async function init(first = true) {
   if (first) {
     const cfg = await store.get('cfg', {}); S.cfg = { apiBase: safeUrl(cfg.apiBase) || DEFAULTS.apiBase, siteBase: safeUrl(cfg.siteBase) || DEFAULTS.siteBase }; S.api = makeApi(S.cfg.apiBase);
     S.compare = cleanEntries(await store.get('compare', []), { needCarId: true }); S.saved = cleanEntries(await store.get('saved', []));
+    S.liveCity = await store.get('liveCity', '');
     const theme = await store.get('theme', null); if (theme) document.documentElement.dataset.theme = theme;
     $('apiBase').value = S.cfg.apiBase; $('siteBase').value = S.cfg.siteBase; $('origin').textContent = location.origin; checkConn();
   }
-  S.scan = null; S.vehicle = null; S.match = null; S.car = null; S.panel = ''; render();
+  S.scan = null; S.vehicle = null; S.match = null; S.car = null; S.panel = ''; S.liveFuel = null; S.liveGear = null; render();
   S.scan = await scan(); S.vehicle = S.scan.vehicles[0] || null; render();
   if (S.vehicle) resolveMatch(S.vehicle);
 }

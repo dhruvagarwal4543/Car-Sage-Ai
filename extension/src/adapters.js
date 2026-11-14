@@ -29,6 +29,17 @@
 
   // The first price that sits next to an "Ex-Showroom"/"On-Road" label decides both value and type. "Get On-Road Price" is a button, not a label.
   // A second price glued to the first (two fuel columns) means the page shows a spread, so the figure is a starting price.
+  const CITIES = 'New Delhi|Delhi|Mumbai|Bangalore|Bengaluru|Chennai|Hyderabad|Pune|Kolkata|Ahmedabad|Chandigarh|Jaipur';
+
+  // CarDekho variant pages carry a spec table: "Fuel Type Petrol ... Transmission Type Manual ... Displacement 1497 cc".
+  function specFacts(doc) {
+    const body = doc.body && doc.body.cloneNode(true);
+    if (!body) return null;
+    body.querySelectorAll('script,style,noscript').forEach((e) => e.remove());
+    const t = text(body), g = (rx) => (rx.exec(t) || [])[1];
+    return { fuel: g(/Fuel Type\s*(Petrol|Diesel|CNG|Electric|Hybrid)/), gear: g(/Transmission Type\s*(Manual|Automatic|AMT|CVT|DCT|IVT|DSG|AT)/), cc: Number(g(/Displacement\s*(\d{3,4})\s*cc/)) || null };   // textContent glues cells together ("Fuel TypePetrolPetrol")
+  }
+
   function labelledPrice(doc) {
     const body = doc.body && doc.body.cloneNode(true);
     if (!body) return null;
@@ -39,10 +50,17 @@
     while ((m = re.exec(t)) && n++ < 60) {
       const before = t.slice(Math.max(0, m.index - 60), m.index), after = t.slice(m.index + m[0].length, m.index + m[0].length + 60);
       const dist = (rx) => { const b = [...before.matchAll(rx)].pop(), a = rx.exec(after); return Math.min(b ? before.length - b.index - b[0].length : 1e9, a ? a.index : 1e9); };   // characters between the label and the price
-      const ex = dist(/ex-?showroom/gi), on = dist(/on-?road/gi);
+      const ex = dist(/ex-?showroom(?: price)?/gi), on = dist(/on-?road(?: price)?/gi);
       if (ex === 1e9 && on === 1e9) continue;
       const p = parsePrice(m[0]);
-      if (p && (/lakh|crore|cr/i.test(m[0]) || p.inr >= 100000)) return { inr: p.inr, type: ex <= on ? 'ex_showroom' : 'on_road', range: p.range || /^\s*(?:₹|Rs\.?)/i.test(after) };
+      if (p && (/lakh|crore|cr/i.test(m[0]) || p.inr >= 100000)) {
+        const type = ex <= on ? 'ex_showroom' : 'on_road', near = before + ' ' + after;
+        // the city/average belongs to the label of the chosen price type only ("Ex-Showroom Price in New Delhi" vs "On-Road Price, Mumbai")
+        const label = new RegExp(`${type === 'ex_showroom' ? 'ex-?showroom' : 'on-?road'}(?: price)?\\s*(?:in\\s+|,\\s*|:\\s*(?:in\\s+)?)(${CITIES})`, 'i').exec(near);   // no trailing \\b: the page text runs the city into the next word ("New DelhiGet Diwali")
+        const everywhere = [...new Set([...t.matchAll(new RegExp(`${type === 'ex_showroom' ? 'ex-?showroom' : 'on-?road'}(?: price)?\\s*(?:in\\s+|,\\s*)(${CITIES})`, 'gi'))].map((x) => x[1].toLowerCase()))];
+        const city = label ? label[1] : everywhere.length === 1 ? t.match(new RegExp(everywhere[0], 'i'))[0] : null;        // the page names one city for this price type: that is the city
+        return { inr: p.inr, type, range: p.range || /^\s*(?:₹|Rs\.?)/i.test(after), city, average: type === 'ex_showroom' && /(?:avg\.?|average)\s*ex-?showroom/i.test(near) };
+      }
     }
     return null;
   }
@@ -106,14 +124,16 @@
     const ex = status === 'new' && labelled;
     // The page rounds to lakhs; the structured price is exact. Keep the exact one when it is the same figure.
     const priceInr = ex ? (b.priceInr && Math.abs(b.priceInr - labelled.inr) <= 5000 ? b.priceInr : labelled.inr) : b.priceInr, ctxText = b.priceContext || '';
-    const gears = b.gears.length ? b.gears : gearOf([title]), fuels = b.fuels.length ? b.fuels : fuelOf([title]);
+    const facts = ctx.facts || {};
+    const gears = b.gears.length ? b.gears : gearOf([title]).length ? gearOf([title]) : gearOf([facts.gear || '']), fuels = b.fuels.length ? b.fuels : fuelOf([title]).length ? fuelOf([title]) : fuelOf([facts.fuel || '']);
+    const displacements = b.displacements.length ? b.displacements : facts.cc ? [facts.cc] : [];
     return {
       site: site ? site.name : new URL(url).hostname, url, canonicalUrl: canonical, title, make: b.make || null, model: b.model || null,
       modelYear: year ? Number(year) : null, status, image: b.image || null, location: b.location || (crumb && crumb.location) || null,
-      priceInr: priceInr || null, priceIsRange: ex ? labelled.range || !!b.priceIsRange : !!b.priceIsRange,
+      priceInr: priceInr || null, priceIsRange: ex ? labelled.range || !!b.priceIsRange : !!b.priceIsRange, priceCity: ex ? labelled.city : null, priceNationalAverage: !!(ex && labelled.average),
       priceType: !priceInr ? 'unknown' : status === 'used' ? 'used_asking' : ex ? labelled.type : /ex[- ]?showroom/i.test(ctxText) ? 'ex_showroom' : /on[- ]?road/i.test(ctxText) ? 'on_road' : 'unknown',
       fuelType: single(fuels), fuelOptions: fuels, transmission: single(gears), transmissionOptions: gears,
-      displacementCc: single(b.displacements), mileage: b.mileage, odometerKm: b.odometerKm ?? null, source: b.source, confidence: ctx.confidence,
+      displacementCc: single(displacements), mileage: b.mileage, odometerKm: b.odometerKm ?? null, source: b.source, confidence: ctx.confidence,
     };
   }
 
@@ -141,11 +161,11 @@
     let vehicles = cands.map((b) => {
       const status = usedPage || /used/i.test(b.condition) || b.odometerKm != null ? 'used' : 'new';
       const conf = b.make && b.model && site && (matched || cands.length === 1) ? 'high' : matched || !site ? 'medium' : 'low';
-      return finish(b, { site, url, canonical, status, h1, crumb: status === 'used' ? crumb : null, labelled: status === 'new' && site && cands.length === 1 ? labelledPrice(doc) : null, confidence: conf });
+      return finish(b, { site, url, canonical, status, h1, facts: site && site.name === 'CarDekho' && /\/overview\//.test(u.pathname) ? specFacts(doc) : null, crumb: status === 'used' ? crumb : null, labelled: status === 'new' && site && cands.length === 1 ? labelledPrice(doc) : null, confidence: conf });
     });
     if (!vehicles.length && site) {
       const b = fromDom(doc);
-      if (b) vehicles = [finish(b, { site, url, canonical, status: usedPage ? 'used' : 'new', h1: null, crumb: null, labelled: usedPage ? null : labelledPrice(doc), confidence: 'low' })];
+      if (b) vehicles = [finish(b, { site, url, canonical, status: usedPage ? 'used' : 'new', h1: null, facts: site.name === 'CarDekho' && /\/overview\//.test(u.pathname) ? specFacts(doc) : null, crumb: null, labelled: usedPage ? null : labelledPrice(doc), confidence: 'low' })];
     }
     if (!vehicles.length) return { supported: !!site, site: site ? site.name : null, vehicles: [], reason: site ? 'No vehicle found on this page. Open a car or variant page.' : 'This site has no machine-readable car data, so it is not supported.' };
     return { supported: true, site: site ? site.name : u.hostname, vehicles, reason: null };

@@ -33,6 +33,7 @@ export function makeApi(base, fetchFn = (...a) => fetch(...a), timeoutMs = 10000
     filters: (make) => call('/api/filters' + qs({ make })),
     match: (v) => call('/api/catalogue/match', v),
     history: (q) => call('/api/price-history/query', q),
+    compareLive: (body) => call('/api/prices/compare-live', body),
     recommend: (prefs) => call('/api/recommendations', prefs),
   };
 }
@@ -90,3 +91,43 @@ export const safeUrl = (u) => (/^https?:\/\//i.test(u || '') ? u : null);
 export const cleanEntries = (v, { needCarId = false } = {}) => (Array.isArray(v) ? v : []).filter((x) => x && typeof x === 'object' && typeof x.label === 'string' && x.label
   && typeof x.site === 'string' && typeof x.observedAt === 'string' && (x.priceInr == null || Number.isFinite(x.priceInr)) && (needCarId ? Number.isSafeInteger(x.carId) && x.carId > 0 : x.carId == null || Number.isSafeInteger(x.carId))
   && (x.sourceUrl == null || typeof x.sourceUrl === 'string'));
+
+export const LIVE_CITIES = ['Delhi', 'Mumbai', 'Bangalore', 'Chennai', 'Hyderabad', 'Pune', 'Kolkata', 'Ahmedabad', 'Chandigarh', 'Jaipur'];
+
+// Request body for /api/prices/compare-live. Identity comes from the listing itself (variant, fuel, transmission, engine, year, status); the catalogue car
+// is not used for variant/fuel because the catalogue is an older generation. `city` is the user's choice, never assumed.
+export function liveRequest(v, car, { refresh = false, city = '', priceType = '', fuel = '', gear = '' } = {}) {
+  const nice = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : undefined);
+  return { vehicle: { make: v.make || (car && car.make), model: v.model || (car && car.model), variant: v.variant || undefined, fuel_type: fuel || v.fuelType || undefined, transmission: nice(gear || v.transmission || undefined),
+    engine_cc: v.displacementCc || undefined, model_year: v.modelYear || undefined, city: city || undefined, vehicle_status: v.status === 'used' ? 'used' : 'new' },
+    source_url: v.canonicalUrl || v.url, displayed_price_inr: v.priceInr || undefined, displayed_price_type: v.priceType === 'used_asking' ? 'unknown' : v.priceType || 'unknown',
+    displayed_price_city: v.priceCity || undefined, displayed_price_national_average: !!v.priceNationalAverage,
+    preferred_price_type: priceType || (v.priceType === 'on_road' ? 'on_road' : 'ex_showroom'), refresh };
+}
+
+const lakh = (n) => `₹${(n / 1e5).toFixed(2)} lakh`;
+const when = (q) => (q.retrieved_at || '').slice(0, 16).replace('T', ' ');
+
+// Display model for the popup. Quotes are shown per price basis; a "cheapest" claim is made only inside one basis with two or more providers.
+export function liveSummary(r) {
+  const groups = (r.comparable_groups || []).map((g) => ({
+    label: g.basis_label, type: g.price_type, multi: !!g.comparable_across_providers, providers: g.providers,
+    rows: g.quotes.map((q) => ({ provider: q.provider, vehicle: q.vehicle, price: q.price_inr, freshness: q.freshness, match: q.match, evidence: q.match_evidence, retrieved: when(q), url: q.source_url, lowest: q === g.lowest || (q.provider === g.lowest.provider && q.source_url === g.lowest.source_url && q.price_inr === g.lowest.price_inr) })),
+  }));
+  const low = r.lowest_comparable;
+  const lowGroup = low && (r.comparable_groups || []).find((g) => g.basis.code === low.basis.code);
+  const claim = !low ? null : lowGroup.comparable_across_providers ? ((lowGroup.tied_lowest_providers || []).length > 1 ? `Same price on ${lowGroup.tied_lowest_providers.join(' and ')} (${low.basis_label}): ${lakh(low.price_inr)}`
+      : `Lowest comparable quote (${low.basis_label}): ${low.provider} at ${lakh(low.price_inr)}`)
+    : `Only ${low.provider} returned an exact ${low.basis_label} quote: no "cheapest across websites" claim is possible.`;
+  const diff = r.difference_from_displayed_inr;
+  return {
+    groups, claim, incompatible: r.incompatible_bases || null,
+    diff: diff == null ? null : diff === 0 ? 'same as this page (same basis)' : `${diff < 0 ? '−' : '+'}${lakh(Math.abs(diff))} vs this page (same basis)`,
+    savings: r.savings_inr ? `Saves ${lakh(r.savings_inr)} compared with this page, same price basis` : null,
+    probable: (r.probable_quotes || []).map((q) => ({ provider: q.provider, vehicle: q.vehicle, price: q.price_inr, label: q.basis_label, why: q.match_evidence, url: q.source_url, retrieved: when(q), freshness: q.freshness })),
+    modelLevel: (r.model_level || []).map((m) => ({ provider: m.provider, low: m.price_low, high: m.price_high, label: m.basis_label, url: m.source_url, note: m.note, freshness: m.freshness })),
+    failures: (r.provider_failures || []).map((f) => `${f.provider} (${f.page}): ${f.error}${f.retry_after_s ? ` - retry in about ${Math.ceil(f.retry_after_s)} s` : ''}${f.served === 'stale' ? ' (an older copy is shown)' : ''}`),
+    retryAfter: Math.max(0, ...(r.provider_failures || []).filter((f) => f.kind === 'rate_limited' || f.kind === 'queue_full').map((f) => f.retry_after_s || 0)),
+    warnings: r.warnings || [], ambiguous: (r.quotes || []).filter((q) => q.match === 'ambiguous').length,
+  };
+}
