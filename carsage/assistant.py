@@ -12,15 +12,21 @@ from sqlalchemy.orm import Session
 
 from carsage import catalogue
 from carsage.models import CatalogueCar as C
-from carsage.recommend import inr, recommend
+from carsage.catalogue import inr
+from carsage.recommend import recommend
 from carsage.schemas import AssistantOut, Preferences
 
 FUELS = {"petrol": "Petrol", "diesel": "Diesel", "cng": "CNG", "electric": "Electric", "ev": "Electric", "hybrid": "Hybrid"}
 BODIES = {"suv": "SUV", "sedan": "Sedan", "hatchback": "Hatchback", "hatch": "Hatchback", "mpv": "MPV", "muv": "MUV", "coupe": "Coupe"}
 PRIORITY_WORDS = {"mileage": r"mileage|efficien|economical|economy|fuel.saving", "power": r"power|performance|fast|quick|sporty",
                   "safety": r"\bsafe|safety|airbag", "space": r"spacious|space|boot|luggage|legroom", "price": r"cheap|affordable|value|budget.friendly|low.cost"}
+# requests the catalogue cannot answer: named back to the user instead of silently ignored or guessed
+UNSUPPORTED = {"engine size": r"\d(?:\.\d+)?\s*(?:l|litre|liter|cc)\b|\bengine\b", "highway/driving use": r"highway|long drive|off.?road",
+               "colour": r"\bcolou?r", "safety rating": r"ncap|crash test|safety rating", "resale value": r"resale",
+               "on-road price/offers": r"on.?road|discount|offer|emi|loan|insurance", "service/maintenance": r"service|maintenance|reliab",
+               "availability": r"waiting period|stock|dealer|showroom near", "used cars": r"\bused\b|second.?hand|pre.?owned"}
 AMBIGUOUS_MODELS = {"city", "sport", "classic", "active", "cross", "plus", "power", "one", "go"}   # common words: need the make before them
-UNIT = r"(lakhs?|lacs?|lk|l|crores?|cr)"
+UNIT = r"(lakhs?|lacs?|lk|crores?|cr)"      # a bare "l" is an engine size ("1.5 l diesel"), not lakh
 NUM = r"(\d[\d,]*(?:\.\d+)?)"
 MONEY = rf"(?:rs\.?|inr|₹)?\s*{NUM}\s*(?:{UNIT}\b)?"
 
@@ -81,7 +87,13 @@ def parse(text: str, context: Preferences | None = None) -> Preferences:
     for k, rx in PRIORITY_WORDS.items():
         if re.search(rx, t) and k not in p.priorities:
             p.priorities.append(k)
+    if re.search(r"strict|exact(?:ly)?|no compromise|don'?t relax|only", t):
+        p.allow_relaxation = False
     return Preferences.model_validate(p.model_dump())
+
+
+def unsupported(text: str) -> list[str]:
+    return [k for k, rx in UNSUPPORTED.items() if re.search(rx, text.lower())]
 
 
 def _has_prefs(p: Preferences):
@@ -128,7 +140,7 @@ def _name(c):
 def _reply_recommend(s, p):
     out = recommend(s, p)
     if not out.recommendations:
-        return "I could not find any catalogue car that meets those requirements.\n" + " ".join(out.notes), []
+        return "I could not find any catalogue car that meets those requirements.\n" + " ".join(out.notes), [], out.trace
     lines = [f"I understood: {_describe(p)}." if _has_prefs(p) else "", f"{out.candidates_considered} catalogue variants matched. Top picks:"]
     for i, r in enumerate(out.recommendations[:3], 1):
         lines.append(f"{i}. {_name(r.car)} ({inr(r.car.price_inr)} ex-showroom, score {r.score:g}/100)")
@@ -136,7 +148,7 @@ def _reply_recommend(s, p):
     for x in out.relaxed_constraints:
         lines.append(f"Nothing matched everything, so I {x}.")
     lines += out.applied_defaults + out.notes
-    return "\n".join(x for x in lines if x), [r.car for r in out.recommendations]
+    return "\n".join(x for x in lines if x), [r.car for r in out.recommendations], out.trace
 
 
 def _cheapest(s, make, model):
@@ -185,12 +197,17 @@ def respond(s: Session, message: str, context: Preferences | None = None) -> Ass
     except ValueError:
         return AssistantOut(reply="Please use a budget from ₹1 to ₹1,000 crore and a seat count from 1 to 20.", intent="help", preferences=context, cars=[])
     lookup = models and (not _has_prefs(current) or re.search(r"tell me about|summari[sz]e|details (?:of|about)", t))
+    skipped = unsupported(message)
     if _has_prefs(prefs) and not lookup:
-        reply, cars = _reply_recommend(s, prefs)
-        return AssistantOut(reply=reply, intent="recommend", preferences=prefs, cars=cars)
+        reply, cars, trace = _reply_recommend(s, prefs)
+        if skipped:
+            reply += f"\nI cannot filter by {', '.join(skipped)}: the catalogue has no such data, so I ignored that part."
+        return AssistantOut(reply=reply, intent="recommend", preferences=prefs, cars=cars, unsupported=skipped, trace=trace)
     if models:
         reply, cars = _reply_lookup(s, models)
         if re.search(r"compar|\bvs\b|versus|difference", t):
             reply = "I could only find one of those models in the catalogue, so I cannot compare them. Here is what I have:\n" + reply
         return AssistantOut(reply=reply, intent="lookup", preferences=context, cars=cars)
+    if skipped:
+        return AssistantOut(reply=f"I cannot filter by {', '.join(skipped)}: the catalogue has no such data. " + HELP, intent="help", preferences=context, cars=[], unsupported=skipped)
     return AssistantOut(reply=HELP, intent="help", preferences=context, cars=[])

@@ -39,6 +39,8 @@ class CarOut(BaseModel):
     mileage_kmpl: float | None = None
     family_group: str | None = None
     tags: list[str] = []
+    freshness: Literal["historical", "possibly_outdated", "unknown"] | None = Field(None, description="age of this catalogue entry judged from evidence; never 'current' without a live source")
+    freshness_reason: str | None = None
 
 
 class CarPage(BaseModel):
@@ -89,6 +91,8 @@ class Preferences(BaseModel):
     use_case: Literal["family", "city"] | None = None
     priorities: list[Literal["price", "mileage", "power", "space", "safety"]] = Field(default_factory=list, max_length=5)
     limit: int = Field(5, ge=1, le=10)
+    live_prices: bool = Field(False, description="Add cached live website quotes (ex-showroom, exact/probable match) to the explanations; never changes feasibility")
+    allow_relaxation: bool = Field(True, description="If nothing satisfies every constraint, may the agent search for the cheapest relaxation? False = strict: an empty answer instead")
 
     @model_validator(mode="after")
     def _budget_order(self):
@@ -105,12 +109,28 @@ class Recommendation(BaseModel):
     missing: list[str]
 
 
+class DecisionTrace(BaseModel):
+    """How the advisor agent reached its answer, step by step. Contains no user identity."""
+    input: dict
+    constraints: list[dict]
+    initial_candidates: int
+    eliminated: dict[str, int] = Field(description="cars each hard constraint rules out on its own (unrecorded attribute = ruled out)")
+    feasible: int = Field(description="cars satisfying every original constraint")
+    relaxation: list[str]
+    search: dict
+    scoring: dict
+    missing_attributes: dict[str, list[str]]
+    ranking: list[dict]
+    latency_ms: float
+
+
 class RecommendationOut(BaseModel):
     recommendations: list[Recommendation]
     candidates_considered: int
     applied_defaults: list[str]
     relaxed_constraints: list[str]
     notes: list[str]
+    trace: DecisionTrace | None = None
 
 
 class AssistantIn(BaseModel):
@@ -123,6 +143,8 @@ class AssistantOut(BaseModel):
     intent: Literal["recommend", "compare", "lookup", "help"]
     preferences: Preferences | None
     cars: list[CarOut]
+    unsupported: list[str] = Field(default_factory=list, description="requests in the message the catalogue cannot filter by")
+    trace: DecisionTrace | None = None
 
 
 class PriceFeatures(BaseModel):

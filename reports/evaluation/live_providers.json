@@ -1,0 +1,2311 @@
+{
+ "checked_at": "2026-11-12 09:32 UTC",
+ "results": [
+  {
+   "make": "Maruti Suzuki",
+   "model": "Swift",
+   "carwale_variant": "LXi Petrol Manual",
+   "identity": {
+    "make": "Maruti Suzuki",
+    "model": "Swift",
+    "variant": "LXi",
+    "fuel_type": "Petrol",
+    "transmission": "Manual",
+    "engine_cc": 1200,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "exact": [
+      {
+       "vehicle": "LXi",
+       "price": 583900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Maruti_Swift/Maruti_Swift_LXi.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "LXi Petrol Manual",
+       "price": 652268,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/maruti-suzuki-cars/swift/lxi/"
+      },
+      {
+       "vehicle": "LXi Petrol Manual",
+       "price": 583900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/maruti-suzuki-cars/swift/lxi/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 583900
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 2.4
+  },
+  {
+   "make": "Maruti Suzuki",
+   "model": "Swift",
+   "carwale_variant": "VXi Petrol Automatic (AMT)",
+   "identity": {
+    "make": "Maruti Suzuki",
+    "model": "Swift",
+    "variant": "VXi",
+    "fuel_type": "Petrol",
+    "transmission": "Automatic",
+    "engine_cc": 1200,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "ambiguous": [
+      {
+       "vehicle": "VXi Opt",
+       "price": 693900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Maruti_Swift/Maruti_Swift_VXi_Opt.htm"
+      },
+      {
+       "vehicle": "VXi Opt AMT",
+       "price": 738900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Maruti_Swift/Maruti_Swift_VXi_Opt_AMT.htm"
+      }
+     ],
+     "exact": [
+      {
+       "vehicle": "VXi AMT",
+       "price": 712900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Maruti_Swift/Maruti_Swift_VXi_AMT.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "VXi Petrol Automatic (AMT)",
+       "price": 812563,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/maruti-suzuki-cars/swift/vxi/"
+      },
+      {
+       "vehicle": "VXi Petrol Automatic (AMT)",
+       "price": 712900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/maruti-suzuki-cars/swift/vxi/"
+      }
+     ],
+     "ambiguous": [
+      {
+       "vehicle": "VXi (O) Petrol Automatic (AMT)",
+       "price": 841339,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/maruti-suzuki-cars/swift/vxi-o/"
+      },
+      {
+       "vehicle": "VXi (O) Petrol Automatic (AMT)",
+       "price": 738900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/maruti-suzuki-cars/swift/vxi-o/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 712900
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 6.4
+  },
+  {
+   "make": "Maruti Suzuki",
+   "model": "Dzire",
+   "carwale_variant": "LXi Petrol Manual",
+   "identity": {
+    "make": "Maruti Suzuki",
+    "model": "Dzire",
+    "variant": "LXi",
+    "fuel_type": "Petrol",
+    "transmission": "Manual",
+    "engine_cc": 1200,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "exact": [
+      {
+       "vehicle": "LXI",
+       "price": 630600,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Maruti_Dzire/Maruti_Dzire_LXI.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "LXi Petrol Manual",
+       "price": 721473,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/maruti-suzuki-cars/dzire/lxi/"
+      },
+      {
+       "vehicle": "LXi Petrol Manual",
+       "price": 630600,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/maruti-suzuki-cars/dzire/lxi/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 630600
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 4.0
+  },
+  {
+   "make": "Maruti Suzuki",
+   "model": "Dzire",
+   "carwale_variant": "VXi Petrol Automatic (AMT)",
+   "identity": {
+    "make": "Maruti Suzuki",
+    "model": "Dzire",
+    "variant": "VXi",
+    "fuel_type": "Petrol",
+    "transmission": "Automatic",
+    "engine_cc": 1200,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "exact": [
+      {
+       "vehicle": "VXI AMT",
+       "price": 772100,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Maruti_Dzire/Maruti_Dzire_VXI_AMT.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "VXi Petrol Automatic (AMT)",
+       "price": 878085,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/maruti-suzuki-cars/dzire/vxi/"
+      },
+      {
+       "vehicle": "VXi Petrol Automatic (AMT)",
+       "price": 772100,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/maruti-suzuki-cars/dzire/vxi/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 772100
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 8.0
+  },
+  {
+   "make": "Maruti Suzuki",
+   "model": "Brezza",
+   "carwale_variant": "Lxi Petrol 1.0L Turbo Manual",
+   "identity": {
+    "make": "Maruti Suzuki",
+    "model": "Brezza",
+    "variant": "Lxi",
+    "fuel_type": "Petrol",
+    "transmission": "Manual",
+    "engine_cc": 1000,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "exact": [
+      {
+       "vehicle": "LXi Turbo",
+       "price": 749900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Maruti_Brezza/Maruti_Brezza_LXi_Turbo.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "Lxi Petrol 1.0L Turbo Manual",
+       "price": 847190,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/maruti-suzuki-cars/brezza/lxi/"
+      },
+      {
+       "vehicle": "Lxi Petrol 1.0L Turbo Manual",
+       "price": 749900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/maruti-suzuki-cars/brezza/lxi/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 749900
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 6.2
+  },
+  {
+   "make": "Maruti Suzuki",
+   "model": "Brezza",
+   "carwale_variant": "Lxi CNG 1.5L Manual",
+   "identity": {
+    "make": "Maruti Suzuki",
+    "model": "Brezza",
+    "variant": "Lxi",
+    "fuel_type": "CNG",
+    "transmission": "Manual",
+    "engine_cc": 1500,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "probable": [
+      {
+       "vehicle": "LXi",
+       "price": 834900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Maruti_Brezza/Maruti_Brezza_LXi.htm"
+      }
+     ],
+     "exact": [
+      {
+       "vehicle": "LXi CNG",
+       "price": 939900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Maruti_Brezza/Maruti_Brezza_LXi_CNG.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "Lxi CNG 1.5L Manual",
+       "price": 1066807,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/maruti-suzuki-cars/brezza/lxi/"
+      },
+      {
+       "vehicle": "Lxi CNG 1.5L Manual",
+       "price": 939900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/maruti-suzuki-cars/brezza/lxi/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 939900
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [
+    [
+     "CarDekho",
+     "LXi"
+    ]
+   ],
+   "seconds": 8.1
+  },
+  {
+   "make": "Hyundai",
+   "model": "i20",
+   "carwale_variant": "Era Petrol Manual",
+   "identity": {
+    "make": "Hyundai",
+    "model": "i20",
+    "variant": "Era",
+    "fuel_type": "Petrol",
+    "transmission": "Manual",
+    "engine_cc": 1200,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "exact": [
+      {
+       "vehicle": "Era",
+       "price": 599700,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Hyundai_i20/Hyundai_i20_Era.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "Era Petrol Manual",
+       "price": 662313,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/hyundai-cars/i20/era/"
+      },
+      {
+       "vehicle": "Era Petrol Manual",
+       "price": 599700,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/hyundai-cars/i20/era/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 599700
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 4.1
+  },
+  {
+   "make": "Hyundai",
+   "model": "i20",
+   "carwale_variant": "Sportz Petrol Automatic",
+   "identity": {
+    "make": "Hyundai",
+    "model": "i20",
+    "variant": "Sportz",
+    "fuel_type": "Petrol",
+    "transmission": "Automatic",
+    "engine_cc": 1200,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "exact": [
+      {
+       "vehicle": "Sportz IVT",
+       "price": 886200,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Hyundai_i20/Hyundai_i20_Sportz_IVT.htm"
+      }
+     ],
+     "ambiguous": [
+      {
+       "vehicle": "Sportz Opt",
+       "price": 838700,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Hyundai_i20/Hyundai_i20_Sportz_Opt.htm"
+      },
+      {
+       "vehicle": "Sportz Opt IVT",
+       "price": 930700,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Hyundai_i20/Hyundai_i20_Sportz_Opt_IVT.htm"
+      },
+      {
+       "vehicle": "Sportz Opt Knight",
+       "price": 847700,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Hyundai_i20/Hyundai_i20_Sportz_Opt_Knight.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "Sportz Petrol Automatic",
+       "price": 994095,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/hyundai-cars/i20/sportz/"
+      },
+      {
+       "vehicle": "Sportz Petrol Automatic",
+       "price": 886200,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/hyundai-cars/i20/sportz/"
+      }
+     ],
+     "ambiguous": [
+      {
+       "vehicle": "Sportz (O) Petrol Automatic",
+       "price": 1042834,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/hyundai-cars/i20/sportz-o/"
+      },
+      {
+       "vehicle": "Sportz (O) Petrol Automatic",
+       "price": 930700,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/hyundai-cars/i20/sportz-o/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 886200
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 8.0
+  },
+  {
+   "make": "Hyundai",
+   "model": "Creta",
+   "carwale_variant": "E Petrol 1.5L Manual",
+   "identity": {
+    "make": "Hyundai",
+    "model": "Creta",
+    "variant": "E",
+    "fuel_type": "Petrol",
+    "transmission": "Manual",
+    "engine_cc": 1500,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "exact": [
+      {
+       "vehicle": "E",
+       "price": 1090700,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Hyundai_Creta/Hyundai_Creta_E.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "E Petrol 1.5L Manual",
+       "price": 1261704,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/hyundai-cars/creta/e/"
+      },
+      {
+       "vehicle": "E Petrol 1.5L Manual",
+       "price": 1090700,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/hyundai-cars/creta/e/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 1090700
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 4.0
+  },
+  {
+   "make": "Hyundai",
+   "model": "Creta",
+   "carwale_variant": "E Diesel 1.5L Turbo Manual",
+   "identity": {
+    "make": "Hyundai",
+    "model": "Creta",
+    "variant": "E",
+    "fuel_type": "Diesel",
+    "transmission": "Manual",
+    "engine_cc": 1500,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "exact": [
+      {
+       "vehicle": "E Diesel",
+       "price": 1261000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Hyundai_Creta/Hyundai_Creta_E_Diesel.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "E Diesel 1.5L Turbo Manual",
+       "price": 1486563,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/hyundai-cars/creta/e/"
+      },
+      {
+       "vehicle": "E Diesel 1.5L Turbo Manual",
+       "price": 1261000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/hyundai-cars/creta/e/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 1261000
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 6.1
+  },
+  {
+   "make": "Tata",
+   "model": "Tiago EV",
+   "carwale_variant": "Smart 19.2 kWh",
+   "identity": {
+    "make": "Tata",
+    "model": "Tiago EV",
+    "variant": "Smart 19.2 kWh",
+    "fuel_type": "Electric",
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "Smart 19.2 kWh",
+       "price": 742039,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/tata-cars/tiago-ev/smart/"
+      },
+      {
+       "vehicle": "Smart 19.2 kWh",
+       "price": 699000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/tata-cars/tiago-ev/smart/"
+      }
+     ],
+     "ambiguous": [
+      {
+       "vehicle": "Pure Plus 19.2 kWh",
+       "price": 911185,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/tata-cars/tiago-ev/pure-plus/"
+      },
+      {
+       "vehicle": "Pure Plus 19.2 kWh",
+       "price": 864000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/tata-cars/tiago-ev/pure-plus/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarWale",
+      "price": 699000
+     }
+    }
+   ],
+   "cross_provider_comparable": false,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 1.9
+  },
+  {
+   "make": "Tata",
+   "model": "Punch",
+   "carwale_variant": "Smart Petrol 5 Speed Manual",
+   "identity": {
+    "make": "Tata",
+    "model": "Punch",
+    "variant": "Smart",
+    "fuel_type": "Petrol",
+    "transmission": "Manual",
+    "engine_cc": 1200,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "exact": [
+      {
+       "vehicle": "Smart",
+       "price": 574990,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Tata_Punch/Tata_Punch_Smart.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "Smart Petrol 5 Speed Manual",
+       "price": 640226,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/tata-cars/punch/smart/"
+      },
+      {
+       "vehicle": "Smart Petrol 5 Speed Manual",
+       "price": 574990,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/tata-cars/punch/smart/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 574990
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 3.9
+  },
+  {
+   "make": "Tata",
+   "model": "Punch",
+   "carwale_variant": "Smart CNG 5 Speed Manual",
+   "identity": {
+    "make": "Tata",
+    "model": "Punch",
+    "variant": "Smart",
+    "fuel_type": "CNG",
+    "transmission": "Manual",
+    "engine_cc": 1200,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "exact": [
+      {
+       "vehicle": "Smart CNG",
+       "price": 684990,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Tata_Punch/Tata_Punch_Smart_CNG.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "Smart CNG 5 Speed Manual",
+       "price": 777939,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/tata-cars/punch/smart/"
+      },
+      {
+       "vehicle": "Smart CNG 5 Speed Manual",
+       "price": 684990,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/tata-cars/punch/smart/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 684990
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 5.9
+  },
+  {
+   "make": "Tata",
+   "model": "Nexon",
+   "carwale_variant": "Smart Petrol 1.2L Turbo 5 Speed Manual",
+   "identity": {
+    "make": "Tata",
+    "model": "Nexon",
+    "variant": "Smart",
+    "fuel_type": "Petrol",
+    "transmission": "Manual",
+    "engine_cc": 1200,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "exact": [
+      {
+       "vehicle": "Smart",
+       "price": 739990,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Tata_Nexon/Tata_Nexon_Smart.htm"
+      }
+     ],
+     "ambiguous": [
+      {
+       "vehicle": "Smart Plus",
+       "price": 821990,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Tata_Nexon/Tata_Nexon_Smart_Plus.htm"
+      },
+      {
+       "vehicle": "Smart Plus S",
+       "price": 851990,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Tata_Nexon/Tata_Nexon_Smart_Plus_S.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "Smart Petrol 1.2L Turbo 5 Speed Manual",
+       "price": 838171,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/tata-cars/nexon/smart/"
+      },
+      {
+       "vehicle": "Smart Petrol 1.2L Turbo 5 Speed Manual",
+       "price": 739990,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/tata-cars/nexon/smart/"
+      }
+     ],
+     "ambiguous": [
+      {
+       "vehicle": "Smart Plus Petrol 1.2L Turbo 5 Speed Manual",
+       "price": 936303,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/tata-cars/nexon/smart-plus/"
+      },
+      {
+       "vehicle": "Smart Plus Petrol 1.2L Turbo 5 Speed Manual",
+       "price": 821990,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/tata-cars/nexon/smart-plus/"
+      },
+      {
+       "vehicle": "Smart Plus (S) Petrol 1.2L Turbo 5 Speed Manual",
+       "price": 969507,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/tata-cars/nexon/smart-plus-s/"
+      },
+      {
+       "vehicle": "Smart Plus (S) Petrol 1.2L Turbo 5 Speed Manual",
+       "price": 851990,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/tata-cars/nexon/smart-plus-s/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 739990
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 4.0
+  },
+  {
+   "make": "Tata",
+   "model": "Nexon",
+   "carwale_variant": "Smart CNG 1.2L Turbo 6 Speed Manual",
+   "identity": {
+    "make": "Tata",
+    "model": "Nexon",
+    "variant": "Smart",
+    "fuel_type": "CNG",
+    "transmission": "Manual",
+    "engine_cc": 1200,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "ambiguous": [
+      {
+       "vehicle": "Smart Plus",
+       "price": 821990,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Tata_Nexon/Tata_Nexon_Smart_Plus.htm"
+      },
+      {
+       "vehicle": "Smart Plus S",
+       "price": 851990,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Tata_Nexon/Tata_Nexon_Smart_Plus_S.htm"
+      },
+      {
+       "vehicle": "Smart Plus CNG",
+       "price": 926990,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Tata_Nexon/Tata_Nexon_Smart_Plus_CNG.htm"
+      },
+      {
+       "vehicle": "Smart Plus S CNG",
+       "price": 956990,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Tata_Nexon/Tata_Nexon_Smart_Plus_S_CNG.htm"
+      }
+     ],
+     "exact": [
+      {
+       "vehicle": "Smart CNG",
+       "price": 834990,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Tata_Nexon/Tata_Nexon_Smart_CNG.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "Smart CNG 1.2L Turbo 6 Speed Manual",
+       "price": 950692,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/tata-cars/nexon/smart/"
+      },
+      {
+       "vehicle": "Smart CNG 1.2L Turbo 6 Speed Manual",
+       "price": 834990,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/tata-cars/nexon/smart/"
+      }
+     ],
+     "ambiguous": [
+      {
+       "vehicle": "Smart Plus CNG 1.2L Turbo 6 Speed Manual",
+       "price": 1052518,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/tata-cars/nexon/smart-plus/"
+      },
+      {
+       "vehicle": "Smart Plus CNG 1.2L Turbo 6 Speed Manual",
+       "price": 926990,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/tata-cars/nexon/smart-plus/"
+      },
+      {
+       "vehicle": "Smart Plus (S) CNG 1.2L Turbo 6 Speed Manual",
+       "price": 1085722,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/tata-cars/nexon/smart-plus-s/"
+      },
+      {
+       "vehicle": "Smart Plus (S) CNG 1.2L Turbo 6 Speed Manual",
+       "price": 956990,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/tata-cars/nexon/smart-plus-s/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 834990
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 6.0
+  },
+  {
+   "make": "Honda",
+   "model": "City",
+   "carwale_variant": "SV Petrol Manual",
+   "identity": {
+    "make": "Honda",
+    "model": "City",
+    "variant": "SV",
+    "fuel_type": "Petrol",
+    "transmission": "Manual",
+    "engine_cc": 1500,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "exact": [
+      {
+       "vehicle": "SV",
+       "price": 1199900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Honda_City/Honda_City_SV.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "SV Petrol Manual",
+       "price": 1381302,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/honda-cars/city/sv/"
+      },
+      {
+       "vehicle": "SV Petrol Manual",
+       "price": 1199900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/honda-cars/city/sv/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 1199900
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 4.0
+  },
+  {
+   "make": "Honda",
+   "model": "City",
+   "carwale_variant": "V Petrol Automatic (CVT)",
+   "identity": {
+    "make": "Honda",
+    "model": "City",
+    "variant": "V",
+    "fuel_type": "Petrol",
+    "transmission": "Automatic",
+    "engine_cc": 1500,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "exact": [
+      {
+       "vehicle": "V CVT",
+       "price": 1450700,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Honda_City/Honda_City_V_CVT.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "V Petrol Automatic (CVT)",
+       "price": 1662391,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/honda-cars/city/v/"
+      },
+      {
+       "vehicle": "V Petrol Automatic (CVT)",
+       "price": 1450700,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/honda-cars/city/v/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 1450700
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 8.0
+  },
+  {
+   "make": "Mahindra",
+   "model": "Thar",
+   "carwale_variant": "LXT 4WD Petrol 2.0L Turbo Manual",
+   "identity": {
+    "make": "Mahindra",
+    "model": "Thar",
+    "variant": "LXT 4WD",
+    "fuel_type": "Petrol",
+    "transmission": "Manual",
+    "engine_cc": 2000,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "ambiguous": [
+      {
+       "vehicle": "OG 2.0L LXT 4WD Petrol",
+       "price": 1559500,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Mahindra_Thar/Mahindra_Thar_2.0L_LXT_4WD_Petrol.htm"
+      },
+      {
+       "vehicle": "OG 2.0L ZXT 4WD Petrol",
+       "price": 1660000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Mahindra_Thar/Mahindra_Thar_2.0L_ZXT_4WD_Petrol.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "LXT 4WD Petrol 2.0L Turbo Manual",
+       "price": 1839710,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/mahindra-cars/thar-og/lxt/"
+      },
+      {
+       "vehicle": "LXT 4WD Petrol 2.0L Turbo Manual",
+       "price": 1560000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/mahindra-cars/thar-og/lxt/"
+      }
+     ],
+     "ambiguous": [
+      {
+       "vehicle": "ZXT 4WD Petrol 2.0L Turbo Manual",
+       "price": 1954566,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/mahindra-cars/thar-og/zxt/"
+      },
+      {
+       "vehicle": "ZXT 4WD Petrol 2.0L Turbo Manual",
+       "price": 1660000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/mahindra-cars/thar-og/zxt/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarWale",
+      "price": 1560000
+     }
+    }
+   ],
+   "cross_provider_comparable": false,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 1.9
+  },
+  {
+   "make": "Mahindra",
+   "model": "Thar",
+   "carwale_variant": "AXT 2WD Diesel 1.5L Turbo Manual",
+   "identity": {
+    "make": "Mahindra",
+    "model": "Thar",
+    "variant": "AXT 2WD",
+    "fuel_type": "Diesel",
+    "transmission": "Manual",
+    "engine_cc": 1500,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "ambiguous": [
+      {
+       "vehicle": "OG 1.5L AXT Diesel RWD",
+       "price": 1032000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Mahindra_Thar/Mahindra_Thar_1.5L_AXT_Diesel_RWD.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "AXT 2WD Diesel 1.5L Turbo Manual",
+       "price": 1235823,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/mahindra-cars/thar-og/axt/"
+      },
+      {
+       "vehicle": "AXT 2WD Diesel 1.5L Turbo Manual",
+       "price": 1032000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/mahindra-cars/thar-og/axt/"
+      }
+     ],
+     "ambiguous": [
+      {
+       "vehicle": "LXT 2WD Diesel 1.5L Turbo Manual",
+       "price": 1548694,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/mahindra-cars/thar-og/lxt/"
+      },
+      {
+       "vehicle": "LXT 2WD Diesel 1.5L Turbo Manual",
+       "price": 1299000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/mahindra-cars/thar-og/lxt/"
+      },
+      {
+       "vehicle": "ZXT 2WD Diesel 1.5L Turbo Manual",
+       "price": 1665875,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/mahindra-cars/thar-og/zxt/"
+      },
+      {
+       "vehicle": "ZXT 2WD Diesel 1.5L Turbo Manual",
+       "price": 1399000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/mahindra-cars/thar-og/zxt/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarWale",
+      "price": 1032000
+     }
+    }
+   ],
+   "cross_provider_comparable": false,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 1.9
+  },
+  {
+   "make": "Kia",
+   "model": "Seltos",
+   "carwale_variant": "HTE Petrol 1.5L Manual",
+   "identity": {
+    "make": "Kia",
+    "model": "Seltos",
+    "variant": "HTE",
+    "fuel_type": "Petrol",
+    "transmission": "Manual",
+    "engine_cc": 1500,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "exact": [
+      {
+       "vehicle": "HTE",
+       "price": 1124900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Kia_Seltos/Kia_Seltos_HTE.htm"
+      }
+     ],
+     "ambiguous": [
+      {
+       "vehicle": "HTE (O)",
+       "price": 1241900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Kia_Seltos/Kia_Seltos_HTE_(O).htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "HTE Petrol 1.5L Manual",
+       "price": 1309857,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/kia-cars/seltos/hte/"
+      },
+      {
+       "vehicle": "HTE Petrol 1.5L Manual",
+       "price": 1124900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/kia-cars/seltos/hte/"
+      }
+     ],
+     "ambiguous": [
+      {
+       "vehicle": "HTE (O) Petrol 1.5L Manual",
+       "price": 1443117,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/kia-cars/seltos/hte-o/"
+      },
+      {
+       "vehicle": "HTE (O) Petrol 1.5L Manual",
+       "price": 1241900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/kia-cars/seltos/hte-o/"
+      },
+      {
+       "vehicle": "HTE (O) Petrol 1.5L Turbo Clutchless Manual (IMT)",
+       "price": 1548811,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/kia-cars/seltos/hte-o/"
+      },
+      {
+       "vehicle": "HTE (O) Petrol 1.5L Turbo Clutchless Manual (IMT)",
+       "price": 1321900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/kia-cars/seltos/hte-o/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 1124900
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 4.0
+  },
+  {
+   "make": "Kia",
+   "model": "Seltos",
+   "carwale_variant": "HTE Diesel 1.5L Turbo Manual",
+   "identity": {
+    "make": "Kia",
+    "model": "Seltos",
+    "variant": "HTE",
+    "fuel_type": "Diesel",
+    "transmission": "Manual",
+    "engine_cc": 1500,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "ambiguous": [
+      {
+       "vehicle": "HTE (O)",
+       "price": 1241900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Kia_Seltos/Kia_Seltos_HTE_(O).htm"
+      },
+      {
+       "vehicle": "HTE (O) Diesel",
+       "price": 1403900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Kia_Seltos/Kia_Seltos_HTE_(O)_Diesel.htm"
+      }
+     ],
+     "exact": [
+      {
+       "vehicle": "HTE Diesel",
+       "price": 1293900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Kia_Seltos/Kia_Seltos_HTE_Diesel.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "HTE Diesel 1.5L Turbo Manual",
+       "price": 1535623,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/kia-cars/seltos/hte/"
+      },
+      {
+       "vehicle": "HTE Diesel 1.5L Turbo Manual",
+       "price": 1293900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/kia-cars/seltos/hte/"
+      }
+     ],
+     "ambiguous": [
+      {
+       "vehicle": "HTE (O) Diesel 1.5L Turbo Manual",
+       "price": 1663933,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/kia-cars/seltos/hte-o/"
+      },
+      {
+       "vehicle": "HTE (O) Diesel 1.5L Turbo Manual",
+       "price": 1403900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/kia-cars/seltos/hte-o/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 1293900
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 6.0
+  },
+  {
+   "make": "Toyota",
+   "model": "Innova Crysta",
+   "carwale_variant": "GX Diesel Turbo Manual 7 STR",
+   "identity": {
+    "make": "Toyota",
+    "model": "Innova Crysta",
+    "variant": "GX 7 STR",
+    "fuel_type": "Diesel",
+    "transmission": "Manual",
+    "engine_cc": 2400,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "exact": [
+      {
+       "vehicle": "2.4 GX 7 Seater",
+       "price": 1995000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Toyota_Innova_Crysta/Toyota_Innova_Crysta_2.4_GX_7_Seater.htm"
+      }
+     ],
+     "ambiguous": [
+      {
+       "vehicle": "2.4 GX 7 Seater Platinum White Pearl",
+       "price": 2009000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Toyota_Innova_Crysta/Toyota_Innova_Crysta_2.4_GX_7_Seater_Platinum_White_Pearl.htm"
+      },
+      {
+       "vehicle": "2.4 GX 8 Seater",
+       "price": 1999000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Toyota_Innova_Crysta/Toyota_Innova_Crysta_2.4_GX_8_Seater.htm"
+      },
+      {
+       "vehicle": "2.4 GX 8 Seater Platinum White Pearl",
+       "price": 2013000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Toyota_Innova_Crysta/Toyota_Innova_Crysta_2.4_GX_8_Seater_Platinum_White_Pearl.htm"
+      },
+      {
+       "vehicle": "2.4 GX Fleet 7 Seater",
+       "price": 1995000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Toyota_Innova_Crysta/Toyota_Innova_Crysta_2.4_GX_Fleet_7_Seater.htm"
+      },
+      {
+       "vehicle": "2.4 GX Fleet 8 Seater",
+       "price": 1999000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Toyota_Innova_Crysta/Toyota_Innova_Crysta_2.4_GX_Fleet_8_Seater.htm"
+      },
+      {
+       "vehicle": "2.4 GX Plus 7 Seater",
+       "price": 2141000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Toyota_Innova_Crysta/Toyota_Innova_Crysta_2.4_GX_Plus_7_Seater.htm"
+      },
+      {
+       "vehicle": "2.4 GX Plus 7 Seater Platinum White Pearl",
+       "price": 2155000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Toyota_Innova_Crysta/Toyota_Innova_Crysta_2.4_GX_Plus_7_Seater_Platinum_White_Pearl.htm"
+      },
+      {
+       "vehicle": "2.4 GX Plus 8 Seater",
+       "price": 2147000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Toyota_Innova_Crysta/Toyota_Innova_Crysta_2.4_GX_Plus_8_Seater.htm"
+      },
+      {
+       "vehicle": "2.4 GX Plus 8 Seater Platinum White Pearl",
+       "price": 2161000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Toyota_Innova_Crysta/Toyota_Innova_Crysta_2.4_GX_Plus_8_Seater_Platinum_White_Pearl.htm"
+      },
+      {
+       "vehicle": "2.4 VX 7 Seater",
+       "price": 2524000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Toyota_Innova_Crysta/Toyota_Innova_Crysta_2.4_VX_7_Seater.htm"
+      },
+      {
+       "vehicle": "2.4 VX 7 Seater Platinum White Pearl",
+       "price": 2538000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Toyota_Innova_Crysta/Toyota_Innova_Crysta_2.4_VX_7_Seater_Platinum_White_Pearl.htm"
+      },
+      {
+       "vehicle": "2.4 ZX 7 Seater",
+       "price": 2696000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Toyota_Innova_Crysta/Toyota_Innova_Crysta_2.4_ZX_7_Seater.htm"
+      },
+      {
+       "vehicle": "2.4 ZX 7 Seater Platinum White Pearl",
+       "price": 2710000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Toyota_Innova_Crysta/Toyota_Innova_Crysta_2.4_ZX_7_Seater_Platinum_White_Pearl.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "GX Diesel Turbo Manual 7 STR",
+       "price": 2389210,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/gx/"
+      },
+      {
+       "vehicle": "GX Diesel Turbo Manual 7 STR",
+       "price": 1995000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/gx/"
+      }
+     ],
+     "ambiguous": [
+      {
+       "vehicle": "GX Diesel Turbo Manual 8 STR",
+       "price": 2393904,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/gx/"
+      },
+      {
+       "vehicle": "GX Diesel Turbo Manual 8 STR",
+       "price": 1999000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/gx/"
+      },
+      {
+       "vehicle": "GX Diesel Turbo Manual 7 STR Platinum White Pearl",
+       "price": 2405640,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/gx/"
+      },
+      {
+       "vehicle": "GX Diesel Turbo Manual 7 STR Platinum White Pearl",
+       "price": 2009000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/gx/"
+      },
+      {
+       "vehicle": "GX Diesel Turbo Manual 8 STR Platinum White Pearl",
+       "price": 2410334,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/gx/"
+      },
+      {
+       "vehicle": "GX Diesel Turbo Manual 8 STR Platinum White Pearl",
+       "price": 2013000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/gx/"
+      },
+      {
+       "vehicle": "GX Plus Diesel Turbo Manual 7 STR",
+       "price": 2560550,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/gx-plus/"
+      },
+      {
+       "vehicle": "GX Plus Diesel Turbo Manual 7 STR",
+       "price": 2141000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/gx-plus/"
+      },
+      {
+       "vehicle": "GX Plus Diesel Turbo Manual 8 STR",
+       "price": 2567591,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/gx-plus/"
+      },
+      {
+       "vehicle": "GX Plus Diesel Turbo Manual 8 STR",
+       "price": 2147000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/gx-plus/"
+      },
+      {
+       "vehicle": "GX Plus Diesel Turbo Manual 7 STR Platinum White Pearl",
+       "price": 2576980,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/gx-plus/"
+      },
+      {
+       "vehicle": "GX Plus Diesel Turbo Manual 7 STR Platinum White Pearl",
+       "price": 2155000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/gx-plus/"
+      },
+      {
+       "vehicle": "GX Plus Diesel Turbo Manual 8 STR Platinum White Pearl",
+       "price": 2584021,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/gx-plus/"
+      },
+      {
+       "vehicle": "GX Plus Diesel Turbo Manual 8 STR Platinum White Pearl",
+       "price": 2161000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/gx-plus/"
+      },
+      {
+       "vehicle": "VX Diesel Turbo Manual 7 STR",
+       "price": 3010024,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/vx/"
+      },
+      {
+       "vehicle": "VX Diesel Turbo Manual 7 STR",
+       "price": 2524000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/vx/"
+      },
+      {
+       "vehicle": "VX Diesel Turbo Manual 7 STR Platinum White Pearl",
+       "price": 3026454,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/vx/"
+      },
+      {
+       "vehicle": "VX Diesel Turbo Manual 7 STR Platinum White Pearl",
+       "price": 2538000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/vx/"
+      },
+      {
+       "vehicle": "ZX Diesel Turbo Manual 7 STR",
+       "price": 3211877,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/zx/"
+      },
+      {
+       "vehicle": "ZX Diesel Turbo Manual 7 STR",
+       "price": 2696000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/zx/"
+      },
+      {
+       "vehicle": "ZX Diesel Turbo Manual 7 STR Platinum White Pearl",
+       "price": 3228307,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/zx/"
+      },
+      {
+       "vehicle": "ZX Diesel Turbo Manual 7 STR Platinum White Pearl",
+       "price": 2710000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/toyota-cars/innova-crysta/zx/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 1995000
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 4.0
+  },
+  {
+   "make": "MG",
+   "model": "Hector",
+   "carwale_variant": "Style Petrol Turbo Manual",
+   "identity": {
+    "make": "MG",
+    "model": "Hector",
+    "variant": "Style",
+    "fuel_type": "Petrol",
+    "transmission": "Manual",
+    "engine_cc": 1500,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "exact": [
+      {
+       "vehicle": "Style",
+       "price": 1214000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/MG_Hector/MG_Hector_Style.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "Style Petrol Turbo Manual",
+       "price": 1418741,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/mg-cars/hector/style/"
+      },
+      {
+       "vehicle": "Style Petrol Turbo Manual",
+       "price": 1214000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/mg-cars/hector/style/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 1214000
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 4.0
+  },
+  {
+   "make": "MG",
+   "model": "Hector",
+   "carwale_variant": "Smart Pro Petrol Turbo Automatic (CVT)",
+   "identity": {
+    "make": "MG",
+    "model": "Hector",
+    "variant": "Smart Pro",
+    "fuel_type": "Petrol",
+    "transmission": "Automatic",
+    "engine_cc": 1500,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "ambiguous": [
+      {
+       "vehicle": "Select Pro",
+       "price": 1494800,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/MG_Hector/MG_Hector_Select_Pro.htm"
+      },
+      {
+       "vehicle": "Sharp Pro",
+       "price": 1764800,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/MG_Hector/MG_Hector_Sharp_Pro.htm"
+      },
+      {
+       "vehicle": "Sharp Pro CVT",
+       "price": 1874800,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/MG_Hector/MG_Hector_Sharp_Pro_CVT.htm"
+      },
+      {
+       "vehicle": "Savvy Pro CVT",
+       "price": 1964800,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/MG_Hector/MG_Hector_Savvy_Pro_CVT.htm"
+      }
+     ],
+     "exact": [
+      {
+       "vehicle": "Smart Pro CVT",
+       "price": 1714800,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/MG_Hector/MG_Hector_Smart_Pro_CVT.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "Smart Pro Petrol Turbo Automatic (CVT)",
+       "price": 1997060,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/mg-cars/hector/smart-pro/"
+      },
+      {
+       "vehicle": "Smart Pro Petrol Turbo Automatic (CVT)",
+       "price": 1714800,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/mg-cars/hector/smart-pro/"
+      }
+     ],
+     "ambiguous": [
+      {
+       "vehicle": "Sharp Pro Petrol Turbo Automatic (CVT)",
+       "price": 2180548,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/mg-cars/hector/sharp-pro/"
+      },
+      {
+       "vehicle": "Sharp Pro Petrol Turbo Automatic (CVT)",
+       "price": 1874800,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/mg-cars/hector/sharp-pro/"
+      },
+      {
+       "vehicle": "Savvy Pro Petrol Turbo Automatic (CVT)",
+       "price": 2283761,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/mg-cars/hector/savvy-pro/"
+      },
+      {
+       "vehicle": "Savvy Pro Petrol Turbo Automatic (CVT)",
+       "price": 1964800,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/mg-cars/hector/savvy-pro/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 1714800
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 7.9
+  },
+  {
+   "make": "Volkswagen",
+   "model": "Virtus",
+   "carwale_variant": "Comfortline Petrol 1.0L Turbo Manual",
+   "identity": {
+    "make": "Volkswagen",
+    "model": "Virtus",
+    "variant": "Comfortline",
+    "fuel_type": "Petrol",
+    "transmission": "Manual",
+    "engine_cc": 1000,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "exact": [
+      {
+       "vehicle": "Comfortline",
+       "price": 1070900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Volkswagen_Virtus/Volkswagen_Virtus_Comfortline.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "Comfortline Petrol 1.0L Turbo Manual",
+       "price": 1240582,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/volkswagen-cars/virtus/comfortline/"
+      },
+      {
+       "vehicle": "Comfortline Petrol 1.0L Turbo Manual",
+       "price": 1070900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/volkswagen-cars/virtus/comfortline/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 1070900
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 4.1
+  },
+  {
+   "make": "Volkswagen",
+   "model": "Virtus",
+   "carwale_variant": "Highline Petrol 1.0L Turbo Automatic (TC)",
+   "identity": {
+    "make": "Volkswagen",
+    "model": "Virtus",
+    "variant": "Highline",
+    "fuel_type": "Petrol",
+    "transmission": "Automatic",
+    "engine_cc": 1000,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "ambiguous": [
+      {
+       "vehicle": "Highline Plus",
+       "price": 1390900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Volkswagen_Virtus/Volkswagen_Virtus_Highline_Plus.htm"
+      },
+      {
+       "vehicle": "Highline Plus AT",
+       "price": 1499900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Volkswagen_Virtus/Volkswagen_Virtus_Highline_Plus_AT.htm"
+      }
+     ],
+     "exact": [
+      {
+       "vehicle": "Highline AT",
+       "price": 1470900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Volkswagen_Virtus/Volkswagen_Virtus_Highline_AT.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "Highline Petrol 1.0L Turbo Automatic (TC)",
+       "price": 1688337,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/volkswagen-cars/virtus/highline/"
+      },
+      {
+       "vehicle": "Highline Petrol 1.0L Turbo Automatic (TC)",
+       "price": 1470900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/volkswagen-cars/virtus/highline/"
+      }
+     ],
+     "ambiguous": [
+      {
+       "vehicle": "Highline Plus Petrol 1.0L Turbo Automatic (TC)",
+       "price": 1720800,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/volkswagen-cars/virtus/highline-plus/"
+      },
+      {
+       "vehicle": "Highline Plus Petrol 1.0L Turbo Automatic (TC)",
+       "price": 1499900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/volkswagen-cars/virtus/highline-plus/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 1470900
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 8.0
+  },
+  {
+   "make": "Skoda",
+   "model": "Slavia",
+   "carwale_variant": "Classic Petrol 1.0L Turbo Manual",
+   "identity": {
+    "make": "Skoda",
+    "model": "Slavia",
+    "variant": "Classic",
+    "fuel_type": "Petrol",
+    "transmission": "Manual",
+    "engine_cc": 1000,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "exact": [
+      {
+       "vehicle": "Classic",
+       "price": 999900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Skoda_Slavia/Skoda_Slavia_Classic.htm"
+      }
+     ],
+     "ambiguous": [
+      {
+       "vehicle": "Classic Plus",
+       "price": 1099000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Skoda_Slavia/Skoda_Slavia_Classic_Plus.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "Classic Petrol 1.0L Turbo Manual",
+       "price": 1111823,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/skoda-cars/slavia/classic/"
+      },
+      {
+       "vehicle": "Classic Petrol 1.0L Turbo Manual",
+       "price": 999900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/skoda-cars/slavia/classic/"
+      }
+     ],
+     "ambiguous": [
+      {
+       "vehicle": "Classic Plus Petrol 1.0L Turbo Manual",
+       "price": 1263820,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/skoda-cars/slavia/classic-plus/"
+      },
+      {
+       "vehicle": "Classic Plus Petrol 1.0L Turbo Manual",
+       "price": 1099000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/skoda-cars/slavia/classic-plus/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 999900
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 4.0
+  },
+  {
+   "make": "Skoda",
+   "model": "Slavia",
+   "carwale_variant": "Classic Plus Petrol 1.0L Turbo Automatic (TC)",
+   "identity": {
+    "make": "Skoda",
+    "model": "Slavia",
+    "variant": "Classic Plus",
+    "fuel_type": "Petrol",
+    "transmission": "Automatic",
+    "engine_cc": 1000,
+    "city": "Delhi",
+    "vehicle_status": "new"
+   },
+   "quotes": {
+    "CarDekho": {
+     "ambiguous": [
+      {
+       "vehicle": "Classic",
+       "price": 999900,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Skoda_Slavia/Skoda_Slavia_Classic.htm"
+      }
+     ],
+     "exact": [
+      {
+       "vehicle": "Classic Plus AT",
+       "price": 1249000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.cardekho.com/overview/Skoda_Slavia/Skoda_Slavia_Classic_Plus_AT.htm"
+      }
+     ]
+    },
+    "CarWale": {
+     "exact": [
+      {
+       "vehicle": "Classic Plus Petrol 1.0L Turbo Automatic (TC)",
+       "price": 1431920,
+       "basis": "DELHI_ON_ROAD",
+       "url": "https://www.carwale.com/skoda-cars/slavia/classic-plus/"
+      },
+      {
+       "vehicle": "Classic Plus Petrol 1.0L Turbo Automatic (TC)",
+       "price": 1249000,
+       "basis": "DELHI_EX_SHOWROOM",
+       "url": "https://www.carwale.com/skoda-cars/slavia/classic-plus/"
+      }
+     ]
+    }
+   },
+   "groups": [
+    {
+     "basis": "DELHI_EX_SHOWROOM",
+     "providers": [
+      "CarDekho",
+      "CarWale"
+     ],
+     "lowest": {
+      "provider": "CarDekho",
+      "price": 1249000
+     }
+    }
+   ],
+   "cross_provider_comparable": true,
+   "model_level": [],
+   "failures": [],
+   "probable": [],
+   "seconds": 8.1
+  }
+ ]
+}

@@ -29,6 +29,10 @@ VISIBLE = C.is_exact_duplicate.is_(False)
 AUTOMATIC = ["automatic", "amt", "dct", "cvt"]
 
 
+def inr(v):
+    return f"₹{v / 1e7:.2f} crore" if v >= 1e7 else f"₹{v / 1e5:.2f} lakh"
+
+
 def category_condition(field, value):
     """Match category membership without rewriting source specifications."""
     col = getattr(C, field)
@@ -42,9 +46,22 @@ def category_condition(field, value):
     return (literal(separator) + compact + literal(separator)).like(f"%{separator}{_like_escape(value)}{separator}%", escape="\\")
 
 
+def freshness(car):
+    """(status, reason) for a catalogue row, from evidence only. The dataset is a snapshot with no price date, so no row is ever "current".
+    historical: emission standard BS3/BS4, whose new sales ended 31 March 2020 (stock until Oct 2020);  possibly_outdated: BS6 rows, which may
+    still be on sale but whose price and trim list are as of the snapshot;  unknown: no emission norm recorded."""
+    norm = (car.emission_norm or "").upper().replace(" ", "").replace("-", "")
+    if norm in ("BS3", "BS4", "BSIII", "BSIV", "BS2", "BS1"):
+        return "historical", f"emission standard {car.emission_norm}: new sales of this standard ended in 2020"
+    if norm in ("BS6", "BSVI"):
+        return "possibly_outdated", "BS6 variant from a dataset snapshot with no price date: the model, trims and prices may have changed since"
+    return "unknown", "no emission standard recorded, so the age of this entry cannot be judged"
+
+
 def to_out(car):
     out = CarOut.model_validate(car)
     out.tags = derive_tags(car)
+    out.freshness, out.freshness_reason = freshness(car)
     return out
 
 

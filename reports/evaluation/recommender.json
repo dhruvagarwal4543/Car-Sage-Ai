@@ -1,0 +1,1207 @@
+{
+ "catalogue_order": {
+  "hard_constraint_satisfaction": 0.188,
+  "strict_results_checked": 80,
+  "coverage": 1.0,
+  "scenarios_relaxed": 0,
+  "empty_results_explained": "n/a",
+  "explanation_consistency": null,
+  "ranking_stability": 1.0,
+  "latency_ms_median": 6.8,
+  "latency_ms_max": 20.3,
+  "per_scenario": [
+   {
+    "scenario": "suv_under_15_diesel",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "family_auto_under_12",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "mileage_under_10",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "seven_seater_auto",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "city_petrol_hatch_8",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "cng_under_7",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "electric_any",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "sedan_10_to_15_power",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "luxury_suv_1cr",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "impossible_diesel_3l",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "impossible_9_seat_auto_5l",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "mpv_diesel_manual_20",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "coupe_under_20",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "balanced_under_6",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "space_family_any_budget",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "hybrid_under_30",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   }
+  ]
+ },
+ "constraint_only": {
+  "hard_constraint_satisfaction": 1.0,
+  "strict_results_checked": 63,
+  "coverage": 0.812,
+  "scenarios_relaxed": 0,
+  "empty_results_explained": "0/3",
+  "explanation_consistency": null,
+  "ranking_stability": 1.0,
+  "latency_ms_median": 7.1,
+  "latency_ms_max": 20.1,
+  "per_scenario": [
+   {
+    "scenario": "suv_under_15_diesel",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Icml Extreme Sd Crdfi 9 Seater Bsiv",
+     "Premier Rio Ex",
+     "Icml Extreme Ld Crdfi Non Ac 9 Seater Bsiv"
+    ]
+   },
+   {
+    "scenario": "family_auto_under_12",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Tigor Revotron Xma",
+     "Maruti Suzuki Dzire Vxi Amt",
+     "Hyundai Xcent S At 1.2"
+    ]
+   },
+   {
+    "scenario": "mileage_under_10",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "seven_seater_auto",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Maruti Suzuki Ertiga Vxi At",
+     "Mahindra Nuvosport N6 Amt",
+     "Maruti Suzuki Ertiga Zxi At"
+    ]
+   },
+   {
+    "scenario": "city_petrol_hatch_8",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "cng_under_7",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Bajaj Qute (Re60) Qcar Cng",
+     "Tata Nano Genx Emax Xm",
+     "Maruti Suzuki Alto Lxi Cng (Cng +"
+    ]
+   },
+   {
+    "scenario": "electric_any",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Mahindra E2O Plus P4",
+     "Tata Tigor Ev Xe+",
+     "Mahindra E2O Plus P6"
+    ]
+   },
+   {
+    "scenario": "sedan_10_to_15_power",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Skoda Rapid 1.5 Tdi Cr Active",
+     "Toyota Yaris J Cvt",
+     "Toyota Yaris G"
+    ]
+   },
+   {
+    "scenario": "luxury_suv_1cr",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Land Rover Discovery 3.0 Hse Diesel",
+     "Bmw X7 Xdrive30D Dpe Signature",
+     "Land Rover Range Rover Sport 3.0L Tdv6 S Diesel"
+    ]
+   },
+   {
+    "scenario": "impossible_diesel_3l",
+    "n": 0,
+    "relaxed": [],
+    "top": []
+   },
+   {
+    "scenario": "impossible_9_seat_auto_5l",
+    "n": 0,
+    "relaxed": [],
+    "top": []
+   },
+   {
+    "scenario": "mpv_diesel_manual_20",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Maruti Suzuki Ertiga 1.5L Vdi",
+     "Mahindra Marazzo M2 7 Str",
+     "Mahindra Marazzo M2 8 Str"
+    ]
+   },
+   {
+    "scenario": "coupe_under_20",
+    "n": 0,
+    "relaxed": [],
+    "top": []
+   },
+   {
+    "scenario": "balanced_under_6",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "space_family_any_budget",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Maruti Suzuki Omni 5 Str Bs-Iv",
+     "Maruti Suzuki Omni E 8 Str Bs-Iv",
+     "Maruti Suzuki Eeco 5 Str"
+    ]
+   },
+   {
+    "scenario": "hybrid_under_30",
+    "n": 3,
+    "relaxed": [],
+    "top": [
+     "Mg Hector 1.5L Super Hybrid",
+     "Mg Hector 1.5L Smart Hybrid",
+     "Mg Hector 1.5L Sharp Hybrid"
+    ]
+   }
+  ]
+ },
+ "greedy_relaxation": {
+  "hard_constraint_satisfaction": 1.0,
+  "strict_results_checked": 61,
+  "coverage": 1.0,
+  "scenarios_relaxed": 3,
+  "empty_results_explained": "n/a",
+  "explanation_consistency": null,
+  "ranking_stability": 1.0,
+  "latency_ms_median": 7.4,
+  "latency_ms_max": 20.2,
+  "per_scenario": [
+   {
+    "scenario": "suv_under_15_diesel",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Ford Ecosport 1.5L Tdci Titanium Plus",
+     "Ford Ecosport 1.5L Tdci Thunder Edition",
+     "Hyundai Venue 1.4 Crdi Mt Sx(O)"
+    ]
+   },
+   {
+    "scenario": "family_auto_under_12",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Toyota Yaris J Cvt",
+     "Hyundai Verna 1.6 Vtvt Sx Plus At",
+     "Ford Ecosport 1.5L Ti-Vct Titanium Plus At"
+    ]
+   },
+   {
+    "scenario": "mileage_under_10",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Bajaj Qute (Re60) Qcar",
+     "Maruti Suzuki Dzire Tour Ldi",
+     "Maruti Suzuki Dzire Ldi"
+    ]
+   },
+   {
+    "scenario": "seven_seater_auto",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Land Rover Discovery 3.0 S Diesel",
+     "Land Rover Discovery 3.0 Se Diesel",
+     "Skoda Kodiaq Scout 2.0 Tdi At"
+    ]
+   },
+   {
+    "scenario": "city_petrol_hatch_8",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Ford Figo Titanium Blu 1.2 Ti-Vct",
+     "Ford Freestyle 1.2L Ti-Vct Titanium Plus",
+     "Tata Tiago Revotron Xe"
+    ]
+   },
+   {
+    "scenario": "cng_under_7",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Maruti Suzuki Wagon R Lxi (O) Cng",
+     "Maruti Suzuki Celerio Tour H2 Cng",
+     "Hyundai Grand I10 1.2 Kappa Vtvt Magna Cng"
+    ]
+   },
+   {
+    "scenario": "electric_any",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Mg Zs Ev Excite",
+     "Mg Zs Ev Exclusive",
+     "Hyundai Kona Electric Premium"
+    ]
+   },
+   {
+    "scenario": "sedan_10_to_15_power",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Hyundai Verna 1.6 Crdi Sx (O)",
+     "Toyota Yaris J Cvt",
+     "Toyota Yaris G"
+    ]
+   },
+   {
+    "scenario": "luxury_suv_1cr",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Lamborghini Urus V8",
+     "Bentley Bentayga W12",
+     "Mercedes-Benz Mercedes-Benz G-Class Amg G 63"
+    ]
+   },
+   {
+    "scenario": "impossible_diesel_3l",
+    "n": 5,
+    "relaxed": [
+     "raised the budget by 15% to ₹3.45 lakh",
+     "dropped the fuel-type requirement"
+    ],
+    "top": [
+     "Maruti Suzuki Alto Std (O)",
+     "Datsun Redi-Go D",
+     "Tata Nano Genx Xe"
+    ]
+   },
+   {
+    "scenario": "impossible_9_seat_auto_5l",
+    "n": 1,
+    "relaxed": [
+     "raised the budget by 15% to ₹5.75 lakh",
+     "dropped the transmission requirement"
+    ],
+    "top": [
+     "Icml Extreme Sd Crdfi 9 Seater Bsiv"
+    ]
+   },
+   {
+    "scenario": "mpv_diesel_manual_20",
+    "n": 4,
+    "relaxed": [],
+    "top": [
+     "Maruti Suzuki Ertiga 1.5L Vdi",
+     "Mahindra Marazzo M2 7 Str",
+     "Mahindra Marazzo M2 8 Str"
+    ]
+   },
+   {
+    "scenario": "coupe_under_20",
+    "n": 5,
+    "relaxed": [
+     "raised the budget by 15% to ₹23.00 lakh",
+     "dropped the body-type requirement"
+    ],
+    "top": [
+     "Ford Figo Titanium Blu 1.5 Tdci",
+     "Ford Aspire 1.5 Tdci Titanium Plus",
+     "Ford Freestyle 1.5L Tdci Titanium Plus"
+    ]
+   },
+   {
+    "scenario": "balanced_under_6",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Maruti Suzuki Alto Std (O)",
+     "Tata Tiago Revotron Xe",
+     "Maruti Suzuki S-Presso Std (O)"
+    ]
+   },
+   {
+    "scenario": "space_family_any_budget",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Land Rover Range Rover Sport 3.0L Tdv6 S Diesel",
+     "Land Rover Range Rover Sport 3.0L Tdv6 Se Diesel",
+     "Lexus Ls 500H Luxury"
+    ]
+   },
+   {
+    "scenario": "hybrid_under_30",
+    "n": 2,
+    "relaxed": [],
+    "top": [
+     "Mg Hector 1.5L Smart Hybrid",
+     "Mg Hector 1.5L Super Hybrid"
+    ]
+   }
+  ]
+ },
+ "agent_no_scoring": {
+  "hard_constraint_satisfaction": 1.0,
+  "strict_results_checked": 63,
+  "coverage": 1.0,
+  "scenarios_relaxed": 3,
+  "empty_results_explained": "n/a",
+  "explanation_consistency": null,
+  "ranking_stability": 1.0,
+  "latency_ms_median": 7.6,
+  "latency_ms_max": 19.6,
+  "per_scenario": [
+   {
+    "scenario": "suv_under_15_diesel",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Icml Extreme Sd Crdfi 9 Seater Bsiv",
+     "Premier Rio Ex",
+     "Icml Extreme Ld Crdfi Non Ac 9 Seater Bsiv"
+    ]
+   },
+   {
+    "scenario": "family_auto_under_12",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Tigor Revotron Xma",
+     "Maruti Suzuki Dzire Vxi Amt",
+     "Hyundai Xcent S At 1.2"
+    ]
+   },
+   {
+    "scenario": "mileage_under_10",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "seven_seater_auto",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Maruti Suzuki Ertiga Vxi At",
+     "Mahindra Nuvosport N6 Amt",
+     "Maruti Suzuki Ertiga Zxi At"
+    ]
+   },
+   {
+    "scenario": "city_petrol_hatch_8",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "cng_under_7",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Bajaj Qute (Re60) Qcar Cng",
+     "Tata Nano Genx Emax Xm",
+     "Maruti Suzuki Alto Lxi Cng (Cng +"
+    ]
+   },
+   {
+    "scenario": "electric_any",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Mahindra E2O Plus P4",
+     "Tata Tigor Ev Xe+",
+     "Mahindra E2O Plus P6"
+    ]
+   },
+   {
+    "scenario": "sedan_10_to_15_power",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Skoda Rapid 1.5 Tdi Cr Active",
+     "Toyota Yaris J Cvt",
+     "Toyota Yaris G"
+    ]
+   },
+   {
+    "scenario": "luxury_suv_1cr",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Land Rover Discovery 3.0 Hse Diesel",
+     "Bmw X7 Xdrive30D Dpe Signature",
+     "Land Rover Range Rover Sport 3.0L Tdv6 S Diesel"
+    ]
+   },
+   {
+    "scenario": "impossible_diesel_3l",
+    "n": 5,
+    "relaxed": [
+     "dropped the fuel-type requirement"
+    ],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "impossible_9_seat_auto_5l",
+    "n": 1,
+    "relaxed": [
+     "raised the budget by 15% to ₹5.75 lakh",
+     "dropped the transmission requirement"
+    ],
+    "top": [
+     "Icml Extreme Sd Crdfi 9 Seater Bsiv"
+    ]
+   },
+   {
+    "scenario": "mpv_diesel_manual_20",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Maruti Suzuki Ertiga 1.5L Vdi",
+     "Mahindra Marazzo M2 7 Str",
+     "Mahindra Marazzo M2 8 Str"
+    ]
+   },
+   {
+    "scenario": "coupe_under_20",
+    "n": 5,
+    "relaxed": [
+     "dropped the body-type requirement"
+    ],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "balanced_under_6",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Tata Nano Genx Xe",
+     "Bajaj Qute (Re60) Qcar",
+     "Tata Nano Genx Xm"
+    ]
+   },
+   {
+    "scenario": "space_family_any_budget",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Maruti Suzuki Omni 5 Str Bs-Iv",
+     "Maruti Suzuki Omni E 8 Str Bs-Iv",
+     "Maruti Suzuki Eeco 5 Str"
+    ]
+   },
+   {
+    "scenario": "hybrid_under_30",
+    "n": 3,
+    "relaxed": [],
+    "top": [
+     "Mg Hector 1.5L Super Hybrid",
+     "Mg Hector 1.5L Smart Hybrid",
+     "Mg Hector 1.5L Sharp Hybrid"
+    ]
+   }
+  ]
+ },
+ "agent_no_rules": {
+  "hard_constraint_satisfaction": 0.984,
+  "strict_results_checked": 61,
+  "coverage": 1.0,
+  "scenarios_relaxed": 3,
+  "empty_results_explained": "n/a",
+  "explanation_consistency": 1.0,
+  "ranking_stability": 1.0,
+  "latency_ms_median": 9.2,
+  "latency_ms_max": 20.6,
+  "per_scenario": [
+   {
+    "scenario": "suv_under_15_diesel",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Ford Ecosport 1.5L Tdci Titanium Plus",
+     "Ford Ecosport 1.5L Tdci Thunder Edition",
+     "Hyundai Venue 1.4 Crdi Mt Sx(O)"
+    ]
+   },
+   {
+    "scenario": "family_auto_under_12",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Toyota Yaris J Cvt",
+     "Tata Tiago Revotron Xza",
+     "Hyundai Verna 1.6 Vtvt Sx Plus At"
+    ]
+   },
+   {
+    "scenario": "mileage_under_10",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Bajaj Qute (Re60) Qcar",
+     "Maruti Suzuki Dzire Tour Ldi",
+     "Maruti Suzuki Dzire Ldi"
+    ]
+   },
+   {
+    "scenario": "seven_seater_auto",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Land Rover Discovery 3.0 S Diesel",
+     "Land Rover Discovery 3.0 Se Diesel",
+     "Skoda Kodiaq Scout 2.0 Tdi At"
+    ]
+   },
+   {
+    "scenario": "city_petrol_hatch_8",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Ford Figo Titanium Blu 1.2 Ti-Vct",
+     "Ford Freestyle 1.2L Ti-Vct Titanium Plus",
+     "Tata Tiago Revotron Xe"
+    ]
+   },
+   {
+    "scenario": "cng_under_7",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Maruti Suzuki Wagon R Lxi (O) Cng",
+     "Maruti Suzuki Celerio Tour H2 Cng",
+     "Hyundai Grand I10 1.2 Kappa Vtvt Magna Cng"
+    ]
+   },
+   {
+    "scenario": "electric_any",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Mg Zs Ev Excite",
+     "Mg Zs Ev Exclusive",
+     "Hyundai Kona Electric Premium"
+    ]
+   },
+   {
+    "scenario": "sedan_10_to_15_power",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Hyundai Verna 1.6 Crdi Sx (O)",
+     "Toyota Yaris J Cvt",
+     "Toyota Yaris G"
+    ]
+   },
+   {
+    "scenario": "luxury_suv_1cr",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Lamborghini Urus V8",
+     "Bentley Bentayga W12",
+     "Mercedes-Benz Mercedes-Benz G-Class Amg G 63"
+    ]
+   },
+   {
+    "scenario": "impossible_diesel_3l",
+    "n": 5,
+    "relaxed": [
+     "dropped the fuel-type requirement"
+    ],
+    "top": [
+     "Maruti Suzuki Alto Std (O)",
+     "Tata Nano Genx Xe",
+     "Datsun Redi-Go D"
+    ]
+   },
+   {
+    "scenario": "impossible_9_seat_auto_5l",
+    "n": 1,
+    "relaxed": [
+     "raised the budget by 15% to ₹5.75 lakh",
+     "dropped the transmission requirement"
+    ],
+    "top": [
+     "Icml Extreme Sd Crdfi 9 Seater Bsiv"
+    ]
+   },
+   {
+    "scenario": "mpv_diesel_manual_20",
+    "n": 4,
+    "relaxed": [],
+    "top": [
+     "Maruti Suzuki Ertiga 1.5L Vdi",
+     "Mahindra Marazzo M2 7 Str",
+     "Mahindra Marazzo M2 8 Str"
+    ]
+   },
+   {
+    "scenario": "coupe_under_20",
+    "n": 5,
+    "relaxed": [
+     "dropped the body-type requirement"
+    ],
+    "top": [
+     "Ford Figo Titanium Blu 1.5 Tdci",
+     "Ford Aspire 1.5 Tdci Titanium Plus",
+     "Ford Freestyle 1.5L Tdci Titanium Plus"
+    ]
+   },
+   {
+    "scenario": "balanced_under_6",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Maruti Suzuki Alto Std (O)",
+     "Tata Tiago Revotron Xe",
+     "Maruti Suzuki S-Presso Std (O)"
+    ]
+   },
+   {
+    "scenario": "space_family_any_budget",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Land Rover Range Rover Sport 3.0L Tdv6 S Diesel",
+     "Land Rover Range Rover Sport 3.0L Tdv6 Se Diesel",
+     "Lexus Ls 500H Luxury"
+    ]
+   },
+   {
+    "scenario": "hybrid_under_30",
+    "n": 2,
+    "relaxed": [],
+    "top": [
+     "Mg Hector 1.5L Smart Hybrid",
+     "Mg Hector 1.5L Super Hybrid"
+    ]
+   }
+  ]
+ },
+ "agent_no_relaxation": {
+  "hard_constraint_satisfaction": 1.0,
+  "strict_results_checked": 61,
+  "coverage": 0.812,
+  "scenarios_relaxed": 0,
+  "empty_results_explained": "3/3",
+  "explanation_consistency": 1.0,
+  "ranking_stability": 1.0,
+  "latency_ms_median": 9.4,
+  "latency_ms_max": 33.5,
+  "per_scenario": [
+   {
+    "scenario": "suv_under_15_diesel",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Ford Ecosport 1.5L Tdci Titanium Plus",
+     "Ford Ecosport 1.5L Tdci Thunder Edition",
+     "Hyundai Venue 1.4 Crdi Mt Sx(O)"
+    ]
+   },
+   {
+    "scenario": "family_auto_under_12",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Toyota Yaris J Cvt",
+     "Hyundai Verna 1.6 Vtvt Sx Plus At",
+     "Ford Ecosport 1.5L Ti-Vct Titanium Plus At"
+    ]
+   },
+   {
+    "scenario": "mileage_under_10",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Bajaj Qute (Re60) Qcar",
+     "Maruti Suzuki Dzire Tour Ldi",
+     "Maruti Suzuki Dzire Ldi"
+    ]
+   },
+   {
+    "scenario": "seven_seater_auto",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Land Rover Discovery 3.0 S Diesel",
+     "Land Rover Discovery 3.0 Se Diesel",
+     "Skoda Kodiaq Scout 2.0 Tdi At"
+    ]
+   },
+   {
+    "scenario": "city_petrol_hatch_8",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Ford Figo Titanium Blu 1.2 Ti-Vct",
+     "Ford Freestyle 1.2L Ti-Vct Titanium Plus",
+     "Tata Tiago Revotron Xe"
+    ]
+   },
+   {
+    "scenario": "cng_under_7",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Maruti Suzuki Wagon R Lxi (O) Cng",
+     "Maruti Suzuki Celerio Tour H2 Cng",
+     "Hyundai Grand I10 1.2 Kappa Vtvt Magna Cng"
+    ]
+   },
+   {
+    "scenario": "electric_any",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Mg Zs Ev Excite",
+     "Mg Zs Ev Exclusive",
+     "Hyundai Kona Electric Premium"
+    ]
+   },
+   {
+    "scenario": "sedan_10_to_15_power",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Hyundai Verna 1.6 Crdi Sx (O)",
+     "Toyota Yaris J Cvt",
+     "Toyota Yaris G"
+    ]
+   },
+   {
+    "scenario": "luxury_suv_1cr",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Lamborghini Urus V8",
+     "Bentley Bentayga W12",
+     "Mercedes-Benz Mercedes-Benz G-Class Amg G 63"
+    ]
+   },
+   {
+    "scenario": "impossible_diesel_3l",
+    "n": 0,
+    "relaxed": [],
+    "top": []
+   },
+   {
+    "scenario": "impossible_9_seat_auto_5l",
+    "n": 0,
+    "relaxed": [],
+    "top": []
+   },
+   {
+    "scenario": "mpv_diesel_manual_20",
+    "n": 4,
+    "relaxed": [],
+    "top": [
+     "Maruti Suzuki Ertiga 1.5L Vdi",
+     "Mahindra Marazzo M2 7 Str",
+     "Mahindra Marazzo M2 8 Str"
+    ]
+   },
+   {
+    "scenario": "coupe_under_20",
+    "n": 0,
+    "relaxed": [],
+    "top": []
+   },
+   {
+    "scenario": "balanced_under_6",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Maruti Suzuki Alto Std (O)",
+     "Tata Tiago Revotron Xe",
+     "Maruti Suzuki S-Presso Std (O)"
+    ]
+   },
+   {
+    "scenario": "space_family_any_budget",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Land Rover Range Rover Sport 3.0L Tdv6 S Diesel",
+     "Land Rover Range Rover Sport 3.0L Tdv6 Se Diesel",
+     "Lexus Ls 500H Luxury"
+    ]
+   },
+   {
+    "scenario": "hybrid_under_30",
+    "n": 2,
+    "relaxed": [],
+    "top": [
+     "Mg Hector 1.5L Smart Hybrid",
+     "Mg Hector 1.5L Super Hybrid"
+    ]
+   }
+  ]
+ },
+ "agent_full": {
+  "hard_constraint_satisfaction": 1.0,
+  "strict_results_checked": 61,
+  "coverage": 1.0,
+  "scenarios_relaxed": 3,
+  "empty_results_explained": "n/a",
+  "explanation_consistency": 1.0,
+  "ranking_stability": 1.0,
+  "latency_ms_median": 9.1,
+  "latency_ms_max": 20.2,
+  "per_scenario": [
+   {
+    "scenario": "suv_under_15_diesel",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Ford Ecosport 1.5L Tdci Titanium Plus",
+     "Ford Ecosport 1.5L Tdci Thunder Edition",
+     "Hyundai Venue 1.4 Crdi Mt Sx(O)"
+    ]
+   },
+   {
+    "scenario": "family_auto_under_12",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Toyota Yaris J Cvt",
+     "Hyundai Verna 1.6 Vtvt Sx Plus At",
+     "Ford Ecosport 1.5L Ti-Vct Titanium Plus At"
+    ]
+   },
+   {
+    "scenario": "mileage_under_10",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Bajaj Qute (Re60) Qcar",
+     "Maruti Suzuki Dzire Tour Ldi",
+     "Maruti Suzuki Dzire Ldi"
+    ]
+   },
+   {
+    "scenario": "seven_seater_auto",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Land Rover Discovery 3.0 S Diesel",
+     "Land Rover Discovery 3.0 Se Diesel",
+     "Skoda Kodiaq Scout 2.0 Tdi At"
+    ]
+   },
+   {
+    "scenario": "city_petrol_hatch_8",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Ford Figo Titanium Blu 1.2 Ti-Vct",
+     "Ford Freestyle 1.2L Ti-Vct Titanium Plus",
+     "Tata Tiago Revotron Xe"
+    ]
+   },
+   {
+    "scenario": "cng_under_7",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Maruti Suzuki Wagon R Lxi (O) Cng",
+     "Maruti Suzuki Celerio Tour H2 Cng",
+     "Hyundai Grand I10 1.2 Kappa Vtvt Magna Cng"
+    ]
+   },
+   {
+    "scenario": "electric_any",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Mg Zs Ev Excite",
+     "Mg Zs Ev Exclusive",
+     "Hyundai Kona Electric Premium"
+    ]
+   },
+   {
+    "scenario": "sedan_10_to_15_power",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Hyundai Verna 1.6 Crdi Sx (O)",
+     "Toyota Yaris J Cvt",
+     "Toyota Yaris G"
+    ]
+   },
+   {
+    "scenario": "luxury_suv_1cr",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Lamborghini Urus V8",
+     "Bentley Bentayga W12",
+     "Mercedes-Benz Mercedes-Benz G-Class Amg G 63"
+    ]
+   },
+   {
+    "scenario": "impossible_diesel_3l",
+    "n": 5,
+    "relaxed": [
+     "dropped the fuel-type requirement"
+    ],
+    "top": [
+     "Maruti Suzuki Alto Std (O)",
+     "Tata Nano Genx Xe",
+     "Datsun Redi-Go D"
+    ]
+   },
+   {
+    "scenario": "impossible_9_seat_auto_5l",
+    "n": 1,
+    "relaxed": [
+     "raised the budget by 15% to ₹5.75 lakh",
+     "dropped the transmission requirement"
+    ],
+    "top": [
+     "Icml Extreme Sd Crdfi 9 Seater Bsiv"
+    ]
+   },
+   {
+    "scenario": "mpv_diesel_manual_20",
+    "n": 4,
+    "relaxed": [],
+    "top": [
+     "Maruti Suzuki Ertiga 1.5L Vdi",
+     "Mahindra Marazzo M2 7 Str",
+     "Mahindra Marazzo M2 8 Str"
+    ]
+   },
+   {
+    "scenario": "coupe_under_20",
+    "n": 5,
+    "relaxed": [
+     "dropped the body-type requirement"
+    ],
+    "top": [
+     "Ford Figo Titanium Blu 1.5 Tdci",
+     "Ford Aspire 1.5 Tdci Titanium Plus",
+     "Ford Freestyle 1.5L Tdci Titanium Plus"
+    ]
+   },
+   {
+    "scenario": "balanced_under_6",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Maruti Suzuki Alto Std (O)",
+     "Tata Tiago Revotron Xe",
+     "Maruti Suzuki S-Presso Std (O)"
+    ]
+   },
+   {
+    "scenario": "space_family_any_budget",
+    "n": 5,
+    "relaxed": [],
+    "top": [
+     "Land Rover Range Rover Sport 3.0L Tdv6 S Diesel",
+     "Land Rover Range Rover Sport 3.0L Tdv6 Se Diesel",
+     "Lexus Ls 500H Luxury"
+    ]
+   },
+   {
+    "scenario": "hybrid_under_30",
+    "n": 2,
+    "relaxed": [],
+    "top": [
+     "Mg Hector 1.5L Smart Hybrid",
+     "Mg Hector 1.5L Super Hybrid"
+    ]
+   }
+  ]
+ }
+}

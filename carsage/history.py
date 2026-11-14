@@ -1,6 +1,7 @@
 """Comparable, attributed price observations. User observations are private; no page fetching."""
 import hashlib
 import json
+import threading
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal
@@ -35,19 +36,43 @@ class MatchIn(BaseModel):
     variant: str | None = Field(None, max_length=160)
     fuel_type: str | None = Field(None, max_length=40)
     transmission: str | None = Field(None, max_length=40)
+    model_year: int | None = Field(None, ge=1900, le=2100, description="the listing's model year, when known: rules out older-regulation catalogue rows")
+
+
+OLDER_REGULATION_BEFORE = 2021   # BS6 became mandatory in April 2020; stock of BS4 could be sold until October 2020
+
+
+def evidence(row, data):
+    """How well a catalogue row agrees with the listing: (fraction of variant words found, fuel agrees, transmission agrees). None = not stated."""
+    words = set(norm(data.variant or '').split())
+    have = set(norm(f'{row.variant} {row.fuel_type} {row.transmission or ""}').split())
+    overlap = len(words & have) / len(words) if words else 0.0
+    fuel = None if not data.fuel_type else norm(data.fuel_type) in norm(row.fuel_type)
+    gear = None if not data.transmission else norm(row.transmission or '') == norm(data.transmission)
+    return overlap, fuel, gear
 
 
 def match(s, data):
     make = {'maruti': 'maruti suzuki', 'mercedes benz': 'mercedes-benz'}.get(norm(data.make), norm(data.make))
     rows = s.scalars(select(CatalogueCar).where(catalogue.VISIBLE, func.lower(CatalogueCar.make) == make,
                                               func.lower(CatalogueCar.model) == norm(data.model)).order_by(CatalogueCar.price_inr, CatalogueCar.id)).all()
-    exact = [r for r in rows if data.variant and norm(r.variant) == norm(data.variant)
-             and (not data.fuel_type or norm(r.fuel_type) == norm(data.fuel_type))
-             and (not data.transmission or norm(r.transmission or '') == norm(data.transmission))]
-    return {'status': 'exact' if len(exact) == 1 else 'ambiguous' if rows else 'unmatched',
-            'candidates': [catalogue.to_out(r) for r in (exact or rows)][:50], 'total_candidates': len(exact or rows),
-            'requires_confirmation': True,
-            'note': 'Select the exact variant. Catalogue specifications are historical; model year/generation are not verified by name matching.'}
+    # a stated fuel or transmission that disagrees rules a row out; the rest are ranked by variant-word evidence, cheapest first on ties
+    kept = [(evidence(r, data), r) for r in rows]
+    kept = [(ev, r) for ev, r in kept if ev[1] is not False and ev[2] is not False]
+    n_before = len(kept)
+    if data.model_year and data.model_year >= OLDER_REGULATION_BEFORE:      # a 2021+ car cannot be a BS4 variant: those rows are an older generation
+        kept = [(ev, r) for ev, r in kept if catalogue.freshness(r)[0] != 'historical']
+    older = n_before - len(kept)
+    kept.sort(key=lambda t: (-t[0][0], t[1].price_inr, t[1].id))
+    exact = [r for (overlap, _, _), r in kept if data.variant and norm(r.variant) == norm(data.variant)]
+    top = kept[0][0][0] if kept else 0.0
+    status = 'exact' if len(exact) == 1 else 'ambiguous' if kept else 'unmatched'
+    return {'status': status, 'candidates': [catalogue.to_out(r) for r in (exact if status == 'exact' else [r for _, r in kept])][:50],
+            'total_candidates': len(exact) if status == 'exact' else len(kept), 'excluded_by_fuel_or_transmission': len(rows) - len(kept),
+            'excluded_older_generation': older, 'confidence': 'high' if status == 'exact' else 'medium' if top >= 0.5 else 'low', 'requires_confirmation': True,
+            'note': ('Select the exact variant. ' + (f'{older} older-generation (BS4 or earlier) catalogue variants were excluded because the listing is model year {data.model_year}. ' if older else '')
+                     + ('The catalogue has only older-generation variants of this model, so no reliable match exists. ' if older and not kept else '')
+                     + 'Catalogue specifications are a historical snapshot; generation is judged from the emission standard only.')}
 
 
 class ObservationIn(MatchIn):
@@ -104,7 +129,32 @@ def digest(parts):
     return hashlib.sha256(json.dumps(parts, ensure_ascii=True, separators=(',', ':')).encode()).hexdigest()
 
 
+DAILY_LIMIT = 50   # observations one user may record per 24 h; keeps a looping client from filling the table
+
+
+class LimitExceeded(ValueError):
+    pass
+
+
+_uid_locks: dict = {}
+_uid_locks_guard = threading.Lock()
+
+
 def ingest(s, data, uid, *, kind='user_observation', provenance=None, rights=None):
+    """Serialise one user's writes inside this process so the daily cap cannot be overshot by parallel requests.
+    shortcut: several server processes still race on the count; put the cap in the database (a counter row or advisory lock) before scaling out."""
+    if kind != 'user_observation':
+        return _ingest(s, data, uid, kind=kind, provenance=provenance, rights=rights)
+    with _uid_locks_guard:
+        lock = _uid_locks.setdefault(uid, threading.Lock())
+        if len(_uid_locks) > 10000:                      # bound the table: forget locks nobody holds
+            for k in [k for k, v in _uid_locks.items() if not v.locked() and k != uid]:
+                del _uid_locks[k]
+    with lock:
+        return _ingest(s, data, uid, kind=kind, provenance=provenance, rights=rights)
+
+
+def _ingest(s, data, uid, *, kind='user_observation', provenance=None, rights=None):
     car = catalogue.get_car(s, data.car_id)
     if car is None:
         raise LookupError('Catalogue vehicle not found')
@@ -117,6 +167,12 @@ def ingest(s, data, uid, *, kind='user_observation', provenance=None, rights=Non
         raise ValueError('Page observations must be recorded within 24 hours; use the reviewed historical importer for dated sources')
     if kind != 'user_observation' and not (rights and provenance):
         raise ValueError('Historical imports require rights and provenance')
+    if kind == 'user_observation':
+        # shortcut: count-then-insert can overshoot the cap by a few rows under concurrent requests; move to a DB-side counter if that matters
+        today = s.scalar(select(func.count()).select_from(PriceObservation).where(PriceObservation.firebase_uid == uid,
+                                                                                  PriceObservation.created_at >= datetime.now(timezone.utc) - timedelta(days=1)))
+        if today >= DAILY_LIMIT:
+            raise LimitExceeded(f'Daily limit of {DAILY_LIMIT} observations reached; try again tomorrow')
     host = urlsplit(data.source_url).hostname
     # Used cars and page observations stay tied to the same physical listing, never a market average.
     scope = data.source_url if kind == 'user_observation' or data.vehicle_status == 'used' else host

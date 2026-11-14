@@ -1,6 +1,8 @@
 """CarSage AI API.  Run:  uvicorn carsage.app:app --reload"""
+import asyncio
 import logging
 import os
+import threading
 import time
 
 from dotenv import load_dotenv
@@ -8,12 +10,14 @@ from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy import select, text
-from sqlalchemy.exc import IntegrityError, OperationalError
+from sqlalchemy.exc import IntegrityError, OperationalError, ProgrammingError
 from sqlalchemy.orm import Session
 
-from carsage import assistant as assistant_mod
+from collections import defaultdict, deque
+
+from carsage import agent as agent_mod, assistant as assistant_mod
 from carsage import catalogue, predict as predict_mod, recommend as recommend_mod
-from carsage import history as history_mod
+from carsage import history as history_mod, prices as prices_mod
 from carsage.auth import current_user
 from carsage.config import validate_startup
 from carsage.db import get_engine
@@ -22,7 +26,8 @@ from carsage.schemas import (AssistantIn, AssistantOut, CarDetail, CarOut, CarPa
                              Preferences, RecommendationOut, UserOut)
 
 log = logging.getLogger("carsage.api")
-SortKey = str
+RATE_TABLE_MAX = 5000   # distinct client addresses tracked at once (behind a proxy every client may share one address: see extension/README.md)
+RATE_LIMITED = ("/api/prices/compare-live", "/api/recommendations", "/api/assistant", "/api/price-predictions", "/api/me/price-observations", "/api/price-history/query", "/api/me/price-history/query")
 
 
 def create_app(engine=None) -> FastAPI:
@@ -46,6 +51,33 @@ def create_app(engine=None) -> FastAPI:
     async def db_down(_: Request, exc: OperationalError):
         log.error("database error: %s", type(exc).__name__)
         return JSONResponse({"detail": "Database unavailable"}, status_code=503)
+
+    @app.exception_handler(ProgrammingError)
+    async def schema_missing(_: Request, exc: ProgrammingError):   # e.g. price_observations absent: migrations not applied
+        log.error("database schema error: %s", type(exc.orig).__name__ if exc.orig else type(exc).__name__)
+        return JSONResponse({"detail": "Database schema is out of date on this server (run: alembic upgrade head)"}, status_code=503)
+
+    # shortcut: per-process, per-client-IP sliding window; put a proxy/Redis limiter in front when running several instances
+    app.state.rate_limit = int(os.environ.get("RATE_LIMIT_PER_MINUTE", "60"))
+    app.state.rate_hits = defaultdict(deque)
+
+    @app.middleware("http")
+    async def rate_limit(request: Request, call_next):
+        limit = request.app.state.rate_limit
+        if limit and request.method == "POST" and request.url.path in RATE_LIMITED:
+            table, now = request.app.state.rate_hits, time.monotonic()
+            if len(table) > RATE_TABLE_MAX:                 # bound memory: drop idle clients, then the oldest half if still too many
+                for k in [k for k, d in table.items() if not d or now - d[-1] > 60]:
+                    del table[k]
+                for k in sorted(table, key=lambda k: table[k][-1])[:len(table) // 2] if len(table) > RATE_TABLE_MAX else []:
+                    del table[k]
+            hits = table[request.client.host if request.client else "?"]
+            while hits and now - hits[0] > 60:
+                hits.popleft()
+            if len(hits) >= limit:
+                return JSONResponse({"detail": "Too many requests; try again in a minute"}, status_code=429, headers={"Retry-After": "60"})
+            hits.append(now)
+        return await call_next(request)
 
     @app.exception_handler(RuntimeError)
     async def config_error(_: Request, exc: RuntimeError):
@@ -120,6 +152,24 @@ def create_app(engine=None) -> FastAPI:
                                         min_price=min_price, max_price=max_price, min_seats=min_seats)
 
     # ---- intelligence
+    @app.get("/api/agent", tags=["recommendations"])
+    def agent():
+        """The advisor agent, inspectable: PEAS, knowledge base, CSP, search strategy, ranking, and what is not AI."""
+        return agent_mod.DESCRIPTION
+
+    @app.post("/api/prices/compare-live", tags=["price intelligence"])
+    async def compare_live(body: prices_mod.CompareIn, request: Request):
+        """Current listed prices for one vehicle across supported websites, grouped by price basis. Only provider-built URLs are fetched.
+        If the client disconnects, queued fetches for this request are cancelled."""
+        cancel = threading.Event()
+        task = asyncio.ensure_future(asyncio.to_thread(prices_mod.compare, body, cancel=cancel))
+        while not task.done():
+            await asyncio.wait({task}, timeout=0.3)
+            if not task.done() and await request.is_disconnected():
+                cancel.set()
+                break
+        return await task
+
     @app.post("/api/catalogue/match", tags=["extension"])
     def match_vehicle(body: history_mod.MatchIn, s: Session = Depends(get_db)):
         return history_mod.match(s, body)
@@ -149,6 +199,8 @@ def create_app(engine=None) -> FastAPI:
             return {"created": created, "observation": history_mod.point(row)}
         except LookupError as exc:
             raise HTTPException(404, str(exc))
+        except history_mod.LimitExceeded as exc:
+            raise HTTPException(429, str(exc))
         except ValueError as exc:
             raise HTTPException(422, str(exc))
 

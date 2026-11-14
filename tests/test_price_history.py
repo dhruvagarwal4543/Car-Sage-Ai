@@ -44,6 +44,11 @@ def test_strict_matching_never_silently_substitutes_a_similar_model(environment)
     assert ambiguous['status'] == 'ambiguous' and ambiguous['requires_confirmation']
     assert {car['id'] for car in ambiguous['candidates']} == {1, 2}
     assert client.post('/api/catalogue/match', json={'make': 'Tata', 'model': 'Nexon EV Plus'}).json()['status'] == 'unmatched'
+    # evidence ranks candidates and a contradicting stated fuel/transmission excludes rows; nothing is ever auto-selected
+    ranked = client.post('/api/catalogue/match', json={'make': 'Tata', 'model': 'Nexon', 'variant': 'XZ Plus Diesel'}).json()
+    assert ranked['status'] == 'ambiguous' and ranked['candidates'][0]['variant'] == 'XZ' and ranked['confidence'] == 'low' and ranked['requires_confirmation']
+    diesel = client.post('/api/catalogue/match', json={'make': 'Tata', 'model': 'Nexon', 'fuel_type': 'Diesel'}).json()
+    assert diesel['status'] == 'unmatched' and diesel['excluded_by_fuel_or_transmission'] == 2
 
 
 def test_record_deduplication_provenance_and_private_ownership(environment):
