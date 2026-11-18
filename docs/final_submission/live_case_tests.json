@@ -1,0 +1,325 @@
+{
+ "tested_at": "2026-11-18 00:59 UTC",
+ "method": "carsage.prices.compare called directly against live provider pages (Delhi); not a browser test",
+ "cases": [
+  {
+   "case": "Hatchback",
+   "requested": {
+    "make": "Maruti Suzuki",
+    "model": "Swift",
+    "variant": "VXi",
+    "fuel_type": "Petrol",
+    "transmission": "Manual"
+   },
+   "seconds": 2.3,
+   "groups": [
+    [
+     "ex-showroom, Delhi",
+     [
+      [
+       "CarDekho",
+       "VXi",
+       667900
+      ],
+      [
+       "CarWale",
+       "VXi Petrol Manual",
+       667900
+      ]
+     ],
+     true
+    ],
+    [
+     "on-road, Delhi",
+     [
+      [
+       "CarWale",
+       "VXi Petrol Manual",
+       762756
+      ]
+     ],
+     false
+    ]
+   ],
+   "lowest": "CarDekho",
+   "probable": [],
+   "ambiguous": 3,
+   "model_level": [],
+   "failures": [],
+   "warnings": [
+    "ambiguous provider variants were left out; state the exact variant, fuel and transmission to include them",
+    "listed prices are what the websites display; the dealer's final price can differ. The providers' pages show their current lineup; model year/generation is not stated per variant."
+   ],
+   "incompatible": null
+  },
+  {
+   "case": "Sedan",
+   "requested": {
+    "make": "Honda",
+    "model": "City",
+    "variant": "V",
+    "fuel_type": "Petrol",
+    "transmission": "Automatic (CVT)"
+   },
+   "seconds": 6.0,
+   "groups": [
+    [
+     "ex-showroom, Delhi",
+     [
+      [
+       "CarDekho",
+       "V CVT",
+       1450700
+      ],
+      [
+       "CarWale",
+       "V Petrol Automatic (CVT)",
+       1450700
+      ]
+     ],
+     true
+    ],
+    [
+     "on-road, Delhi",
+     [
+      [
+       "CarWale",
+       "V Petrol Automatic (CVT)",
+       1662391
+      ]
+     ],
+     false
+    ]
+   ],
+   "lowest": "CarDekho",
+   "probable": [],
+   "ambiguous": 0,
+   "model_level": [],
+   "failures": [],
+   "warnings": [
+    "listed prices are what the websites display; the dealer's final price can differ. The providers' pages show their current lineup; model year/generation is not stated per variant."
+   ],
+   "incompatible": null
+  },
+  {
+   "case": "SUV diesel",
+   "requested": {
+    "make": "Hyundai",
+    "model": "Creta",
+    "variant": "E",
+    "fuel_type": "Diesel",
+    "transmission": "Manual"
+   },
+   "seconds": 6.0,
+   "groups": [
+    [
+     "ex-showroom, Delhi",
+     [
+      [
+       "CarDekho",
+       "E Diesel",
+       1261000
+      ],
+      [
+       "CarWale",
+       "E Diesel 1.5L Turbo Manual",
+       1261000
+      ]
+     ],
+     true
+    ],
+    [
+     "on-road, Delhi",
+     [
+      [
+       "CarWale",
+       "E Diesel 1.5L Turbo Manual",
+       1486563
+      ]
+     ],
+     false
+    ]
+   ],
+   "lowest": "CarDekho",
+   "probable": [],
+   "ambiguous": 0,
+   "model_level": [],
+   "failures": [],
+   "warnings": [
+    "listed prices are what the websites display; the dealer's final price can differ. The providers' pages show their current lineup; model year/generation is not stated per variant."
+   ],
+   "incompatible": null
+  },
+  {
+   "case": "Electric",
+   "requested": {
+    "make": "Tata",
+    "model": "Tiago EV",
+    "variant": "Smart 19.2 kWh",
+    "fuel_type": "Electric"
+   },
+   "seconds": 1.9,
+   "groups": [
+    [
+     "on-road, Delhi",
+     [
+      [
+       "CarWale",
+       "Smart 19.2 kWh",
+       742039
+      ]
+     ],
+     false
+    ],
+    [
+     "ex-showroom, Delhi",
+     [
+      [
+       "CarWale",
+       "Smart 19.2 kWh",
+       699000
+      ]
+     ],
+     false
+    ]
+   ],
+   "lowest": "CarWale",
+   "probable": [],
+   "ambiguous": 2,
+   "model_level": [],
+   "failures": [],
+   "warnings": [
+    "only CarWale returned an exact ex-showroom, Delhi quote, so no 'cheapest across websites' claim is possible",
+    "ambiguous provider variants were left out; state the exact variant, fuel and transmission to include them",
+    "listed prices are what the websites display; the dealer's final price can differ. The providers' pages show their current lineup; model year/generation is not stated per variant."
+   ],
+   "incompatible": null
+  },
+  {
+   "case": "Automatic (AMT)",
+   "requested": {
+    "make": "Maruti Suzuki",
+    "model": "Dzire",
+    "variant": "VXi",
+    "fuel_type": "Petrol",
+    "transmission": "Automatic (AMT)"
+   },
+   "seconds": 6.0,
+   "groups": [
+    [
+     "ex-showroom, Delhi",
+     [
+      [
+       "CarDekho",
+       "VXI AMT",
+       772100
+      ],
+      [
+       "CarWale",
+       "VXi Petrol Automatic (AMT)",
+       772100
+      ]
+     ],
+     true
+    ],
+    [
+     "on-road, Delhi",
+     [
+      [
+       "CarWale",
+       "VXi Petrol Automatic (AMT)",
+       878085
+      ]
+     ],
+     false
+    ]
+   ],
+   "lowest": "CarDekho",
+   "probable": [],
+   "ambiguous": 0,
+   "model_level": [],
+   "failures": [],
+   "warnings": [
+    "listed prices are what the websites display; the dealer's final price can differ. The providers' pages show their current lineup; model year/generation is not stated per variant."
+   ],
+   "incompatible": null
+  },
+  {
+   "case": "Diesel SUV",
+   "requested": {
+    "make": "Kia",
+    "model": "Seltos",
+    "variant": "HTE",
+    "fuel_type": "Diesel",
+    "transmission": "Manual"
+   },
+   "seconds": 6.0,
+   "groups": [
+    [
+     "ex-showroom, Delhi",
+     [
+      [
+       "CarDekho",
+       "HTE Diesel",
+       1293900
+      ],
+      [
+       "CarWale",
+       "HTE Diesel 1.5L Turbo Manual",
+       1293900
+      ]
+     ],
+     true
+    ],
+    [
+     "on-road, Delhi",
+     [
+      [
+       "CarWale",
+       "HTE Diesel 1.5L Turbo Manual",
+       1535623
+      ]
+     ],
+     false
+    ]
+   ],
+   "lowest": "CarDekho",
+   "probable": [],
+   "ambiguous": 4,
+   "model_level": [],
+   "failures": [],
+   "warnings": [
+    "ambiguous provider variants were left out; state the exact variant, fuel and transmission to include them",
+    "listed prices are what the websites display; the dealer's final price can differ. The providers' pages show their current lineup; model year/generation is not stated per variant."
+   ],
+   "incompatible": null
+  },
+  {
+   "case": "Ambiguous (no fuel/gearbox)",
+   "requested": {
+    "make": "Mahindra",
+    "model": "Thar",
+    "variant": "LXT"
+   },
+   "seconds": 2.1,
+   "groups": [],
+   "lowest": null,
+   "probable": [],
+   "ambiguous": 21,
+   "model_level": [
+    [
+     "CarDekho",
+     1032000,
+     1899000
+    ]
+   ],
+   "failures": [],
+   "warnings": [
+    "ambiguous provider variants were left out; state the exact variant, fuel and transmission to include them",
+    "no exact variant price was found; the model-level starting prices are references for the whole model, not prices for your variant",
+    "listed prices are what the websites display; the dealer's final price can differ. The providers' pages show their current lineup; model year/generation is not stated per variant."
+   ],
+   "incompatible": null
+  }
+ ]
+}
