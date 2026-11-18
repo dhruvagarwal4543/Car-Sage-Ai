@@ -105,7 +105,7 @@ curl -X POST http://127.0.0.1:8000/api/assistant -H 'content-type: application/j
 Prices are **ex-showroom prices of new cars**. The data has no on-road prices, live inventory or used-car listings, and the API never claims otherwise.
 
 ### How recommendations and the assistant work
-1. **Constraints (hard):** budget, fuel, transmission, body type, seats, and an optional use case. If nothing satisfies them, constraints are relaxed in a fixed order (budget +15%, use case, body type, transmission, fuel) and the response says exactly what was relaxed.
+1. **Constraints (hard):** budget, fuel, transmission, body type, seats, and an optional use case. If nothing satisfies them, uniform-cost search over the five relaxable constraints (at most 2^5 = 32 states; costs budget +15% = 1, use case 2, body type 3, transmission 4, fuel 5) finds the cheapest relaxation and the response says exactly what was relaxed; `allow_relaxation=false` returns no cars instead. Minimum price and minimum seats are never relaxed.
 2. **Knowledge rules:** [carsage/rules.py](carsage/rules.py) derives tags such as `family_friendly` from attributes with explicit if-then rules; these are project heuristics, not dataset facts.
 3. **Heuristic score:** a weighted min-max score over the matches (price, mileage, power, boot space, airbags); at most two variants per model are returned. A missing attribute scores 0 and is reported, never guessed.
 4. **Assistant:** regular-expression and keyword extraction turns a message into preferences, then calls the same functions. Replies are assembled from database results only. It is not an LLM, has no internet access and no live prices.

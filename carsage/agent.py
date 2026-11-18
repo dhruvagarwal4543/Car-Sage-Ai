@@ -10,7 +10,7 @@ from carsage.recommend import BALANCED, CRITERIA, MAX_PER_MODEL, recommend as de
 PEAS = {
     "performance": [
         "every strict recommendation satisfies all hard constraints (verified in tests/test_agent.py and src/evaluate_recommender.py)",
-        "feasible set found whenever one exists; cheapest relaxation when none exists (uniform-cost search, exhaustive over <= 2^6 states)",
+        "feasible set found whenever one exists; cheapest relaxation when none exists (uniform-cost search, exhaustive over at most 2^5 = 32 states)",
         "explanations consistent with the data they cite (checked in the evaluation)",
         "response time: decision latency recorded in every trace",
         "missing data reported as 'not recorded', never assumed",

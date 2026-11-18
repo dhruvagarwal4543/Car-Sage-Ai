@@ -108,6 +108,13 @@ export function liveRequest(v, car, { refresh = false, city = '', priceType = ''
 const lakh = (n) => `₹${(n / 1e5).toFixed(2)} lakh`;
 const when = (q) => (q.retrieved_at || '').slice(0, 16).replace('T', ' ');
 
+// Min–max price per website within one price basis (the first basis that has quotes), for a page that names a model but no variant.
+function ranges(quotes) {
+  const by = new Map();
+  for (const q of quotes) { const k = q.provider + '|' + q.basis.code; const e = by.get(k) || { provider: q.provider, label: q.basis_label, low: Infinity, high: 0, n: 0, urls: new Set() }; e.low = Math.min(e.low, q.price_inr); e.high = Math.max(e.high, q.price_inr); if (!e.urls.has(q.source_url)) { e.urls.add(q.source_url); e.n++; } by.set(k, e); }
+  return [...by.values()].filter((e) => e.n).sort((a, b) => a.label.localeCompare(b.label) || a.provider.localeCompare(b.provider));
+}
+
 // Display model for the popup. Quotes are shown per price basis; a "cheapest" claim is made only inside one basis with two or more providers.
 export function liveSummary(r) {
   const groups = (r.comparable_groups || []).map((g) => ({
@@ -128,6 +135,7 @@ export function liveSummary(r) {
     modelLevel: (r.model_level || []).map((m) => ({ provider: m.provider, low: m.price_low, high: m.price_high, label: m.basis_label, url: m.source_url, note: m.note, freshness: m.freshness })),
     failures: (r.provider_failures || []).map((f) => `${f.provider} (${f.page}): ${f.error}${f.retry_after_s ? ` - retry in about ${Math.ceil(f.retry_after_s)} s` : ''}${f.served === 'stale' ? ' (an older copy is shown)' : ''}`),
     retryAfter: Math.max(0, ...(r.provider_failures || []).filter((f) => f.kind === 'rate_limited' || f.kind === 'queue_full').map((f) => f.retry_after_s || 0)),
+    ranges: ranges(r.quotes || []),
     warnings: r.warnings || [], ambiguous: (r.quotes || []).filter((q) => q.match === 'ambiguous').length,
   };
 }

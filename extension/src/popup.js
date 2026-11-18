@@ -26,6 +26,11 @@ async function scan() {
   } catch { return { supported: false, vehicles: [], reason: 'CarSage cannot read this page (it is protected by the browser).' }; }
 }
 
+// Live-panel defaults, so nothing has to be re-entered: the page's own value, then the matched catalogue car, then the listing title.
+const cap = (x) => (x ? x.charAt(0).toUpperCase() + x.slice(1).toLowerCase() : '');
+const liveFuelOf = () => S.liveFuel ?? (S.vehicle.fuelType || cap(S.car?.fuel_type) || cap((/\b(petrol|diesel|cng|electric|hybrid)\b/i.exec(S.vehicle.title) || [])[1]) || '');
+const liveGearOf = () => S.liveGear ?? (S.vehicle.transmission || cap(S.car?.transmission && (/auto|amt|cvt|dct|dsg/i.test(S.car.transmission) ? 'automatic' : 'manual')) || (/\b(amt|cvt|dct|dsg|automatic|at)\b/i.test(S.vehicle.title) ? 'Automatic' : /\b(mt|manual)\b/i.test(S.vehicle.title) ? 'Manual' : ''));
+
 async function resolveMatch(v) {
   S.match = { status: 'loading' }; S.car = null; render();
   try {
@@ -34,7 +39,10 @@ async function resolveMatch(v) {
     const make = sp.make || v.make;
     if (sp.make) sp = splitTitle(v.title, S.makes, (await S.api.filters(sp.make)).models.map((m) => m.value));
     const model = sp.model || v.model;
-    v.make ||= make; v.model ||= model; v.variant ||= sp.variant || null;      // the listing's own identity, used by live price comparison
+    v.make ||= make; v.model ||= model;
+    const t = v.title.replace(/^(?:19|20)\d{2}\s+/, ''), id = `${v.make} ${v.model}`;
+    const rest = v.make && v.model && t.toLowerCase().startsWith(id.toLowerCase()) ? t.slice(id.length).trim() : '';
+    v.variant ||= sp.variant || rest || null;      // the listing's own identity (works for cars outside the catalogue), used by live price comparison
     if (!make || !model) { S.match = { status: 'unresolved' }; return render(); }
     const r = await S.api.match({ make, model, variant: sp.variant || undefined, fuel_type: v.fuelType || undefined, model_year: v.status === 'new' ? v.modelYear || undefined : undefined });
     S.match = r; if (r.status === 'exact') S.car = r.candidates[0];
@@ -58,14 +66,14 @@ function renderVehicle() {
   if (m?.status === 'loading') matchHtml = '<p class="muted">Matching to the catalogue…</p>';
   else if (m?.status === 'error') matchHtml = fail(m.error);
   else if (m?.status === 'unresolved') matchHtml = '<p class="warn">Could not tell the make and model. Search the catalogue below.</p>';
-  else if (m?.status === 'unmatched') matchHtml = '<p class="warn">This model is not in the CarSage catalogue, so it cannot be compared or priced. You can still save it on this device.</p>';
+  else if (m?.status === 'unmatched') matchHtml = '<p class="warn">This car is not in the CarSage catalogue, so Add to Compare, Price History and Alternatives are unavailable. Compare Prices still works: it reads CarDekho and CarWale live.</p>';
   else if (car) matchHtml = `<p class="ok">Matched: ${carLine(car)}</p>${m?.status === 'ambiguous' ? '<button data-act="rechoose">Change variant</button><p class="muted">Add this one, then change the variant and add another to compare variants of the same model.</p>' : ''}`;
   else if (m?.status === 'ambiguous') matchHtml = `<p class="warn">${m.total_candidates} catalogue variants fit (match confidence ${esc(m.confidence || 'low')}; best evidence first). Choose the right one:</p><label class="sr" for="cand">Catalogue variant</label><select id="cand"><option value="">Choose a variant…</option>${m.candidates.map((c) => `<option value="${c.id}">${carLine(c)}</option>`).join('')}</select><button class="primary" data-act="confirm">Confirm variant</button><p class="muted">${esc(m.note || '')}</p>`;
   const on = car ? '' : 'disabled title="Match the car to the catalogue first"';
   return `<div class="card">${pick}<div class="row">${img ? `<img class="thumb" src="${esc(img)}" alt="">` : ''}<div><div class="title">${esc(v.title)}</div><div class="muted">${esc(facts)}</div><div>${esc(price)}</div>
     <div class="muted">${link ? `<a href="${esc(link)}" target="_blank" rel="noopener noreferrer">${esc(v.site)}</a>` : esc(v.site)} · detected via ${v.source === 'json-ld' ? 'page metadata' : 'page text'} · confidence ${esc(v.confidence)}</div></div></div>${matchHtml}
     <div class="actions"><button class="primary" data-act="save">Save (this device)</button><button data-act="addCompare" ${on}>Add to Compare</button><button data-act="history" ${on}>Price History</button>
-    <button data-act="alts" ${on}>Find Alternatives</button><button data-act="live" ${v.variant && v.make && v.model ? '' : 'disabled title="This page shows a model, not an exact variant: open a variant page"'}>Compare Prices</button><button data-act="open" ${on}>Open Details</button><button data-act="rescan">Rescan</button></div></div>`;
+    <button data-act="alts" ${on}>Find Alternatives</button><button data-act="live" ${v.make && v.model ? '' : 'disabled title="Could not read the make and model from this page"'}>Compare Prices</button><button data-act="open" ${on}>Open Details</button><button data-act="rescan">Rescan</button></div></div>`;
 }
 
 function renderPanel() {
@@ -73,8 +81,8 @@ function renderPanel() {
     + `<label>Budget up to (₹ lakh)<input id="bud" type="number" min="1" step="0.5" value="${Math.round(((S.vehicle.priceInr || S.car.price_inr) / 1e5) * 10) / 10}"></label><button class="primary" data-act="runAlts">Find</button><div id="altOut"></div></div>`;
   if (S.panel === 'live') return `<h2>Compare prices across websites</h2><div class="card"><p class="muted">Current listed prices on CarDekho and CarWale for this variant, grouped by what the price means (type and city). Pages are read when you ask and cached up to 6 hours.</p>
       <label>City to compare for<select id="liveCity"><option value="">Not specified (each site's own default)</option>${LIVE_CITIES.map((c) => `<option ${c === S.liveCity ? 'selected' : ''}>${c}</option>`).join('')}</select></label>
-      <label>Fuel<select id="liveFuel">${['', 'Petrol', 'Diesel', 'CNG', 'Electric', 'Hybrid'].map((f) => `<option value="${f}" ${f === (S.liveFuel ?? S.vehicle.fuelType ?? '') ? 'selected' : ''}>${f || (S.vehicle.fuelOptions && S.vehicle.fuelOptions.length > 1 ? 'Choose: ' + S.vehicle.fuelOptions.join(' / ') : 'Not stated')}</option>`).join('')}</select></label>
-      <label>Transmission<select id="liveGear">${['', 'Manual', 'Automatic'].map((g) => `<option value="${g}" ${g === (S.liveGear ?? (S.vehicle.transmission || '')) ? 'selected' : ''}>${g || 'Not stated'}</option>`).join('')}</select></label>
+      <label>Fuel<select id="liveFuel">${['', 'Petrol', 'Diesel', 'CNG', 'Electric', 'Hybrid'].map((f) => `<option value="${f}" ${f === liveFuelOf() ? 'selected' : ''}>${f || (S.vehicle.fuelOptions && S.vehicle.fuelOptions.length > 1 ? 'Choose: ' + S.vehicle.fuelOptions.join(' / ') : 'Not stated')}</option>`).join('')}</select></label>
+      <label>Transmission<select id="liveGear">${['', 'Manual', 'Automatic'].map((g) => `<option value="${g}" ${g === liveGearOf() ? 'selected' : ''}>${g || 'Not stated'}</option>`).join('')}</select></label>
       <label>Price type<select id="livePT"><option value="" ${S.livePriceType ? '' : 'selected'}>As on this page</option><option value="ex_showroom" ${S.livePriceType === 'ex_showroom' ? 'selected' : ''}>Ex-showroom</option><option value="on_road" ${S.livePriceType === 'on_road' ? 'selected' : ''}>On-road (needs a city)</option></select></label>
       <div class="actions"><button class="primary" data-act="runLive" id="liveGo">Compare prices</button><button data-act="runLive" data-refresh="1" id="liveRefresh">Refresh</button></div><div id="liveOut" aria-live="polite"></div></div>`;
   if (S.panel === 'history') {
@@ -124,8 +132,10 @@ async function runHistory(years) {
 
 function liveHtml(sum) {
   const qrow = (x) => `<li><div class="title">${x.lowest ? '▼ ' : ''}${esc(x.provider)} · ${inr(x.price)}</div><div class="muted">${esc(x.vehicle)} · ${esc(x.match)} match · ${esc(x.freshness)}${x.retrieved ? ' · ' + esc(x.retrieved) + 'Z' : ''} · <a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">source</a></div></li>`;
+  const ranges = sum.ranges.map((r) => `<li><div class="title">${esc(r.provider)} · ${inr(r.low)} – ${inr(r.high)}</div><div class="muted">${esc(r.label)}</div></li>`).join('');
   return (sum.incompatible ? `<p class="warn" role="alert">${esc(sum.incompatible)}</p>` : '')
-    + (sum.groups.length ? sum.groups.map((g) => `<h3>${esc(g.label)}</h3><p class="muted">${g.multi ? 'Comparable across ' + esc(g.providers.join(' and ')) : 'One website only'}</p><ul>${g.rows.map(qrow).join('')}</ul>`).join('') : '<p class="warn">No exact variant quote found.</p>')
+    + (!sum.groups.length && ranges ? `<h3>Price range by website</h3><ul>${ranges}</ul><p class="muted">This page shows a model, not one variant. Open a variant page (or state fuel and transmission) for an exact side-by-side price.</p>` : '')
+    + (sum.groups.length ? sum.groups.map((g) => `<h3>${esc(g.label)}</h3><p class="muted">${g.multi ? 'Comparable across ' + esc(g.providers.join(' and ')) : 'One website only'}</p><ul>${g.rows.map(qrow).join('')}</ul>`).join('') : (ranges ? '' : '<p class="warn">No exact variant quote found.</p>'))
     + (sum.claim ? `<p class="ok">${esc(sum.claim)}${sum.diff ? ' · ' + esc(sum.diff) : ''}${sum.savings ? ' · ' + esc(sum.savings) : ''}</p>` : '')
     + (sum.probable.length ? `<h3>Probable matches (not in the comparison)</h3><ul>${sum.probable.map((x) => `<li><div class="title">${esc(x.provider)} · ${esc(x.vehicle)} · ${inr(x.price)}</div><div class="muted">${esc(x.label)} · ${esc(x.why)} · <a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">source</a></div></li>`).join('')}</ul>` : '')
     + (sum.modelLevel.length ? `<h3>Model-level references (not your variant)</h3><ul>${sum.modelLevel.map((m) => `<li><div class="title">${esc(m.provider)} · ${inr(m.low)} – ${inr(m.high)}</div><div class="muted">${esc(m.label)} · ${esc(m.note)} · <a href="${esc(m.url)}" target="_blank" rel="noopener noreferrer">source</a></div></li>`).join('')}</ul>` : '')
@@ -197,7 +207,7 @@ document.addEventListener('click', async (ev) => {
       return render();
     }
     case 'addCompare': return addCompare(fromListing());
-    case 'history': case 'alts': case 'live': S.panel = S.panel === d.act ? '' : d.act; return render();
+    case 'history': case 'alts': case 'live': S.panel = S.panel === d.act ? '' : d.act; render(); return d.act === 'live' && S.panel === 'live' ? runLive(false) : undefined;   // opening the panel runs the comparison
     case 'runLive': return runLive(!!d.refresh);
     case 'runHistory': return runHistory(Number(d.years));
     case 'runAlts': return runAlts();
@@ -233,7 +243,7 @@ async function init(first = true) {
   if (first) {
     const cfg = await store.get('cfg', {}); S.cfg = { apiBase: safeUrl(cfg.apiBase) || DEFAULTS.apiBase, siteBase: safeUrl(cfg.siteBase) || DEFAULTS.siteBase }; S.api = makeApi(S.cfg.apiBase);
     S.compare = cleanEntries(await store.get('compare', []), { needCarId: true }); S.saved = cleanEntries(await store.get('saved', []));
-    S.liveCity = await store.get('liveCity', '');
+    S.liveCity = await store.get('liveCity', 'Delhi');
     const theme = await store.get('theme', null); if (theme) document.documentElement.dataset.theme = theme;
     $('apiBase').value = S.cfg.apiBase; $('siteBase').value = S.cfg.siteBase; $('origin').textContent = location.origin; checkConn();
   }

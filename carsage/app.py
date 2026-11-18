@@ -38,7 +38,7 @@ def create_app(engine=None) -> FastAPI:
                               "Prices are ex-showroom (new cars); there is no live inventory or on-road pricing.")
     app.state.engine = engine
     origins = [o.strip() for o in os.environ.get("CORS_ORIGINS", "http://localhost:5173").split(",") if o.strip()]
-    app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=["GET", "POST", "PUT", "DELETE"], allow_headers=["Authorization", "Content-Type"])
+    app.add_middleware(CORSMiddleware, allow_origins=origins, allow_origin_regex=r"chrome-extension://[a-p]{32}", allow_methods=["GET", "POST", "PUT", "DELETE"], allow_headers=["Authorization", "Content-Type"])
 
     @app.middleware("http")
     async def access_log(request: Request, call_next):

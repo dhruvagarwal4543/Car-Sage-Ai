@@ -7,8 +7,8 @@
   "empty_results_explained": "n/a",
   "explanation_consistency": null,
   "ranking_stability": 1.0,
-  "latency_ms_median": 6.8,
-  "latency_ms_max": 20.3,
+  "latency_ms_median": 12.5,
+  "latency_ms_max": 38.0,
   "per_scenario": [
    {
     "scenario": "suv_under_15_diesel",
@@ -180,8 +180,8 @@
   "empty_results_explained": "0/3",
   "explanation_consistency": null,
   "ranking_stability": 1.0,
-  "latency_ms_median": 7.1,
-  "latency_ms_max": 20.1,
+  "latency_ms_median": 10.8,
+  "latency_ms_max": 31.2,
   "per_scenario": [
    {
     "scenario": "suv_under_15_diesel",
@@ -341,8 +341,8 @@
   "empty_results_explained": "n/a",
   "explanation_consistency": null,
   "ranking_stability": 1.0,
-  "latency_ms_median": 7.4,
-  "latency_ms_max": 20.2,
+  "latency_ms_median": 8.0,
+  "latency_ms_max": 23.9,
   "per_scenario": [
    {
     "scenario": "suv_under_15_diesel",
@@ -520,8 +520,8 @@
   "empty_results_explained": "n/a",
   "explanation_consistency": null,
   "ranking_stability": 1.0,
-  "latency_ms_median": 7.6,
-  "latency_ms_max": 19.6,
+  "latency_ms_median": 9.1,
+  "latency_ms_max": 25.1,
   "per_scenario": [
    {
     "scenario": "suv_under_15_diesel",
@@ -698,8 +698,8 @@
   "empty_results_explained": "n/a",
   "explanation_consistency": 1.0,
   "ranking_stability": 1.0,
-  "latency_ms_median": 9.2,
-  "latency_ms_max": 20.6,
+  "latency_ms_median": 9.4,
+  "latency_ms_max": 22.4,
   "per_scenario": [
    {
     "scenario": "suv_under_15_diesel",
@@ -875,8 +875,8 @@
   "empty_results_explained": "3/3",
   "explanation_consistency": 1.0,
   "ranking_stability": 1.0,
-  "latency_ms_median": 9.4,
-  "latency_ms_max": 33.5,
+  "latency_ms_median": 9.0,
+  "latency_ms_max": 26.9,
   "per_scenario": [
    {
     "scenario": "suv_under_15_diesel",
@@ -1036,7 +1036,7 @@
   "explanation_consistency": 1.0,
   "ranking_stability": 1.0,
   "latency_ms_median": 9.1,
-  "latency_ms_max": 20.2,
+  "latency_ms_max": 20.8,
   "per_scenario": [
    {
     "scenario": "suv_under_15_diesel",
